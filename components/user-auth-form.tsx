@@ -29,6 +29,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -36,13 +37,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    const signInResult = await signIn('email', {
+    console.log(data, 'data');
+
+    const signInResult = await signIn('Credentials', {
       email: data.email.toLowerCase(),
+      password: data.password,
       redirect: false,
       callbackUrl: searchParams?.get('from') || '/paseos',
     });
 
     setIsLoading(false);
+    console.log(signInResult, 'signInResult');
 
     if (!signInResult?.ok) {
       return toast({
@@ -78,6 +83,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading || isGitHubLoading}
               {...register('email')}
             />
+
             {errors?.email && (
               <p className="px-1 text-xs text-red-600">
                 {errors.email.message}
@@ -100,6 +106,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading || isGitHubLoading}
               {...register('password')}
             />
+
             {errors?.password && (
               <p className="px-1 text-xs text-red-600">
                 {errors.password.message}

@@ -30,10 +30,10 @@ export function MainNav() {
             Mi perro
           </Link>
           <Link
-            href="/docs/components"
+            href="/paseos"
             className={cn(
               'transition-colors hover:text-foreground/80',
-              pathname?.startsWith('/docs/components')
+              pathname?.startsWith('/paseos')
                 ? 'text-foreground'
                 : 'text-foreground/60'
             )}
