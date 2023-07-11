@@ -1,17 +1,23 @@
-import { ThemeProvider } from '@/components/theme-provider';
-import './globals.css';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { SiteHeader } from '@/components/site-header';
-import { SiteFooter } from '@/components/site-footer';
-import AuthProvider from '@/components/auth-provider';
+import { ThemeProvider } from "@/components/theme-provider";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import AuthProvider from "@/components/auth-provider";
+import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Doggo',
+  title: "Doggo",
   description:
-    'Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.',
+    "Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 interface RootLayoutProps {
@@ -20,15 +26,16 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="es-MX" suppressHydrationWarning>
+    <html lang='es-MX' suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <AuthProvider>
-            <div className="relative flex min-h-screen flex-col">
+            <div className='relative flex min-h-screen flex-col'>
               <SiteHeader />
               {children}
               <SiteFooter />
             </div>
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </body>

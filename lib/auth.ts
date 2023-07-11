@@ -4,8 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { db } from '@/lib/db';
 
-// const postmarkClient = new Client(env.POSTMARK_API_TOKEN);
-
 export const authOptions: NextAuthOptions = {
   // This is a temporary fix for prisma client.
   // @see https://github.com/prisma/prisma/issues/16117
@@ -20,11 +18,11 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: '' },
+        email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const user = { id: '1', name: 'J Smith', email: 'test@email.com' };
+        const user = { id: '1', name: 'Jose Arteaga', email: 'test@email.com' };
 
         if (user) {
           // Any object returned will be saved in `user` property of the JWT

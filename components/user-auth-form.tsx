@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { useSearchParams } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { cn } from '@/lib/utils';
-import { userAuthSchema } from '@/lib/validations/auth';
-import { buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from '@/components/ui/use-toast';
-import { Github, Loader2 } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { userAuthSchema } from "@/lib/validations/auth";
+import { buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
+import { Github, Loader2 } from "lucide-react";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   buttonConfirm?: string | undefined;
@@ -37,115 +37,114 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    console.log(data, 'data');
+    console.log(data, "data");
 
-    const signInResult = await signIn('Credentials', {
+    const signInResult = await signIn("credentials", {
       email: data.email.toLowerCase(),
       password: data.password,
-      redirect: false,
-      callbackUrl: searchParams?.get('from') || '/paseos',
+      redirect: true,
+      callbackUrl: searchParams?.get("from") || "/paseos",
     });
 
     setIsLoading(false);
-    console.log(signInResult, 'signInResult');
 
     if (!signInResult?.ok) {
       return toast({
-        title: 'Algo salió mal.',
+        title: "Algo salió mal.",
         description:
-          'Tu inicio de sesión falló. Por favor, inténtalo de nuevo.',
-        variant: 'destructive',
+          "Tu inicio de sesión falló. Por favor, inténtalo de nuevo.",
+        variant: "destructive",
       });
     }
 
     return toast({
-      title: 'Revise su correo electrónico',
-      description: 'We sent you a login link. Be sure to check your spam too.',
+      title: "Revise su correo electrónico",
+      description: "We sent you a login link. Be sure to check your spam too.",
     });
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
+        <div className='grid gap-2'>
+          <div className='grid gap-1'>
+            <Label className='sr-only' htmlFor='email'>
               Email
             </Label>
 
             <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
+              id='email'
+              placeholder='name@example.com'
+              type='email'
+              autoCapitalize='none'
+              autoComplete='email'
+              autoCorrect='off'
               disabled={isLoading || isGitHubLoading}
-              {...register('email')}
+              {...register("email")}
             />
 
             {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
+              <p className='px-1 text-xs text-red-600'>
                 {errors.email.message}
               </p>
             )}
           </div>
 
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="password">
+          <div className='grid gap-1'>
+            <Label className='sr-only' htmlFor='password'>
               Contraseña
             </Label>
 
             <Input
-              id="password"
-              placeholder="password"
-              type="password"
-              autoCapitalize="none"
-              autoComplete="password"
-              autoCorrect="off"
+              id='password'
+              placeholder='password'
+              type='password'
+              autoCapitalize='none'
+              autoComplete='password'
+              autoCorrect='off'
               disabled={isLoading || isGitHubLoading}
-              {...register('password')}
+              {...register("password")}
             />
 
             {errors?.password && (
-              <p className="px-1 text-xs text-red-600">
+              <p className='px-1 text-xs text-red-600'>
                 {errors.password.message}
               </p>
             )}
           </div>
 
           <button className={cn(buttonVariants())} disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {props.buttonConfirm ? props.buttonConfirm : 'Iniciar sesión'}
+            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            {props.buttonConfirm ? props.buttonConfirm : "Iniciar sesión"}
           </button>
         </div>
       </form>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+      <div className='relative'>
+        <div className='absolute inset-0 flex items-center'>
+          <span className='w-full border-t' />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
+        <div className='relative flex justify-center text-xs uppercase'>
+          <span className='bg-background px-2 text-muted-foreground'>
             O continuar con
           </span>
         </div>
       </div>
 
       <button
-        type="button"
-        className={cn(buttonVariants({ variant: 'outline' }))}
+        type='button'
+        className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGitHubLoading(true);
-          signIn('github');
+          signIn("github");
         }}
         disabled={isLoading || isGitHubLoading}
       >
         {isGitHubLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
         ) : (
-          <Github className="mr-2 h-4 w-4" />
-        )}{' '}
+          <Github className='mr-2 h-4 w-4' />
+        )}{" "}
         Github
       </button>
     </div>
