@@ -1,39 +1,38 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { userAuthSchema } from "@/lib/validations/auth";
+import { userRegisterSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon, Github, Loader2 } from "lucide-react";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type FormData = z.infer<typeof userAuthSchema>;
+type FormData = z.infer<typeof userRegisterSchema>;
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserRegisterForm({
+  className,
+  ...props
+}: UserRegisterFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(userAuthSchema),
+    resolver: zodResolver(userRegisterSchema),
   });
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
 
   function handlePasswordIconClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -43,24 +42,41 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    const signInResult = await signIn("credentials", {
-      email: data.email.toLowerCase(),
-      password: data.password,
-      redirect: false,
+    const registrationResult = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email.toLowerCase(),
+        password: data.password,
+      }),
     });
 
     setIsLoading(false);
 
-    if (signInResult?.error) {
+    if (!registrationResult?.ok) {
       return toast({
-        title: "Algo salió mal.",
+        title: " Oh no! Algo salió mal.",
         description:
-          "Tu inicio de sesión falló. Por favor, inténtalo de nuevo.",
+          "Tu registro falló. Por favor, inténtalo de nuevo. Si el problema persiste, contactenos.",
         variant: "destructive",
       });
-    }
+    } else {
+      signIn("credentials", {
+        email: data.email.toLowerCase(),
+        password: data.password,
+        redirect: false,
+        callbackUrl: "/",
+      });
 
-    router.push(searchParams?.get("from") || "/");
+      return toast({
+        title: "Revise su correo electrónico",
+        description:
+          "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
+      });
+    }
   }
 
   return (
@@ -68,13 +84,34 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid gap-2'>
           <div className='grid gap-1'>
+            <Label className='sr-only' htmlFor='name'>
+              Nombre
+            </Label>
+
+            <Input
+              id='name'
+              placeholder='Nombre'
+              type='text'
+              autoCapitalize='none'
+              autoComplete='username'
+              autoCorrect='off'
+              disabled={isLoading || isGitHubLoading}
+              {...register("name")}
+            />
+
+            {errors?.name && (
+              <p className='px-1 text-xs text-red-600'>{errors.name.message}</p>
+            )}
+          </div>
+
+          <div className='grid gap-1'>
             <Label className='sr-only' htmlFor='email'>
               Email
             </Label>
 
             <Input
               id='email'
-              placeholder='name@example.com'
+              placeholder='nombre@correo.com'
               type='email'
               autoCapitalize='none'
               autoComplete='email'
@@ -126,7 +163,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
           <Button disabled={isLoading}>
             {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-            Iniciar sesión
+            Registrarse
           </Button>
         </div>
       </form>

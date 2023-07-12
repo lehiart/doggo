@@ -1,69 +1,87 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcrypt';
 
-import { db } from '@/lib/db';
+import { db } from '@/lib/prisma';
 
 export const authOptions: NextAuthOptions = {
   // This is a temporary fix for prisma client.
   // @see https://github.com/prisma/prisma/issues/16117
-  // adapter: PrismaAdapter(db as any),
+  adapter: PrismaAdapter(db as any),
   session: {
     strategy: 'jwt',
   },
   pages: {
     signIn: '/login',
+    error: '/login',
   },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: 'Email', type: 'email'},
+        password: { label: 'Password', type: 'password'},
       },
       async authorize(credentials) {
-        const user = { id: '1', name: 'Jose Arteaga', email: 'test@email.com' };
+        if (!credentials?.email || !credentials?.password) {
+					throw new Error("Invalid credentials")
+				}
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
+        const user = await db.user.findUnique({
+					where: {
+						email: credentials.email,
+					},
+				})
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-        }
+				if (!user) {
+					throw new Error("Invalid credentials")
+				}
+
+				const isCorrectPassword = await bcrypt.compare(credentials.password, user.hashedPassword!)
+
+        if (!isCorrectPassword) {
+					throw new Error("Invalid credentials")
+				}
+
+        return user
       },
     }),
   ],
+  
   callbacks: {
-    // async session({ token, session }) {
-    //   if (token) {
-    //     session.user.id = token.id;
-    //     session.user.name = token.name;
-    //     session.user.email = token.email;
-    //     session.user.image = token.picture;
-    //   }
-    //   return session;
-    // },
-    // async jwt({ token, user }) {
-    //   const dbUser = await db.user.findFirst({
-    //     where: {
-    //       email: token.email,
-    //     },
-    //   });
-    //   if (!dbUser) {
-    //     if (user) {
-    //       token.id = user?.id;
-    //     }
-    //     return token;
-    //   }
-    //   return {
-    //     id: dbUser.id,
-    //     name: dbUser.name,
-    //     email: dbUser.email,
-    //     picture: dbUser.image,
-    //   };
-    // },
+    async session({ token, session }) {
+      if (token) {
+        session.user.id = token.id
+        session.user.name = token.name
+        session.user.email = token.email
+        session.user.image = token.picture
+      }
+
+      return session
+    },
+    async jwt({ token, user }) {
+      const dbUser = await db.user.findFirst({
+        where: {
+          email: token.email,
+        },
+      });
+
+      if (!dbUser) {
+        if (user) {
+          token.id = user?.id;
+        }
+        return token;
+      }
+
+      return {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        picture: dbUser.image,
+      };
+    },
   },
+  
 };

@@ -43,13 +43,13 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href='/dashboard'>Dashboard</Link>
+          <Link href='/manada'>Mi manada</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href='/dashboard/billing'>Billing</Link>
+          <Link href='/aventuras'>Aventuras</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href='/dashboard/settings'>Settings</Link>
+          <Link href='/proveedores'>Proveedores</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

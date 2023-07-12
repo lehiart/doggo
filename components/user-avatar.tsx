@@ -1,15 +1,14 @@
-// import { User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { AvatarProps } from "@radix-ui/react-avatar";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User2 } from "lucide-react";
 
 interface UserAvatarProps extends AvatarProps {
-  user: { name: string; image?: string };
+  user: Pick<User, "image" | "name">;
 }
 
 export function UserAvatar({ user, ...props }: UserAvatarProps) {
-  console.log(user);
   return (
     <Avatar {...props}>
       {user.image ? (
