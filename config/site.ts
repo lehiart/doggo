@@ -1,7 +1,7 @@
 import { SiteConfig } from '@/types';
 
 export const siteConfig: SiteConfig = {
-  name: 'Doggo',
+  name: 'DogeHouse',
   description:
     'Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.',
   url: 'https://tx.shadcn.com',

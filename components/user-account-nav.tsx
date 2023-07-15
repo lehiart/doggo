@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "@/components/user-avatar";
+import { LogOutIcon, UserIcon } from "lucide-react";
 
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   user: Pick<User, "name" | "image" | "email">;
@@ -42,14 +43,9 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild>
-          <Link href='/manada'>Mi manada</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href='/aventuras'>Aventuras</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href='/proveedores'>Proveedores</Link>
+        <DropdownMenuItem className='cursor-pointer'>
+          <UserIcon className='mr-2 h-4 w-4' />
+          <Link href='/perfil'>Mi perfil</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -63,6 +59,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
             });
           }}
         >
+          <LogOutIcon className='mr-2 h-4 w-4' />
           Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>

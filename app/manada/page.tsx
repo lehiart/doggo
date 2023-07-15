@@ -1,7 +1,7 @@
 import React from "react";
 
-function Manada() {
+function MyPackPage() {
   return <div> Mi Manada</div>;
 }
 
-export default Manada;
+export default MyPackPage;

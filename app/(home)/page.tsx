@@ -1,8 +1,22 @@
+"use client";
+
 import { StatesSelector } from "@/components/states-selector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
 
 export default function Home() {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      location: "",
+    },
+    mode: "onChange",
+  });
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+  };
+
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <section className='space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32'>
@@ -11,7 +25,10 @@ export default function Home() {
             Encuentra todo lo que necesitas para tu perro.
           </h1>
 
-          <div className='flex items-center mt-8'>
+          <form
+            className='flex items-center mt-8'
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Input
               type='search'
               placeholder='Buscar...'
@@ -22,10 +39,12 @@ export default function Home() {
               en
             </p>
 
-            <StatesSelector />
+            <StatesSelector control={control} />
 
-            <Button className='ml-4'> Buscar </Button>
-          </div>
+            <Button type='submit' className='ml-4'>
+              Buscar
+            </Button>
+          </form>
         </div>
       </section>
     </main>

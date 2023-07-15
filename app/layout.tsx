@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Doggo",
+  title: "DogeHouse",
   description:
     "Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.",
   icons: {

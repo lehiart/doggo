@@ -1,6 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/prisma';
@@ -48,8 +49,11 @@ export const authOptions: NextAuthOptions = {
         return user
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
-  
   callbacks: {
     async session({ token, session }) {
       if (token) {
@@ -61,7 +65,7 @@ export const authOptions: NextAuthOptions = {
 
       return session
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, }) {
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,

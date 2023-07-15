@@ -1,7 +1,7 @@
 import React from "react";
 
-function Aventuras() {
+function AdventuresPage() {
   return <div>Aventuras</div>;
 }
 
-export default Aventuras;
+export default AdventuresPage;

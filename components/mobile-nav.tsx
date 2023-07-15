@@ -91,7 +91,7 @@ export function MobileNav() {
           onOpenChange={setOpen}
         >
           <Dog className='mr-2 h-4 w-4' />
-          <span className='font-bold'>Doggo</span>
+          <span className='font-bold'>DogeHouse</span>
         </MobileLink>
 
         <ScrollArea className='my-4 h-[calc(100vh-8rem)] pb-10 pl-6'>

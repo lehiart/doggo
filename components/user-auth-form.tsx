@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon, Github, Loader2 } from "lucide-react";
+import { GoogleIcon } from "./ui/google-icon";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -30,7 +31,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
+  const [isSocialLoading, setIsSocialLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -79,7 +80,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize='none'
               autoComplete='email'
               autoCorrect='off'
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading || isSocialLoading}
               {...register("email")}
             />
 
@@ -90,12 +91,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
-          <div className='grid gap-1 mb-2'>
+          <div className='mb-2 grid gap-1'>
             <Label className='sr-only' htmlFor='password'>
               Contraseña
             </Label>
 
-            <div className='flex flex-column gap-1'>
+            <div className='flex-column flex gap-1'>
               <Input
                 id='password'
                 placeholder='Contraseña'
@@ -103,7 +104,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 autoCapitalize='none'
                 autoComplete='password'
                 autoCorrect='off'
-                disabled={isLoading || isGitHubLoading}
+                disabled={isLoading || isSocialLoading}
                 {...register("password")}
               />
               <Button
@@ -146,17 +147,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         type='button'
         variant='outline'
         onClick={() => {
-          setIsGitHubLoading(true);
-          signIn("github");
+          setIsSocialLoading(true);
+          signIn("google");
         }}
-        disabled={isLoading || isGitHubLoading}
+        disabled={isLoading || isSocialLoading}
       >
-        {isGitHubLoading ? (
+        {isSocialLoading ? (
           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
         ) : (
-          <Github className='mr-2 h-4 w-4' />
-        )}{" "}
-        Github
+          <GoogleIcon className='h-4 w-[24px]' />
+        )}
+        Google
       </Button>
     </div>
   );
