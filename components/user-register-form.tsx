@@ -59,7 +59,7 @@ export function UserRegisterForm({
 
     if (!registrationResult?.ok) {
       return toast({
-        title: " Oh no! Algo salió mal.",
+        title: "Oh no! Algo salió mal.",
         description:
           "Tu registro falló. Por favor, inténtalo de nuevo. Si el problema persiste, contactenos.",
         variant: "destructive",
