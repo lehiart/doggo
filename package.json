@@ -10,9 +10,8 @@
     "turbo": "next dev --turbo -p 3002",
     "preview": "next build && next start",
     "postinstall": "prisma generate",
-    "prisma": "npx prisma studio",
-    "prepare": "husky install"
-  },
+    "prisma": "npx prisma studio"
+ },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
     "@next-auth/prisma-adapter": "^1.0.7",
