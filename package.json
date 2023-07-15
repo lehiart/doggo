@@ -10,8 +10,7 @@
     "turbo": "next dev --turbo -p 3002",
     "preview": "next build && next start",
     "postinstall": "prisma generate",
-    "prisma": "npx prisma studio",
-    "pre-commit": "lint-staged"
+    "prisma": "npx prisma studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
