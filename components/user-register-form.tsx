@@ -73,7 +73,7 @@ export function UserRegisterForm({
       });
 
       return toast({
-        title: "Revise su correo electrónico",
+        title: "Revise su correo electrónico ",
         description:
           "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
       });

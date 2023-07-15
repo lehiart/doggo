@@ -10,7 +10,8 @@
     "turbo": "next dev --turbo -p 3002",
     "preview": "next build && next start",
     "postinstall": "prisma generate",
-    "prisma": "npx prisma studio"
+    "prisma": "npx prisma studio",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -58,8 +59,14 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.3",
     "prettier-plugin-tailwindcss": "^0.4.0",
-    "prisma": "^5.0.0",
-    "husky": "^8.0.0"
+    "prisma": "^5.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
   }
 }
