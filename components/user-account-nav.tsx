@@ -45,7 +45,9 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
 
         <DropdownMenuItem className='cursor-pointer'>
           <UserIcon className='mr-2 h-4 w-4' />
-          <Link href='/perfil'>Mi perfil</Link>
+          <Link className='w-full' href='/perfil'>
+            Mi perfil
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
