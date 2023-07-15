@@ -5,7 +5,8 @@ import { ProfileForm } from "./profile-form";
 import { getCurrentUser } from "@/lib/session";
 
 export default async function SettingsProfilePage() {
-  const user = await getCurrentUser();
+  // @ts-ignore
+  const user: User = await getCurrentUser();
 
   if (!user) {
     redirect("/login");
