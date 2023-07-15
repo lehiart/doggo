@@ -63,10 +63,5 @@
     "lint-staged": "^13.2.3",
     "prettier-plugin-tailwindcss": "^0.4.0",
     "prisma": "^5.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
   }
 }
