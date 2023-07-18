@@ -4,7 +4,6 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { User } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,9 +22,11 @@ import { toast } from "@/components/ui/use-toast";
 import SocialMediaURLSelect from "./social-media-url-select";
 import { StatesSelector } from "@/components/states-selector";
 import { Loader2Icon } from "lucide-react";
+import ImageUploadInput from "./image-upload-input";
+import { EditableUserData, ExtendedUserProfileForm } from "@/types/user";
 
 const profileFormSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(2, {
       message: "El nombre debe ser por lo menos de dos caracteres.",
@@ -34,9 +35,12 @@ const profileFormSchema = z.object({
       message: "El nombre debe ser maximo de 30 caracteres.",
     }),
   email: z.string().email(),
+  image: z.string().optional(),
   bio: z.string().optional(),
   url: z.string().optional(),
-  urls: z.array(z.object({ url: z.string(), value: z.string() })).optional(),
+  links: z
+    .array(z.object({ url: z.string(), value: z.string(), id: z.string() }))
+    .optional(),
   phone: z.string().optional(),
   location: z.string().optional(),
 });
@@ -44,23 +48,50 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 interface ProfileFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  user: User;
+  userProfile: EditableUserData;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
+const cleanData = (data: any) => {
+  // we dont need the url on the payload
+  const { url, ...remainingData } = data;
+
+  // links needs to be an string
+  if (remainingData.links) {
+    remainingData.links = JSON.stringify(remainingData.links);
+  }
+
+  // phone needs to be a number without mask
+  if (remainingData.phone) {
+    remainingData.phone = remainingData.phone.replace(/\D/g, "");
+  }
+
+  return remainingData;
+};
+
+const addMaskToPhone = (phone: string) => {
+  if (!phone) return "";
+
+  const phoneMask = phone
+    .replace(/\D/g, "")
+    .replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1)-$2-$3"); // Apply mask pattern
+
+  return phoneMask;
+};
+
+export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      username: user?.name || "",
-      email: user?.email || "",
-      bio: user?.bio || undefined,
-      // @ts-ignore
-      urls: user?.links || [],
+      name: userProfile?.name || "",
+      email: userProfile?.email || "",
+      image: userProfile?.image || "",
+      bio: userProfile?.bio || undefined,
       url: "",
-      phone: user?.phone || "",
-      location: user?.location || "",
+      links: (userProfile?.links && JSON.parse(userProfile.links)) || "[]",
+      phone: (userProfile?.phone && addMaskToPhone(userProfile.phone)) || "",
+      location: userProfile?.location || "",
     },
     mode: "onChange",
   });
@@ -68,33 +99,67 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   async function onSubmit(data: ProfileFormValues) {
     setIsSaving(true);
 
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    type DirtyField = {
+      [key: string]: boolean;
+    };
 
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    type DirtyFields = {
+      dirtyFields: DirtyField;
+    };
+
+    // Only add the dirty fields to the payload
+    const { dirtyFields }: any = form.formState; // {password: true, email: true}
+    const cleanedData = cleanData(data); // {password: "123", email: "email@example.com"}
+
+    const payload: { [key: string]: string | null } = Object.keys(
+      cleanedData
+    ).reduce((acc: { [key: string]: string | null }, key: string) => {
+      if (dirtyFields[key as keyof DirtyFields]) {
+        acc[key] = cleanedData[key as keyof typeof cleanedData];
+      }
+      return acc;
+    }, {});
+
+    //is client so make it on the server route.ts
+    try {
+      const result = await fetch("/api/profile", {
+        method: "POST",
+        body: JSON.stringify({ ...payload, id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      toast({
+        title: "Tu perfil se ha actualizado correctamente.",
+      });
+    } catch (err) {
+      toast({
+        title:
+          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
+        description: "Si el problema persiste, contacta a soporte.",
+        variant: "destructive",
+      });
+    }
 
     setIsSaving(false);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <ImageUploadInput form={form} />
+
         <FormField
           control={form.control}
-          name='username'
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Nombre <span className='text-red-500'>*</span>
+                Nombre <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='Nombre' {...field} />
+                <Input placeholder="Nombre" {...field} />
               </FormControl>
               <FormDescription>
                 Este es tu nombre público. Puede ser tu nombre real o un
@@ -107,14 +172,14 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Email <span className='text-red-500'>*</span>
+                Email <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder='Email' {...field} disabled={true} />
+                <Input placeholder="Email" {...field} disabled={true} />
               </FormControl>
 
               <FormMessage />
@@ -124,14 +189,14 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
         <FormField
           control={form.control}
-          name='bio'
+          name="bio"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Biografía</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder='Cuenta algo sobre ti...'
-                  className='resize-none'
+                  placeholder="Cuenta algo sobre ti..."
+                  className="resize-none"
                   {...field}
                   maxLength={160}
                 />
@@ -145,21 +210,19 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
         <FormField
           control={form.control}
-          name='phone'
+          name="phone"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Telefono (opcional)</FormLabel>
               <FormControl>
                 <Input
-                  type='tel'
-                  placeholder='(00) 0000-0000'
+                  type="tel"
+                  placeholder="(00) 0000-0000"
                   {...field}
                   maxLength={10}
                   onChange={(e) => {
                     const value = e.target.value;
-                    const formattedValue = value
-                      .replace(/\D/g, "") // Remove non-digit characters
-                      .replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1)-$2-$3"); // Apply mask pattern
+                    const formattedValue = addMaskToPhone(value);
 
                     field.onChange(formattedValue);
                   }}
@@ -176,7 +239,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
         <FormField
           control={form.control}
-          name='location'
+          name="location"
           render={() => (
             <FormItem>
               <FormLabel>Estado de residencia (opcional)</FormLabel>
@@ -190,7 +253,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
           )}
         />
 
-        <Button type='submit' disabled={!form.formState.isDirty || isSaving}>
+        <Button type="submit" disabled={!form.formState.isDirty || isSaving}>
           {isSaving ? <Loader2Icon /> : "Actualizar perfil"}
         </Button>
       </form>

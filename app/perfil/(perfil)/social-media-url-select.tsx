@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useFieldArray } from "react-hook-form";
+import { v4 as uuid } from "uuid";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -36,14 +37,9 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
+import { randomUUID } from "crypto";
 
 type IconType =
   | "website"
@@ -71,7 +67,7 @@ const icons: Icons = {
 function SocialMediaIcon({ type }: { type: IconType | string }) {
   const Icon = icons[type];
 
-  return <Icon className='h-4 w-4' />;
+  return <Icon className="h-4 w-4" />;
 }
 
 const socialMap = [
@@ -84,10 +80,10 @@ const socialMap = [
   { value: "tiktok", label: "TikTok" },
 ];
 
-function SocialMediaURLSelect({ form }: { form: any }) {
+function SocialMediaURLSelect({ form }: any) {
   const [open, setOpen] = React.useState(false);
   const { fields, append, remove } = useFieldArray({
-    name: "urls",
+    name: "links",
     control: form.control,
   });
 
@@ -101,18 +97,11 @@ function SocialMediaURLSelect({ form }: { form: any }) {
     remove(index);
   }
 
-  // {
-  //   /* <Input
-  //           {...form.register("url")}
-  //           placeholder='http://facebook.com/dogehouse'
-  //         /> */
-  // }
-
   return (
     <div>
-      <Label htmlFor='url'>Mis Links</Label>
+      <Label htmlFor="url">Mis Links</Label>
 
-      <Card className='mt-2'>
+      <Card className="mt-2">
         <CardHeader>
           <CardDescription>
             Agrega enlaces a tu sitio web, blog o perfiles de redes sociales.
@@ -120,15 +109,15 @@ function SocialMediaURLSelect({ form }: { form: any }) {
         </CardHeader>
 
         <CardContent>
-          <div className='flex flex-col md:flex-row'>
+          <div className="flex flex-col md:flex-row">
             <FormField
               control={form.control}
-              name='url'
+              name="url"
               render={({ field }) => (
-                <FormItem className='w-full'>
+                <FormItem className="w-full">
                   <FormControl>
                     <Input
-                      placeholder='http://facebook.com/dogehouse'
+                      placeholder="http://facebook.com/dogehouse"
                       {...field}
                     />
                   </FormControl>
@@ -139,29 +128,30 @@ function SocialMediaURLSelect({ form }: { form: any }) {
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
-                  variant='secondary'
-                  className='shrink-0 ml-0 mt-2 md:ml-2 md:mt-0'
+                  variant="secondary"
+                  className="ml-0 mt-2 shrink-0 md:ml-2 md:mt-0"
                   disabled={fields.length >= 8 || !watchURLinput}
                 >
-                  <PlusIcon className='mr-2 h-4 w-4' />
+                  <PlusIcon className="mr-2 h-4 w-4" />
                   Agregar Link
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className='p-0' side='bottom' align='start'>
+              <PopoverContent className="p-0" side="bottom" align="start">
                 <Command>
-                  <CommandInput placeholder='Buscar por nombre...' />
+                  <CommandInput placeholder="Buscar por nombre..." />
                   <CommandList>
                     <CommandEmpty>No se encontraron resultados.</CommandEmpty>
                     <CommandGroup>
                       {socialMap.map((element) => (
                         <CommandItem
                           key={element.value}
-                          className='cursor-pointer'
+                          className="cursor-pointer"
                           onSelect={() => {
                             append({
                               value: element.value,
                               url: form.getValues("url"),
+                              id: uuid(),
                             });
 
                             setOpen(false);
@@ -169,7 +159,7 @@ function SocialMediaURLSelect({ form }: { form: any }) {
                           }}
                         >
                           <SocialMediaIcon type={element.value} />
-                          <span className='ml-2'>{element.label}</span>
+                          <span className="ml-2">{element.label}</span>
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -179,13 +169,13 @@ function SocialMediaURLSelect({ form }: { form: any }) {
             </Popover>
           </div>
 
-          <Separator className='my-4' />
+          <Separator className="my-4" />
 
-          <div className='space-y-4'>
-            <div className='grid gap-6'>
+          <div className="space-y-4">
+            <div className="grid gap-6">
               {fields.length === 0 && (
-                <div className='flex items-center justify-center mt-6'>
-                  <span className='text-sm text-muted-foreground'>
+                <div className="mt-6 flex items-center justify-center">
+                  <span className="text-sm text-muted-foreground">
                     No tienes ningun link a tu sitio o redes
                   </span>
                 </div>
@@ -196,28 +186,28 @@ function SocialMediaURLSelect({ form }: { form: any }) {
                   return (
                     <li
                       key={item.id}
-                      className='flex items-center justify-between space-x-4 mb-4'
+                      className="mb-4 flex items-center justify-between space-x-4"
                     >
-                      <div className='flex items-center space-x-4 w-full'>
-                        <div className='rounded-full bg-muted p-3'>
+                      <div className="flex w-full items-center space-x-4">
+                        <div className="rounded-full bg-muted p-3">
                           <SocialMediaIcon type={item.value} />
                         </div>
 
-                        <div className='w-full'>
+                        <div className="w-full">
                           <Input
-                            {...form.register(`urls.${index}.url`)}
+                            {...form.register(`links.${index}.url`)}
                             disabled
                           />
                         </div>
                       </div>
 
                       <Button
-                        className='ml-4'
+                        className="ml-4"
                         onClick={(e) => {
                           handleDeleteURL(e, index);
                         }}
                       >
-                        <span className='sr-only'>Borrar</span>
+                        <span className="sr-only">Borrar</span>
                         <Trash2Icon />
                       </Button>
                     </li>
