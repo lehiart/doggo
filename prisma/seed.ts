@@ -1,53 +1,31 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, User, Pack, PackMember } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import createUsers from "./factories/user.factory";
+import createPacksAndAssociateToUser from "./factories/pack.factory";
+import createPackMembers from "./factories/pack-member.factory";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  await prisma.user.deleteMany({}); // use with caution.
+async function seed() {
+  try {
+    const deletePackMembers = prisma.packMember.deleteMany();
+    const deletePacks = prisma.pack.deleteMany();
+    const deleteUsers = prisma.user.deleteMany();
 
-  const amountOfUsers = 5;
+    // The transaction runs synchronously so deleteUsers must run last.
+    await prisma.$transaction([deletePackMembers, deletePacks, deleteUsers]);
 
-  const users: User[] = [];
+    const usersIds = await createUsers();
+    const packsIds = await createPacksAndAssociateToUser(usersIds);
+    await createPackMembers(packsIds);
 
-  for (let i = 0; i < amountOfUsers; i++) {
-    const user: User = {
-      id: faker.string.uuid(),
-      name: faker.internet.userName(),
-      hashedPassword: faker.internet.password(),
-      email: faker.internet.email().toLowerCase(),
-      emailVerified: null,
-      image: faker.image.avatar(),
-      createdAt: faker.date.past(),
-      updatedAt: faker.date.recent(),
-      phone: faker.phone.number("55########"),
-      links: JSON.stringify([
-        {
-          id: faker.string.uuid(),
-          value: "website",
-          url: faker.internet.url(),
-        },
-      ]),
-      bio: faker.lorem.sentences(2),
-      location: faker.helpers.arrayElement(["CDMX", "BC", "GTO", "BCS", "AGS"]),
-    };
-
-    users.push(user);
-  }
-
-  // Insert users into the database
-  for (const user of users) {
-    await prisma.user.create({
-      data: user,
-    });
+    console.log("🌱 Database seeded 🌱");
+  } catch {
+    console.log("Error seeding database");
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+seed();

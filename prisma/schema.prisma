@@ -72,6 +72,33 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  pack     Pack?     @relation("UserPack")
 
   @@map(name: "users")
+}
+
+model Pack {
+  id     String @id @unique @default(cuid())
+  userId String @unique
+  user   User   @relation("UserPack", fields: [userId], references: [id])
+
+  members PackMember[]
+
+  @@map(name: "pack")
+}
+
+// One member to one pack, in the future we may want many to many
+model PackMember {
+  id       String @id @default(cuid())
+  packId   String @unique
+  name     String
+  breed    String
+  age      String
+  imageURL String
+  size     String
+
+  pack Pack @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@index([packId])
+  @@map(name: "pack_members")
 }
