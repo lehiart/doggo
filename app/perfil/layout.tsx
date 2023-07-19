@@ -18,14 +18,6 @@ const sidebarNavItems = [
     title: "Cuenta",
     href: "/perfil/cuenta",
   },
-  {
-    title: "Apariencia",
-    href: "/perfil/apariencia",
-  },
-  {
-    title: "Notificaciones",
-    href: "/perfil/notificaciones",
-  },
 ];
 
 interface SettingsLayoutProps {

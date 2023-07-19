@@ -7,21 +7,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function ProfilePageLoading() {
+export default function ProfileAccountPageLoading() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Perfil</h3>
+        <h3 className="text-lg font-medium">Cuenta</h3>
         <p className="text-sm text-muted-foreground">
-          Así es como los demás te verán en el sitio.
+          Actualiza la configuración de tu cuenta.
         </p>
       </div>
 
       <Separator />
-
-      <div className="flex justify-center">
-        <Skeleton className="my-16 aspect-square w-32 overflow-hidden rounded-full sm:w-36 md:w-[200px]" />
-      </div>
 
       <Card>
         <CardHeader className="gap-2">

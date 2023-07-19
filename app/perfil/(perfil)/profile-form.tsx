@@ -87,9 +87,9 @@ export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
       name: userProfile?.name || "",
       email: userProfile?.email || "",
       image: userProfile?.image || "",
-      bio: userProfile?.bio || undefined,
+      bio: userProfile?.bio || "",
       url: "",
-      links: (userProfile?.links && JSON.parse(userProfile.links)) || "[]",
+      links: (userProfile?.links && JSON.parse(userProfile.links)) || "",
       phone: (userProfile?.phone && addMaskToPhone(userProfile.phone)) || "",
       location: userProfile?.location || "",
     },
@@ -124,7 +124,7 @@ export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
     try {
       const result = await fetch("/api/profile", {
         method: "POST",
-        body: JSON.stringify({ ...payload, id }),
+        body: JSON.stringify({ ...payload, id, updatedAt: new Date() }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -181,7 +181,6 @@ export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
               <FormControl>
                 <Input placeholder="Email" {...field} disabled={true} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
