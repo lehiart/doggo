@@ -62,13 +62,13 @@ export function StatesSelector({ control }: { control: any }) {
     <div>
       <Controller
         control={control}
-        name='location'
+        name="location"
         render={({ field: { onChange, onBlur, value, name, ref } }) => (
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
-                variant='outline'
-                role='combobox'
+                variant="outline"
+                role="combobox"
                 className={cn(
                   "w-[200px] justify-between",
                   !value && "text-muted-foreground"
@@ -79,17 +79,17 @@ export function StatesSelector({ control }: { control: any }) {
                       (state) => state.value === value.toUpperCase()
                     )?.label
                   : "Selecciona el estado"}
-                <ChevronsUpDownIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
 
-            <PopoverContent className='w-[200px] p-0'>
+            <PopoverContent className="w-[200px] p-0">
               <Command>
-                <CommandInput placeholder='Buscar estado...' />
+                <CommandInput placeholder="Buscar estado..." />
                 <CommandEmpty>
                   No se encontro ningun estado con ese nombre.
                 </CommandEmpty>
-                <CommandGroup className='h-[200px] overflow-scroll'>
+                <CommandGroup className="h-[200px] overflow-y-scroll">
                   {statesOfMexico.map((state) => (
                     <CommandItem
                       value={state.value}

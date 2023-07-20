@@ -5,27 +5,6 @@ const prisma = new PrismaClient();
 
 type RequiredUser = Omit<User, "id">;
 
-// const userData: RequiredUser = {
-//   // id: faker.string.uuid(),
-//   name: faker.internet.displayName(),
-//   hashedPassword: faker.internet.password(),
-//   email: faker.internet.email().toLowerCase(),
-//   emailVerified: null,
-//   image: faker.image.avatar(),
-//   createdAt: faker.date.past(),
-//   updatedAt: faker.date.recent(),
-//   phone: faker.phone.number("55########"),
-//   links: JSON.stringify([
-//     {
-//       id: faker.string.uuid(),
-//       value: faker.helpers.arrayElement(["website", "twitter", "instagram", "facebook", "linkedin"]),
-//       url: faker.internet.url(),
-//     },
-//   ]),
-//   bio: faker.lorem.sentences(2),
-//   location: faker.helpers.arrayElement(["CDMX", "BC", "GTO", "BCS", "AGS"]),
-// };
-
 const createMultipleUsers = (amount: number) => {
   const users: RequiredUser[] = [];
 

@@ -6,22 +6,21 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Dog } from "lucide-react";
-import { Button } from "./ui/button";
 
 export function MainNav() {
   const pathname = usePathname();
 
   return (
     <>
-      <div className='mr-4 hidden md:flex'>
-        <Link href='/' className='mr-6 flex items-center space-x-2'>
-          <Dog className='h-6 w-6' />
-          <span className='hidden font-bold sm:inline-block'>DogeHouse</span>
+      <div className="mr-4 hidden md:flex">
+        <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Dog className="h-6 w-6" />
+          <span className="hidden font-bold sm:inline-block">DogeHouse</span>
         </Link>
 
-        <nav className='flex items-center space-x-6 text-sm font-medium'>
+        <nav className="flex items-center space-x-6 text-sm font-medium">
           <Link
-            href='/manada'
+            href="/manada"
             className={cn(
               "transition-colors hover:text-foreground/80",
               pathname === "/docs" ? "text-foreground" : "text-foreground/60"
@@ -30,7 +29,7 @@ export function MainNav() {
             Mi manada
           </Link>
           <Link
-            href='/aventuras'
+            href="/aventuras"
             className={cn(
               "transition-colors hover:text-foreground/80",
               pathname?.startsWith("/aventuras")
@@ -40,20 +39,9 @@ export function MainNav() {
           >
             Aventuras
           </Link>
-          <Link
-            href='/entrenadores'
-            className={cn(
-              "transition-colors hover:text-foreground/80",
-              pathname?.startsWith("/examples")
-                ? "text-foreground"
-                : "text-foreground/60"
-            )}
-          >
-            Entrenadores
-          </Link>
 
           <Link
-            href='/proveedores'
+            href="/proveedores"
             className={cn(
               "hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block"
             )}

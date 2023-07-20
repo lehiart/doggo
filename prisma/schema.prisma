@@ -70,12 +70,17 @@ model User {
   location       String?
   phone          String?
 
-  accounts Account[]
-  sessions Session[]
-  pack     Pack?     @relation("UserPack")
+  accounts      Account[]
+  sessions      Session[]
+  pack          Pack?          @relation("UserPack")
+  favoriteItems FavoriteItems? @relation("UserFavoriteItems")
 
   @@map(name: "users")
 }
+
+////////////////////////////////////////// PACK & PACK MEMBERS  ///////////////////////////////////////////////////////
+////// Pack has many members, members have only one pack
+///// Member is a dog with info
 
 model Pack {
   id     String @id @unique @default(cuid())
@@ -87,7 +92,6 @@ model Pack {
   @@map(name: "pack")
 }
 
-// One member to one pack, in the future we may want many to many
 model PackMember {
   id       String @id @default(cuid())
   packId   String @unique
@@ -101,4 +105,57 @@ model PackMember {
 
   @@index([packId])
   @@map(name: "pack_members")
+}
+
+///////////////////////////////////////  ITEMS & FAVORITE ITEMS LIST   //////////////////////////////////////////////////
+////// Item can be part of a favoriteItems list, favoriteItems list has many items
+////// Item has a required 1 category and many subcategories
+
+model FavoriteItems {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation("UserFavoriteItems", fields: [userId], references: [id])
+
+  items Item[]
+}
+
+model Item {
+  id          String @id @default(cuid())
+  title       String
+  description String
+
+  categoryId String
+
+  category      Category      @relation("ItemCategory", fields: [categoryId], references: [id])
+  subcategories Subcategory[] @relation("ItemSubcategories")
+
+  FavoriteItems   FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
+  favoriteItemsId String?
+
+  @@index([favoriteItemsId])
+  @@index([categoryId])
+}
+
+////////////////////////////////////////////////   CATEGORY & SUBCATEGORY   //////////////////////////////////////////////////
+////// Category has many subcategories, subcategories have only one category
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  route String @unique
+
+  item          Item[]        @relation("ItemCategory")
+  subcategories Subcategory[] @relation("SubcategoriesOfCategory")
+}
+
+model Subcategory {
+  id         String @id @default(cuid())
+  name       String @unique
+  route      String @unique
+  categoryId String
+
+  item     Item[]   @relation("ItemSubcategories")
+  category Category @relation("SubcategoriesOfCategory", fields: [categoryId], references: [id])
+
+  @@index([categoryId])
 }
