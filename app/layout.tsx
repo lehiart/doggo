@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import AuthProvider from "@/components/auth-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,15 +27,16 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang='es-MX' suppressHydrationWarning>
+    <html lang="es-MX" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
-            <div className='relative flex min-h-screen flex-col'>
+            <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
               {children}
               <SiteFooter />
             </div>
+            <Analytics />
             <Toaster />
           </AuthProvider>
         </ThemeProvider>

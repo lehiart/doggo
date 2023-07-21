@@ -54,7 +54,7 @@ model VerificationToken {
   @@map(name: "verification_tokens")
 }
 
-// Custom Models https://www.prismabuilder.io/
+////////////////////////////////////////// NORMAL USER   ///////////////////////////////////////////////////////
 
 model User {
   id             String    @id @default(cuid())
@@ -123,6 +123,12 @@ model Item {
   id          String @id @default(cuid())
   title       String
   description String
+  // addressStreet String
+  // addressCity   String
+  // addressState  String
+  // addressZip    String
+  // openingHours  String
+  // closingHours  String
 
   categoryId String
 
@@ -159,3 +165,11 @@ model Subcategory {
 
   @@index([categoryId])
 }
+
+////////////////////////////////////////////////   COMPANY USER   //////////////////////////////////////////////////
+// Company can create items
+// Company user has many items, items have only one company
+
+// model Company {
+
+// }
