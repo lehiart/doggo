@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Account {
-  id                String   @id @default(cuid())
+  id                String   @id @default(uuid())
   userId            String
   type              String
   provider          String
@@ -35,7 +35,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -57,7 +57,7 @@ model VerificationToken {
 ////////////////////////////////////////// NORMAL USER   ///////////////////////////////////////////////////////
 
 model User {
-  id             String    @id @default(cuid())
+  id             String    @id @default(uuid())
   name           String?
   hashedPassword String?
   email          String?   @unique
@@ -83,7 +83,7 @@ model User {
 ///// Member is a dog with info
 
 model Pack {
-  id     String @id @unique @default(cuid())
+  id     String @id @unique @default(uuid())
   userId String @unique
   user   User   @relation("UserPack", fields: [userId], references: [id])
 
@@ -93,7 +93,7 @@ model Pack {
 }
 
 model PackMember {
-  id       String @id @default(cuid())
+  id       String @id @default(uuid())
   packId   String @unique
   name     String
   breed    String
@@ -109,10 +109,12 @@ model PackMember {
 
 ///////////////////////////////////////  ITEMS & FAVORITE ITEMS LIST   //////////////////////////////////////////////////
 ////// Item can be part of a favoriteItems list, favoriteItems list has many items
-////// Item has a required 1 category and many subcategories
+////// Item has a required 1 category, category has many items
+///// Item has many subcategories, subcategories have only one item
+////// Item has a required 1 company, company has many items
 
 model FavoriteItems {
-  id     String @id @default(cuid())
+  id     String @id @default(uuid())
   userId String @unique
   user   User   @relation("UserFavoriteItems", fields: [userId], references: [id])
 
@@ -120,7 +122,7 @@ model FavoriteItems {
 }
 
 model Item {
-  id          String @id @default(cuid())
+  id          String @id @default(uuid())
   title       String
   description String
   // addressStreet String
@@ -130,37 +132,41 @@ model Item {
   // openingHours  String
   // closingHours  String
 
-  categoryId String
+  categoryId      String
+  companyId       String
+  favoriteItemsId String?
 
   category      Category      @relation("ItemCategory", fields: [categoryId], references: [id])
   subcategories Subcategory[] @relation("ItemSubcategories")
 
-  FavoriteItems   FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
-  favoriteItemsId String?
+  FavoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
+
+  company Company @relation("CompanyItems", fields: [companyId], references: [id])
 
   @@index([favoriteItemsId])
   @@index([categoryId])
+  @@index([companyId])
 }
 
 ////////////////////////////////////////////////   CATEGORY & SUBCATEGORY   //////////////////////////////////////////////////
 ////// Category has many subcategories, subcategories have only one category
 
 model Category {
-  id    String @id @default(cuid())
+  id    String @id @default(uuid())
   name  String @unique
   route String @unique
 
-  item          Item[]        @relation("ItemCategory")
+  items         Item[]        @relation("ItemCategory")
   subcategories Subcategory[] @relation("SubcategoriesOfCategory")
 }
 
 model Subcategory {
-  id         String @id @default(cuid())
+  id         String @id @default(uuid())
   name       String @unique
   route      String @unique
   categoryId String
 
-  item     Item[]   @relation("ItemSubcategories")
+  items    Item[]   @relation("ItemSubcategories")
   category Category @relation("SubcategoriesOfCategory", fields: [categoryId], references: [id])
 
   @@index([categoryId])
@@ -170,6 +176,17 @@ model Subcategory {
 // Company can create items
 // Company user has many items, items have only one company
 
-// model Company {
+model Company {
+  id             String    @id @default(uuid())
+  name           String
+  hashedPassword String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  createdAt      DateTime  @default(now()) @map(name: "created_at")
+  updatedAt      DateTime  @default(now()) @map(name: "updated_at")
 
-// }
+  pro Boolean @default(false)
+
+  items Item[] @relation("CompanyItems")
+}

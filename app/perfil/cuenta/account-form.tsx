@@ -99,8 +99,6 @@ export function AccountForm({
         body: JSON.stringify(payload),
       });
 
-      console.log(result);
-
       if (!result.ok) {
         toast({
           title: "No se pudo actualizar la contraseña.",

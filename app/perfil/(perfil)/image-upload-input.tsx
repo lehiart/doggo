@@ -19,7 +19,6 @@ export const ImageUploadInput = ({ form }: any) => {
   const editImage = ({
     target: { files },
   }: ChangeEvent<HTMLInputElement>): void => {
-    console.log(files);
     const imagesData = getImagesData(files);
 
     if (!imagesData) {

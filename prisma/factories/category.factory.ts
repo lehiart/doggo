@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { PrismaClient, Category, Subcategory } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 import { CATEGORY_NAMES } from "../../config/category";
 import { slugify } from "../../lib/utils";
