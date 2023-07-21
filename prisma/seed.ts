@@ -1,5 +1,4 @@
-import { PrismaClient, User, Pack, PackMember } from "@prisma/client";
-import { faker } from "@faker-js/faker";
+import { PrismaClient } from "@prisma/client";
 import createUsers from "./factories/user.factory";
 import createPacksAndAssociateToUser from "./factories/pack.factory";
 import createPackMembers from "./factories/pack-member.factory";
