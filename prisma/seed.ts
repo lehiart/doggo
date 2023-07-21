@@ -33,18 +33,22 @@ async function seed() {
       deleteCompanies,
     ]);
 
+    // 1 - create categories and subcategories
     await createCategories();
 
+    // 2 - create users, create packs and associate them to the existing users, thencreate pack members
     const usersIds = await createUsers();
     const packsIds = await createPacksAndAssociateToUser(usersIds);
     await createPackMembers(packsIds);
 
+    // 3 - create company users, create items and associate them to the existing companies
     const companiesIds = await createCompanies();
     const itemsIds = await createItemsAndAssociateToCompany(companiesIds);
-    const lists = await createFavoriteItemsListToUser(usersIds, itemsIds);
-    console.log(lists, "lists");
 
-    console.log("🌱 Database seeded 🌱");
+    // 4 - create favorite items list to each user, with pre-existing items
+    await createFavoriteItemsListToUser(usersIds, itemsIds);
+
+    console.log("🌱 -  Database seeded - 🌱");
   } catch (err) {
     console.log("Error seeding database", err);
     process.exit(1);
