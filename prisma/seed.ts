@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 
 async function seed() {
   try {
+    const deleteVerificationTokens = prisma.verificationToken.deleteMany();
     const deleteFavoriteItemsList = prisma.favoriteItems.deleteMany();
     const deleteItems = prisma.item.deleteMany();
     const deleteCategories = prisma.category.deleteMany();
@@ -28,6 +29,7 @@ async function seed() {
       deleteCategories,
       deletePackMembers,
       deletePacks,
+      deleteVerificationTokens,
       deleteUsers,
       deleteCompanies,
     ]);

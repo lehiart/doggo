@@ -11,7 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DogeHouse",
+  title: "Doghouse",
   description:
     "Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.",
   icons: {

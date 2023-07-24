@@ -15,7 +15,7 @@ export function MainNav() {
       <div className="mr-4 hidden md:flex">
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Dog className="h-6 w-6" />
-          <span className="hidden font-bold sm:inline-block">DogeHouse</span>
+          <span className="hidden font-bold sm:inline-block">DogHouse</span>
         </Link>
 
         <nav className="flex items-center space-x-6 text-sm font-medium">

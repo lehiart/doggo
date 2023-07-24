@@ -16,6 +16,10 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon, Github, Loader2 } from "lucide-react";
 import { GoogleIcon } from "./ui/google-icon";
+import {
+  INVALID_CREDENTIALS_MSG,
+  NOT_VERIFIED_EMAIL_MSG,
+} from "@/lib/constants";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -53,6 +57,24 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(false);
 
     if (signInResult?.error) {
+      if (signInResult.error === NOT_VERIFIED_EMAIL_MSG) {
+        return toast({
+          title: "Revise su correo electrónico ",
+          description:
+            "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
+          variant: "destructive",
+        });
+      }
+
+      if (signInResult.error === INVALID_CREDENTIALS_MSG) {
+        return toast({
+          title: "Revise sus credenciales",
+          description:
+            "Por favor, compruebe que ha introducido correctamente su correo electrónico y su contraseña.",
+          variant: "destructive",
+        });
+      }
+
       return toast({
         title: "Algo salió mal.",
         description:
@@ -67,85 +89,85 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid gap-2'>
-          <div className='grid gap-1'>
-            <Label className='sr-only' htmlFor='email'>
+        <div className="grid gap-2">
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="email">
               Email
             </Label>
 
             <Input
-              id='email'
-              placeholder='name@example.com'
-              type='email'
-              autoCapitalize='none'
-              autoComplete='email'
-              autoCorrect='off'
+              id="email"
+              placeholder="name@example.com"
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
               disabled={isLoading || isSocialLoading}
               {...register("email")}
             />
 
             {errors?.email && (
-              <p className='px-1 text-xs text-red-600'>
+              <p className="px-1 text-xs text-red-600">
                 {errors.email.message}
               </p>
             )}
           </div>
 
-          <div className='mb-2 grid gap-1'>
-            <Label className='sr-only' htmlFor='password'>
+          <div className="mb-2 grid gap-1">
+            <Label className="sr-only" htmlFor="password">
               Contraseña
             </Label>
 
-            <div className='flex-column flex gap-1'>
+            <div className="flex-column flex gap-1">
               <Input
-                id='password'
-                placeholder='Contraseña'
+                id="password"
+                placeholder="Contraseña"
                 type={showPassword ? "text" : "password"}
-                autoCapitalize='none'
-                autoComplete='password'
-                autoCorrect='off'
+                autoCapitalize="none"
+                autoComplete="password"
+                autoCorrect="off"
                 disabled={isLoading || isSocialLoading}
                 {...register("password")}
               />
               <Button
-                variant='outline'
-                size='icon'
+                variant="outline"
+                size="icon"
                 onClick={(e) => handlePasswordIconClick(e)}
                 tabIndex={-1}
               >
-                <span className='sr-only'>Ver contraseña</span>
+                <span className="sr-only">Ver contraseña</span>
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </Button>
             </div>
 
             {errors?.password && (
-              <p className='px-1 text-xs text-red-600'>
+              <p className="px-1 text-xs text-red-600">
                 {errors.password.message}
               </p>
             )}
           </div>
 
           <Button disabled={isLoading}>
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Iniciar sesión
           </Button>
         </div>
       </form>
 
-      <div className='relative'>
-        <div className='absolute inset-0 flex items-center'>
-          <span className='w-full border-t' />
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
         </div>
-        <div className='relative flex justify-center text-xs uppercase'>
-          <span className='bg-background px-2 text-muted-foreground'>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
             O continuar con
           </span>
         </div>
       </div>
 
       <Button
-        type='button'
-        variant='outline'
+        type="button"
+        variant="outline"
         onClick={() => {
           setIsSocialLoading(true);
           signIn("google");
@@ -153,9 +175,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         disabled={isLoading || isSocialLoading}
       >
         {isSocialLoading ? (
-          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <GoogleIcon className='h-4 w-[24px]' />
+          <GoogleIcon className="h-4 w-[24px]" />
         )}
         Google
       </Button>

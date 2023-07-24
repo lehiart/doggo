@@ -1,13 +1,13 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
+import { Metadata } from "next";
+import Link from "next/link";
 
-import { Button } from '@/components/ui/button';
-import { UserAuthForm } from '@/components/user-auth-form';
-import { ChevronLeft, Dog } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { UserAuthForm } from "@/components/user-auth-form";
+import { ChevronLeft, Dog } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: 'Inicia sesión',
-  description: 'Inicial sesión en tu cuenta de Dogehouse.',
+  title: "Inicia sesión",
+  description: "Inicia sesión en tu cuenta de Doghouse.",
 };
 
 export default function LoginPage() {
@@ -38,7 +38,7 @@ export default function LoginPage() {
 
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link
-            href="/register"
+            href="/registro"
             className="hover:text-brand underline underline-offset-4"
           >
             No tienes una cuenta? Registrate

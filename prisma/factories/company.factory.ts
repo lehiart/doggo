@@ -3,7 +3,7 @@ import { PrismaClient, Company } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-type RequiredUserData = Omit<Company, "id">;
+type RequiredUserData = Omit<Company, "id" | "emailVerified">;
 
 const createMultipleUsers = (amount: number) => {
   const users: RequiredUserData[] = [];
@@ -13,7 +13,6 @@ const createMultipleUsers = (amount: number) => {
       name: faker.company.name(),
       hashedPassword: faker.internet.password(),
       email: faker.internet.email().toLowerCase(),
-      emailVerified: null,
       image: faker.image.avatar(),
       createdAt: faker.date.past(),
       updatedAt: faker.date.recent(),

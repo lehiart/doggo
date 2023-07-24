@@ -65,13 +65,6 @@ export function UserRegisterForm({
         variant: "destructive",
       });
     } else {
-      signIn("credentials", {
-        email: data.email.toLowerCase(),
-        password: data.password,
-        redirect: false,
-        callbackUrl: "/",
-      });
-
       return toast({
         title: "Revise su correo electrónico ",
         description:

@@ -1,6 +1,10 @@
 import bcrypt from "bcrypt";
 import { db } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
+import { Resend } from "resend";
+import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
+import { EmailTemplate } from "@/components/email/email-template";
 
 export async function POST(request: Request) {
   try {
@@ -18,6 +22,8 @@ export async function POST(request: Request) {
     });
 
     if (userExists) {
+      // console.log('si existeeeeee', userExists)
+      // TODO: check if  email is not verified and token is expired????
       return new NextResponse("User already exists", { status: 400 });
     }
 
@@ -28,10 +34,32 @@ export async function POST(request: Request) {
         name,
         email,
         hashedPassword,
+        pack: { create: {} },
       },
     });
 
-    return NextResponse.json(user);
+    // User created OK - Start verification token email process
+    const verificationTokenData = {
+      userId: user.id,
+      token: `${randomUUID()}${randomUUID()}`.replace(/-/g, ""),
+    };
+
+    const token = await db.verificationToken.create({
+      data: verificationTokenData,
+    });
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const emailData = {
+      from: "Doghouse <hola@doghouse.mx>",
+      to: ["lehiarteaga@gmail.com"],
+      subject: "Activa tu cuenta",
+      react: EmailTemplate({ firstName: "Jose", token: token.token }),
+      headers: { "X-Entity-Ref-ID": new Date().getTime().toString() },
+    };
+
+    await resend.emails.send(emailData as CreateEmailOptions);
+
+    return NextResponse.json({ success: "ok", status: 200 });
   } catch (error) {
     console.error(error, "REGISTRATION_ERROR");
     return new NextResponse("Something went wrong", { status: 500 });

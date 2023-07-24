@@ -1,15 +1,12 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
+import { db } from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
-import { db } from "@/lib/prisma";
+import { INVALID_CREDENTIALS_MSG, NOT_VERIFIED_EMAIL_MSG } from "./constants";
 
 export const authOptions: NextAuthOptions = {
-  // This is a temporary fix for prisma client.
-  // @see https://github.com/prisma/prisma/issues/16117
-  adapter: PrismaAdapter(db as any),
   session: {
     strategy: "jwt",
   },
@@ -28,7 +25,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
-          // throw new Error("Invalid credentials")
         }
 
         const user = await db.user.findUnique({
@@ -39,7 +35,10 @@ export const authOptions: NextAuthOptions = {
 
         if (!user) {
           return null;
-          // throw new Error("Invalid credentials")
+        }
+
+        if (!user.emailVerified) {
+          throw new Error(NOT_VERIFIED_EMAIL_MSG);
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -48,8 +47,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isCorrectPassword) {
-          return null;
-          // throw new Error("Invalid credentials")
+          throw new Error(INVALID_CREDENTIALS_MSG);
         }
 
         return user;
@@ -61,6 +59,47 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ account, profile }) {
+      if (account?.provider === "google") {
+        if (!profile?.email) {
+          return false;
+        }
+
+        await db.user.upsert({
+          where: {
+            email: profile.email,
+          },
+          create: {
+            email: profile.email,
+            name: profile.name,
+            image: (profile as any).picture,
+            pack: {
+              create: {},
+            },
+            accounts: {
+              create: {
+                type: account.type,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                refresh_token: account?.refresh_token,
+                access_token: account?.access_token,
+                expires_at: account?.expires_at,
+                token_type: account?.token_type,
+                scope: account?.scope,
+                id_token: account?.id_token,
+                session_state: account?.session_state,
+              },
+            },
+          },
+          update: {
+            name: profile.name,
+            image: (profile as any).picture,
+          },
+        });
+      }
+
+      return true;
+    },
     async session({ token, session }) {
       if (token) {
         session.user.id = token.id;

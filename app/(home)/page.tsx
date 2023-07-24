@@ -14,7 +14,7 @@ export default function Home() {
   });
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    // console.log(data);
   };
 
   return (

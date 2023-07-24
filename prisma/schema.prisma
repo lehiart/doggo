@@ -46,32 +46,41 @@ model Session {
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+  id          String    @id @default(uuid())
+  token       String    @unique
+  activatedAt DateTime?
 
-  @@unique([identifier, token])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([id, token])
+  @@index([userId])
   @@map(name: "verification_tokens")
 }
 
 ////////////////////////////////////////// NORMAL USER   ///////////////////////////////////////////////////////
 
 model User {
-  id             String    @id @default(uuid())
+  id             String   @id @default(uuid())
   name           String?
   hashedPassword String?
-  email          String?   @unique
-  emailVerified  DateTime?
+  email          String?  @unique
+  emailVerified  Boolean  @default(false)
   image          String?
-  createdAt      DateTime  @default(now()) @map(name: "created_at")
-  updatedAt      DateTime  @default(now()) @map(name: "updated_at")
+  createdAt      DateTime @default(now()) @map(name: "created_at")
+  updatedAt      DateTime @default(now()) @map(name: "updated_at")
   bio            String?
   links          String?
   location       String?
   phone          String?
 
-  accounts      Account[]
-  sessions      Session[]
+  accounts           Account[]
+  sessions           Session[]
+  verificationTokens VerificationToken[]
+
   pack          Pack?          @relation("UserPack")
   favoriteItems FavoriteItems? @relation("UserFavoriteItems")
 
@@ -85,7 +94,7 @@ model User {
 model Pack {
   id     String @id @unique @default(uuid())
   userId String @unique
-  user   User   @relation("UserPack", fields: [userId], references: [id])
+  user   User   @relation("UserPack", fields: [userId], references: [id], onDelete: Cascade)
 
   members PackMember[]
 
@@ -116,7 +125,7 @@ model PackMember {
 model FavoriteItems {
   id     String @id @default(uuid())
   userId String @unique
-  user   User   @relation("UserFavoriteItems", fields: [userId], references: [id])
+  user   User   @relation("UserFavoriteItems", fields: [userId], references: [id], onDelete: Cascade)
 
   items Item[]
 }
@@ -177,14 +186,14 @@ model Subcategory {
 // Company user has many items, items have only one company
 
 model Company {
-  id             String    @id @default(uuid())
+  id             String   @id @default(uuid())
   name           String
   hashedPassword String?
-  email          String?   @unique
-  emailVerified  DateTime?
+  email          String?  @unique
+  emailVerified  Boolean  @default(false)
   image          String?
-  createdAt      DateTime  @default(now()) @map(name: "created_at")
-  updatedAt      DateTime  @default(now()) @map(name: "updated_at")
+  createdAt      DateTime @default(now()) @map(name: "created_at")
+  updatedAt      DateTime @default(now()) @map(name: "updated_at")
 
   pro Boolean @default(false)
 

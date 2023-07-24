@@ -116,7 +116,7 @@ function SocialMediaURLSelect({ form }: any) {
                 <FormItem className="w-full">
                   <FormControl>
                     <Input
-                      placeholder="http://facebook.com/dogehouse"
+                      placeholder="http://facebook.com/doghouse"
                       {...field}
                     />
                   </FormControl>

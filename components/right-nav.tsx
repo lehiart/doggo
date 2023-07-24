@@ -10,30 +10,30 @@ function RightNav() {
   const { data: session } = useSession();
 
   return (
-    <div className='flex flex-1 items-center space-x-2 justify-end'>
+    <div className="flex flex-1 items-center justify-end space-x-2">
       {session?.user ? (
-        <div className='flex'>
+        <div className="flex">
           <UserAccountNav user={session.user} />
         </div>
       ) : (
         <>
-          <nav className='items-center hidden md:flex'>
-            <Link href='/login'>
-              <Button variant='secondary' size='sm'>
+          <nav className="hidden items-center md:flex">
+            <Link href="/login">
+              <Button variant="secondary" size="sm">
                 Acceder
               </Button>
             </Link>
 
-            <Link href='/register' className='pl-4 pr-2'>
-              <Button variant='secondary' size='sm'>
+            <Link href="/registro" className="pl-4 pr-2">
+              <Button variant="secondary" size="sm">
                 Registrate
               </Button>
             </Link>
           </nav>
 
-          <nav className='md:hidden'>
-            <Link href='/login'>
-              <Button variant='secondary' size='sm'>
+          <nav className="md:hidden">
+            <Link href="/login">
+              <Button variant="secondary" size="sm">
                 Acceder
               </Button>
             </Link>

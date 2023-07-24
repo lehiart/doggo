@@ -29,22 +29,6 @@ export function isValidImage(name: string, bytes: number): boolean {
   return isValidImageExtension(name) && bytes < 20 * Math.pow(1024, 2);
 }
 
-// export function isValidUsername(
-//   username: string,
-//   value: string
-// ): string | null {
-//   if (value.length < 4)
-//     return 'Your username must be longer than 4 characters.';
-//   if (value.length > 15)
-//     return 'Your username must be shorter than 15 characters.';
-//   if (!/^\w+$/i.test(value))
-//     return "Your username can only contain letters, numbers and '_'.";
-//   if (!/[a-z]/i.test(value)) return 'Include a non-number character.';
-//   if (value === username) return 'This is your current username.';
-
-//   return null;
-// }
-
 export function getImagesData(
   files: FileList | null,
   currentFiles?: number
