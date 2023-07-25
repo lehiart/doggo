@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { breeds } from "./breeds";
+import { breeds } from "../lib/breeds";
 
 export function BreedSelector({ form }: any) {
   const [open, setOpen] = React.useState(false);

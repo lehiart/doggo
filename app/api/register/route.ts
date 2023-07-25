@@ -22,7 +22,6 @@ export async function POST(request: Request) {
     });
 
     if (userExists) {
-      // console.log('si existeeeeee', userExists)
       // TODO: check if  email is not verified and token is expired????
       return new NextResponse("User already exists", { status: 400 });
     }

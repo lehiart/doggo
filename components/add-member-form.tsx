@@ -15,7 +15,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BreedSelector } from "./breed-selector-input";
-import ImageUploadInput from "../perfil/(perfil)/image-upload-input";
+import ImageUploadInput from "../app/perfil/(perfil)/image-upload-input";
 import { toast } from "@/components/ui/use-toast";
 import {
   Select,
@@ -57,12 +57,13 @@ export default function AddMemberForm({ id }: { id: string | undefined }) {
     };
 
     try {
-      const result = await fetch("/api/pack", {
+      const result = await fetch("/api/pack/member", {
         method: "POST",
         body: JSON.stringify(payload),
       });
 
       if (result.ok) {
+        router.refresh();
         router.push("/manada");
       }
     } catch (error) {

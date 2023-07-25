@@ -12,7 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DogIcon, Trash2Icon } from "lucide-react";
+import { DogIcon } from "lucide-react";
+import { DeletePackMemberBtn } from "./delete-pack-member-btn";
 
 async function MyPackPage() {
   const user = await getCurrentUser();
@@ -71,9 +72,8 @@ async function MyPackPage() {
                   </CardContent>
                   <CardFooter className="gap-2">
                     <Button className="w-full">Editar</Button>
-                    <Button className="bg-destructive">
-                      <Trash2Icon />
-                    </Button>
+
+                    <DeletePackMemberBtn memberId={member.id} />
                   </CardFooter>
                 </Card>
               </li>

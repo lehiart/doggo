@@ -114,8 +114,6 @@ const ActivateTokenPage = ({ params }: { params: { token: string } }) => {
         body: JSON.stringify({ token }),
       });
 
-      console.log("el result es: ", result);
-
       if (result.status === 403) {
         setActivationStatus(ActivationStatus.INVALID);
         return;
