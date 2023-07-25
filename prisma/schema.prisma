@@ -102,13 +102,15 @@ model Pack {
 }
 
 model PackMember {
-  id       String @id @default(uuid())
-  packId   String @unique
+  id       String  @id @default(uuid())
+  packId   String
   name     String
   breed    String
   age      String
-  imageURL String
+  imageURL String?
   size     String
+  gender   String
+  weight   String?
 
   pack Pack @relation(fields: [packId], references: [id], onDelete: Cascade)
 

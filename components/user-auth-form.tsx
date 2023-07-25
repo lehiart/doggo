@@ -51,7 +51,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const signInResult = await signIn("credentials", {
       email: data.email.toLowerCase(),
       password: data.password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: searchParams?.get("from") || "/",
     });
 
     setIsLoading(false);

@@ -148,7 +148,7 @@ export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <ImageUploadInput form={form} />
+        <ImageUploadInput form={form} type="user" />
 
         <FormField
           control={form.control}

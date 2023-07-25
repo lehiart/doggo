@@ -1,7 +1,18 @@
+import React from "react";
 import { db } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
-import Image from "next/image";
-import React from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DogIcon, Trash2Icon } from "lucide-react";
 
 async function MyPackPage() {
   const user = await getCurrentUser();
@@ -15,27 +26,61 @@ async function MyPackPage() {
       userId: user.id,
     },
     select: {
+      id: true,
       members: true,
     },
   });
 
-  // console.log(myPack);
-
   return (
     <div>
-      <h1 className="mb-20">Mi Manada</h1>
-      {myPack?.members.map((member) => (
-        <div key={member.id}>
-          <div>{member.name}</div>
-          <Image
-            quality={100}
-            src={member.imageURL}
-            alt={member.name}
-            width={200}
-            height={200}
-          />
+      <div className="my-4">
+        <Link href="manada/nuevo">
+          <Button>Agregar nuevo</Button>
+        </Link>
+      </div>
+
+      {myPack?.members.length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
+          <p className="mb-4">Aún no tienes miembros en tu manada</p>
+          <Link href="manada/nuevo">
+            <Button>Agregar nuevo</Button>
+          </Link>
         </div>
-      ))}
+      ) : (
+        <div>
+          <p className="mb-4">Estos son los miembros de mi manada:</p>
+          <ul>
+            {myPack?.members.map((member) => (
+              <li key={member.id}>
+                <Card className="mb-4 w-[350px]">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-2">
+                    <div>
+                      <CardTitle>{member.name}</CardTitle>
+                      <CardDescription>{member.breed}</CardDescription>
+                    </div>
+
+                    <Avatar>
+                      <AvatarImage src={member.imageURL || undefined} />
+                      <AvatarFallback>
+                        <DogIcon />
+                      </AvatarFallback>
+                    </Avatar>
+                  </CardHeader>
+                  <CardContent>
+                    <p>Card Content</p>
+                  </CardContent>
+                  <CardFooter className="gap-2">
+                    <Button className="w-full">Editar</Button>
+                    <Button className="bg-destructive">
+                      <Trash2Icon />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

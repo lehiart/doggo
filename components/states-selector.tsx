@@ -56,7 +56,6 @@ const statesOfMexico = [
 
 export function StatesSelector({ control }: { control: any }) {
   const [open, setOpen] = useState(false);
-  // const [value, setValue] = useState("cdmx");
 
   return (
     <div>

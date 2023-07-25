@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/tooltip";
 import { getImagesData } from "@/lib/validations/image";
 import Image from "next/image";
-import { CameraIcon, User2Icon } from "lucide-react";
+import { CameraIcon, DogIcon, User2Icon } from "lucide-react";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 
-export const ImageUploadInput = ({ form }: any) => {
+export const ImageUploadInput = ({ form, type }: any) => {
   const profileInputFileRef = useRef<HTMLInputElement>(null);
 
   const editImage = ({
@@ -32,6 +32,8 @@ export const ImageUploadInput = ({ form }: any) => {
     //TODO: upload image to server with and save the url string to user profile
     form.setValue("image", newImage);
   };
+
+  const MyIcon = type === "user" ? User2Icon : DogIcon;
 
   return (
     <div className="relative mx-auto my-16 flex w-32 justify-center md:w-[200px]">
@@ -63,7 +65,7 @@ export const ImageUploadInput = ({ form }: any) => {
                         />
                       </figure>
                     ) : (
-                      <User2Icon
+                      <MyIcon
                         className="inner:!m-1 inner:rounded-full flex h-full
                     h-full w-full w-full items-center justify-center rounded-full bg-muted"
                       />

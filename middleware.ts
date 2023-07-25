@@ -45,6 +45,9 @@ export const config = {
   matcher: [
     "/login",
     "/registro",
+    "/manada",
+    "/manada/nuevo",
+
     // '/dashboard/:path*',
     // '/editor/:path*',
     // '/paseos',

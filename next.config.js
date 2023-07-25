@@ -8,6 +8,9 @@ const nextConfig = {
       "loremflickr.com",
     ],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;

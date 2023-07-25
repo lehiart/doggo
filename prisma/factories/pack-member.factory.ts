@@ -20,7 +20,9 @@ const createPackMembers = async (packIds: string[]): Promise<string[]> => {
           ]),
           age: faker.helpers.arrayElement(["1", "2", "3", "4", "5"]),
           imageURL: faker.image.urlLoremFlickr({ category: "animals" }),
-          size: faker.helpers.arrayElement(["Pequeño", "Mediano", "Grande"]),
+          size: faker.helpers.arrayElement(["small", "medium", "large"]),
+          gender: faker.helpers.arrayElement(["male", "female"]),
+          weight: faker.helpers.arrayElement(["1", "2", "3", "4", "5"]),
         };
 
         return prisma.packMember.create({ data });
