@@ -37,10 +37,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        if (!user.emailVerified) {
-          throw new Error(NOT_VERIFIED_EMAIL_MSG);
-        }
-
         const isCorrectPassword = await bcrypt.compare(
           credentials.password,
           user.hashedPassword!
@@ -48,6 +44,10 @@ export const authOptions: NextAuthOptions = {
 
         if (!isCorrectPassword) {
           throw new Error(INVALID_CREDENTIALS_MSG);
+        }
+
+        if (!user.emailVerified) {
+          throw new Error(NOT_VERIFIED_EMAIL_MSG);
         }
 
         return user;
@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
             email: profile.email,
             name: profile.name,
             image: (profile as any).picture,
+            emailVerified: true,
             pack: {
               create: {},
             },

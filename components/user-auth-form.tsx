@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { EyeIcon, EyeOffIcon, Github, Loader2 } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { GoogleIcon } from "./ui/google-icon";
 import {
   INVALID_CREDENTIALS_MSG,
@@ -58,15 +58,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(false);
 
     if (signInResult?.error) {
-      if (signInResult.error === NOT_VERIFIED_EMAIL_MSG) {
-        return toast({
-          title: "Revise su correo electrónico ",
-          description:
-            "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
-          variant: "destructive",
-        });
-      }
-
       if (signInResult.error === INVALID_CREDENTIALS_MSG) {
         return toast({
           title: "Revise sus credenciales",
@@ -74,6 +65,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             "Por favor, compruebe que ha introducido correctamente su correo electrónico y su contraseña.",
           variant: "destructive",
         });
+      }
+
+      if (signInResult.error === NOT_VERIFIED_EMAIL_MSG) {
+        router.push("/cuenta-no-verificada");
+        return;
       }
 
       return toast({
