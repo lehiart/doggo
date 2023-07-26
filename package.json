@@ -12,7 +12,8 @@
     "postinstall": "prisma generate",
     "prisma": "npx prisma studio",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "npx prisma db seed"
+    "prisma:seed": "npx prisma db seed",
+    "email": "email dev -p 3006"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -33,6 +34,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.4",
     "@radix-ui/react-tooltip": "^1.0.6",
+    "@react-email/components": "0.0.7",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -53,6 +55,7 @@
     "react": "18.2.0",
     "react-day-picker": "^8.8.0",
     "react-dom": "18.2.0",
+    "react-email": "1.9.4",
     "react-hook-form": "^7.45.1",
     "resend": "^0.17.1",
     "tailwind-merge": "^1.13.2",

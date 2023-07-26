@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
-import { EmailTemplate } from "@/components/email/email-template";
+import VerifyTokenEmail from "@/emails/verify-token-email";
 
 export async function POST(request: Request) {
   try {
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       from: "Doghouse <hola@doghouse.mx>",
       to: ["lehiarteaga@gmail.com"],
       subject: "Activa tu cuenta",
-      react: EmailTemplate({ firstName: "Jose", token: token.token }),
+      react: VerifyTokenEmail({ firstName: "Jose", token: token.token }),
       headers: { "X-Entity-Ref-ID": new Date().getTime().toString() },
     };
 
