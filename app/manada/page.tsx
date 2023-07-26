@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DogIcon } from "lucide-react";
-import { DeletePackMemberBtn } from "./delete-pack-member-btn";
+import { DeletePackMemberBtn } from "../../components/delete-pack-member-btn";
 
 async function MyPackPage() {
   const user = await getCurrentUser();
@@ -71,7 +71,12 @@ async function MyPackPage() {
                     <p>Card Content</p>
                   </CardContent>
                   <CardFooter className="gap-2">
-                    <Button className="w-full">Editar</Button>
+                    <Link
+                      href={`manada/editar/${member.id}`}
+                      className="w-full"
+                    >
+                      <Button className="w-full">Editar</Button>
+                    </Link>
 
                     <DeletePackMemberBtn memberId={member.id} />
                   </CardFooter>

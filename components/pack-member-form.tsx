@@ -27,6 +27,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PackMember } from "@prisma/client";
 
 const formSchema = z.object({
   name: z.string().min(1).max(25),
@@ -38,22 +39,33 @@ const formSchema = z.object({
   weight: z.string().optional(),
 });
 
-export default function AddMemberForm({ id }: { id: string | undefined }) {
+interface MemberFormProps {
+  id: string | undefined;
+  type: "EDIT" | "NEW";
+  member?: PackMember | undefined;
+}
+
+export default function PackMemberForm({ id, type, member }: MemberFormProps) {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: member?.name,
+      breed: member?.breed,
+      age: member?.age,
+      gender: member?.gender,
+      size: member?.size,
+      weight: member?.weight || undefined,
+      image: member?.imageURL || undefined,
+    },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsSaving(true);
-
+  async function addNewMember(data: z.infer<typeof formSchema>) {
     const payload = {
       ...data,
       id,
-      age: data.age.includes("mes") ? data.age.replace("mes", "") : data.age,
     };
 
     try {
@@ -73,6 +85,45 @@ export default function AddMemberForm({ id }: { id: string | undefined }) {
         description: "Si el problema persiste, contacta a soporte.",
         variant: "destructive",
       });
+    }
+  }
+
+  const editMemberData = async (data: z.infer<typeof formSchema>) => {
+    const payload = {
+      ...data,
+      id,
+      memberId: member?.id,
+    };
+
+    try {
+      const result = await fetch("/api/pack/member", {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+
+      if (result.ok) {
+        router.refresh();
+        router.push("/manada");
+      }
+    } catch (error) {
+      toast({
+        title:
+          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
+        description: "Si el problema persiste, contacta a soporte.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsSaving(true);
+
+    if (type === "EDIT") {
+      await editMemberData(data);
+    }
+
+    if (type === "NEW") {
+      await addNewMember(data);
     }
 
     setIsSaving(false);
@@ -127,7 +178,7 @@ export default function AddMemberForm({ id }: { id: string | undefined }) {
                   </FormControl>
                   <SelectContent className="h-[200px]">
                     {Array.from({ length: 11 }, (_, i) => (
-                      <SelectItem key={i + "mes"} value={`${i + 1}mes`}>
+                      <SelectItem key={i + "mes"} value={`0.${i + 1}`}>
                         {i + 1} {i + 1 === 1 ? "mes" : "meses"}
                       </SelectItem>
                     ))}
@@ -238,8 +289,8 @@ export default function AddMemberForm({ id }: { id: string | undefined }) {
           />
         </div>
 
-        <Button type="submit" disabled={!form.formState.isDirty || isSaving}>
-          Agregar
+        <Button type="submit" disabled={!form.formState.isValid || isSaving}>
+          {type === "EDIT" ? "Editar" : "Agregar"}
         </Button>
       </form>
     </Form>

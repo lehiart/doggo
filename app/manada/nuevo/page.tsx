@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/session";
-import AddMemberForm from "../../../components/add-member-form";
+import PackMemberForm from "../../../components/pack-member-form";
 import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export default async function AddNewMemberPage() {
 
       <h1>Agrega un nuevo miembro</h1>
 
-      <AddMemberForm id={user?.id} />
+      <PackMemberForm id={user?.id} type="NEW" />
     </div>
   );
 }
