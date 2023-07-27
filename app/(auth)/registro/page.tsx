@@ -3,8 +3,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserRegisterForm } from "@/components/user-register-form";
 import { DogIcon } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CompanyRegistrationForm } from "@/components/company-register-form";
 
 export const metadata = {
   title: "Crea una cuenta",
@@ -33,19 +31,7 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <Tabs defaultValue="user" className="min-h-[356px]">
-            <TabsList className="mb-4 grid w-full grid-cols-2">
-              <TabsTrigger value="user">Usuario</TabsTrigger>
-              <TabsTrigger value="company">Negocio</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="user">
-              <UserRegisterForm />
-            </TabsContent>
-            <TabsContent value="company">
-              <CompanyRegistrationForm />
-            </TabsContent>
-          </Tabs>
+          <UserRegisterForm />
 
           <p className="px-8 text-center text-sm text-muted-foreground">
             Al hacer clic en Continuar, acepta nuestros{" "}

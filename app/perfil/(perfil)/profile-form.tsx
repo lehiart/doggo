@@ -23,7 +23,6 @@ import SocialMediaURLSelect from "./social-media-url-select";
 import { StatesSelector } from "@/components/states-selector";
 import { Loader2Icon } from "lucide-react";
 import ImageUploadInput from "./image-upload-input";
-import { EditableUserData, ExtendedUserProfileForm } from "@/types/user";
 
 const profileFormSchema = z.object({
   name: z
@@ -45,10 +44,23 @@ const profileFormSchema = z.object({
   location: z.string().optional(),
 });
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+type FormData = z.infer<typeof profileFormSchema>;
 
-interface ProfileFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  userProfile: EditableUserData;
+export interface ProfileFormProps
+  extends React.HTMLAttributes<HTMLFormElement> {
+  userProfile: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+    profile: {
+      id: string;
+      bio: string | null;
+      location: string | null;
+      phone: string | null;
+      links: string | null;
+    };
+  };
 }
 
 const cleanData = (data: any) => {
@@ -78,25 +90,31 @@ const addMaskToPhone = (phone: string) => {
   return phoneMask;
 };
 
-export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
+export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
 
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<FormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: userProfile?.name || "",
       email: userProfile?.email || "",
       image: userProfile?.image || "",
-      bio: userProfile?.bio || "",
+      bio: userProfile?.profile?.bio || "",
       url: "",
-      links: (userProfile?.links && JSON.parse(userProfile.links)) || "",
-      phone: (userProfile?.phone && addMaskToPhone(userProfile.phone)) || "",
-      location: userProfile?.location || "",
+      links:
+        (userProfile?.profile?.links &&
+          JSON.parse(userProfile.profile?.links)) ||
+        "",
+      phone:
+        (userProfile?.profile?.phone &&
+          addMaskToPhone(userProfile.profile?.phone)) ||
+        "",
+      location: userProfile?.profile?.location || "",
     },
     mode: "onChange",
   });
 
-  async function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: FormData) {
     setIsSaving(true);
 
     type DirtyField = {
@@ -124,7 +142,11 @@ export const ProfileForm = ({ userProfile, id }: ProfileFormProps) => {
     try {
       const result = await fetch("/api/profile", {
         method: "POST",
-        body: JSON.stringify({ ...payload, id, updatedAt: new Date() }),
+        body: JSON.stringify({
+          ...payload,
+          userId: userProfile.id,
+          updatedAt: new Date(),
+        }),
         headers: {
           "Content-Type": "application/json",
         },

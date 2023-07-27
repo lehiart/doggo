@@ -6,7 +6,6 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { cn } from "@/lib/utils";
 import { userRegisterSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,15 +13,11 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { GoogleIcon } from "@/components/ui/google-icon";
-
-interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type FormData = z.infer<typeof userRegisterSchema>;
 
-export function UserRegisterForm({
-  className,
-  ...props
-}: UserRegisterFormProps) {
+export function UserRegisterForm() {
   const {
     register,
     handleSubmit,
@@ -35,6 +30,7 @@ export function UserRegisterForm({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isSocialLoading, setIsSocialLoading] = React.useState<boolean>(false);
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [roleType, setRoleType] = React.useState<string>("USER");
 
   function handlePasswordIconClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
@@ -53,6 +49,7 @@ export function UserRegisterForm({
         name: data.name,
         email: data.email.toLowerCase(),
         password: data.password,
+        role: roleType,
       }),
     });
 
@@ -76,93 +73,112 @@ export function UserRegisterForm({
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="name">
-              Nombre
-            </Label>
+        <Tabs defaultValue="user">
+          <TabsList className="mb-4 grid w-full grid-cols-2">
+            <TabsTrigger value="user" onClick={() => setRoleType("USER")}>
+              Usuario
+            </TabsTrigger>
+            <TabsTrigger value="company" onClick={() => setRoleType("COMPANY")}>
+              Negocio
+            </TabsTrigger>
+          </TabsList>
+          <div className="grid gap-2">
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="name">
+                Nombre
+              </Label>
 
-            <Input
-              id="name"
-              placeholder="Nombre"
-              type="text"
-              autoCapitalize="none"
-              autoComplete="username"
-              autoCorrect="off"
-              disabled={isLoading || isSocialLoading}
-              {...register("name")}
-            />
-
-            {errors?.name && (
-              <p className="px-1 text-xs text-red-600">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-
-            <Input
-              id="email"
-              placeholder="nombre@correo.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading || isSocialLoading}
-              {...register("email")}
-            />
-
-            {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-2 grid gap-1">
-            <Label className="sr-only" htmlFor="password">
-              Contraseña
-            </Label>
-
-            <div className="flex-column flex gap-1">
               <Input
-                id="password"
-                placeholder="Contraseña"
-                type={showPassword ? "text" : "password"}
+                id="name"
+                placeholder="Nombre de usuario"
+                type="text"
                 autoCapitalize="none"
-                autoComplete="password"
+                autoComplete="username"
                 autoCorrect="off"
                 disabled={isLoading || isSocialLoading}
-                {...register("password")}
+                {...register("name")}
               />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={(e) => handlePasswordIconClick(e)}
-                tabIndex={-1}
-                disabled={isLoading || isSocialLoading}
-              >
-                <span className="sr-only">Ver contraseña</span>
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </Button>
+
+              {errors?.name && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
 
-            {errors?.password && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="email">
+                Email
+              </Label>
 
-          <Button disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Registrarse
-          </Button>
-        </div>
+              <Input
+                id="email"
+                placeholder="nombre@correo.com"
+                type="email"
+                autoCapitalize="none"
+                autoComplete="email"
+                autoCorrect="off"
+                disabled={isLoading || isSocialLoading}
+                {...register("email")}
+              />
+
+              {errors?.email && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-2 grid gap-1">
+              <Label className="sr-only" htmlFor="password">
+                Contraseña
+              </Label>
+
+              <div className="flex-column flex gap-1">
+                <Input
+                  id="password"
+                  placeholder="Contraseña"
+                  type={showPassword ? "text" : "password"}
+                  autoCapitalize="none"
+                  autoComplete="password"
+                  autoCorrect="off"
+                  disabled={isLoading || isSocialLoading}
+                  {...register("password")}
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={(e) => handlePasswordIconClick(e)}
+                  tabIndex={-1}
+                  disabled={isLoading || isSocialLoading}
+                >
+                  <span className="sr-only">Ver contraseña</span>
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </Button>
+              </div>
+
+              {errors?.password && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <TabsContent value="user">
+              <Button disabled={isLoading} className="w-full">
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Registrarse
+              </Button>
+            </TabsContent>
+            <TabsContent value="company">
+              <Button disabled={isLoading} className="w-full">
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Registrarse como negocio
+              </Button>
+            </TabsContent>
+          </div>
+        </Tabs>
       </form>
 
       <div className="relative">

@@ -11,6 +11,11 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Role {
+  USER
+  COMPANY
+}
+
 model Account {
   id                String   @id @default(uuid())
   userId            String
@@ -52,19 +57,16 @@ model VerificationToken {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now())
 
-  userId    String?
-  companyId String?
+  userId String?
 
-  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  company Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([id, token])
   @@index([userId])
-  @@index([companyId])
   @@map(name: "verification_tokens")
 }
 
-////////////////////////////////////////// NORMAL USER   ///////////////////////////////////////////////////////
+////////////////////////////////////////// USER   ///////////////////////////////////////////////////////
 
 model User {
   id             String   @id @default(uuid())
@@ -75,20 +77,52 @@ model User {
   image          String?
   createdAt      DateTime @default(now()) @map(name: "created_at")
   updatedAt      DateTime @default(now()) @map(name: "updated_at")
-  bio            String?
-  links          String?
-  location       String?
-  phone          String?
   role           Role     @default(USER)
 
   accounts           Account[]
   sessions           Session[]
   verificationTokens VerificationToken[]
+  profile            Profile?
 
-  pack          Pack?          @relation("UserPack")
-  favoriteItems FavoriteItems? @relation("UserFavoriteItems")
+  pack          Pack?          @relation("UserPack") // user can have zero (role: company) or one pack (role: user)
+  favoriteItems FavoriteItems? @relation("UserFavoriteItems") // only user (role: user) can have favorite items
+  companies     Company[]      @relation("UserCompanies") // user can have zero (role: user) or many companies (role: company)
 
   @@map(name: "users")
+}
+
+////////////////////////////////////////// USER PROFILE   ///////////////////////////////////////////////////////
+
+model Profile {
+  id       String  @id @default(uuid())
+  userId   String  @unique //only one profile for one user
+  bio      String?
+  links    String?
+  location String?
+  phone    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "profiles")
+}
+
+///////////////////////////// USER COMPANIES FOR ROLE: COMPANY  ///////////////////////////////////////////////////////
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String?
+  image     String?
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  ownerId   String
+
+  pro   Boolean @default(false)
+  owner User    @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
+
+  items Item[] @relation("CompanyItems")
+
+  @@index([ownerId])
 }
 
 ////////////////////////////////////////// PACK & PACK MEMBERS  ///////////////////////////////////////////////////////
@@ -185,30 +219,4 @@ model Subcategory {
   category Category @relation("SubcategoriesOfCategory", fields: [categoryId], references: [id])
 
   @@index([categoryId])
-}
-
-////////////////////////////////////////////////   COMPANY USER   //////////////////////////////////////////////////
-// Company can create items
-// Company user has many items, items have only one company
-
-model Company {
-  id             String   @id @default(uuid())
-  name           String
-  hashedPassword String?
-  email          String?  @unique
-  emailVerified  Boolean  @default(false)
-  image          String?
-  createdAt      DateTime @default(now()) @map(name: "created_at")
-  updatedAt      DateTime @default(now()) @map(name: "updated_at")
-
-  pro  Boolean @default(false)
-  role Role    @default(COMPANY)
-
-  verificationTokens VerificationToken[]
-  items              Item[]              @relation("CompanyItems")
-}
-
-enum Role {
-  USER
-  COMPANY
 }

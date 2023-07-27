@@ -6,24 +6,36 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, ...values } = body;
+    const { userId, ...values } = body;
+    console.log(userId, values, "PROFILE_UPDATE");
 
     // Ensure user is authenticated and has access to this user.
     const session = await getServerSession(authOptions);
-    if (!session?.user || id !== session?.user.id) {
+    if (!session?.user || userId !== session?.user.id) {
       return new Response(null, { status: 403 });
     }
 
-    const user = await db.user.update({
+    await db.user.update({
       where: {
-        id,
+        id: userId,
       },
-      data: values,
+      data: {
+        name: values.name,
+        image: values.image,
+        profile: {
+          update: {
+            bio: values.bio,
+            location: values.location,
+            links: values.links,
+            phone: values.phone,
+          },
+        },
+      },
     });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error(error, "REGISTRATION_ERROR");
+    console.error(error, "PPROFILE_UPDATE_ERROR");
     return new NextResponse("Something went wrong", { status: 500 });
   }
 }

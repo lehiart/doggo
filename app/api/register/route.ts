@@ -5,13 +5,16 @@ import { randomUUID } from "crypto";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import VerifyTokenEmail from "@/emails/verify-token-email";
+import { RegistrationData } from "@/types/next-auth";
+import { ROLE } from "@/lib/constants";
+// import { type UserCreateArgs } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, password } = body;
+    const { name, email, password, role } = body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
@@ -21,26 +24,29 @@ export async function POST(request: Request) {
       },
     });
 
-    const userCompanyExists = await db.company.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (userExists || userCompanyExists) {
+    if (userExists) {
       return new NextResponse("User already exists", { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = await db.user.create({
-      data: {
-        name,
-        email,
-        hashedPassword,
-        pack: { create: {} },
-      },
-    });
+    const data: any = {
+      name,
+      email,
+      hashedPassword,
+      profile: { create: {} },
+    };
+
+    if (role !== ROLE.USER && role === ROLE.COMPANY) {
+      data.role = role;
+      data.companies = { create: {} };
+    }
+
+    if (role === ROLE.USER) {
+      data.pack = { create: {} };
+    }
+
+    const user = await db.user.create({ data });
 
     // User created OK - Start verification token email process
     const verificationTokenData = {

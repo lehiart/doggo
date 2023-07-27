@@ -19,7 +19,6 @@ import { GoogleIcon } from "./ui/google-icon";
 import {
   INVALID_CREDENTIALS_MSG,
   NOT_VERIFIED_EMAIL_MSG,
-  ROLE,
 } from "@/lib/constants";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -50,7 +49,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     const signInResult = await signIn("credentials", {
-      role: ROLE.USER,
       email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,

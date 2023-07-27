@@ -4,11 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 
-import {
-  INVALID_CREDENTIALS_MSG,
-  NOT_VERIFIED_EMAIL_MSG,
-  ROLE,
-} from "./constants";
+import { INVALID_CREDENTIALS_MSG, NOT_VERIFIED_EMAIL_MSG } from "./constants";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -26,34 +22,17 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        role: { label: "Role", type: "role" },
       },
       async authorize(credentials) {
-        if (
-          !credentials?.email ||
-          !credentials?.password ||
-          !credentials?.role
-        ) {
+        if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        let user;
-
-        if (credentials.role === ROLE.USER) {
-          user = await db.user.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
-        }
-
-        if (credentials.role === ROLE.COMPANY) {
-          user = await db.company.findUnique({
-            where: {
-              email: credentials.email,
-            },
-          });
-        }
+        const user = await db.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
 
         if (!user) {
           return null;
@@ -84,16 +63,6 @@ export const authOptions: NextAuthOptions = {
     async signIn({ account, profile }) {
       if (account?.provider === "google") {
         if (!profile?.email) {
-          return false;
-        }
-
-        const userIsAlreadyCompany = await db.company.findUnique({
-          where: {
-            email: profile.email,
-          },
-        });
-
-        if (userIsAlreadyCompany) {
           return false;
         }
 
@@ -144,22 +113,13 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
-      //user only available on first login
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
         },
       });
 
-      const dbCompany = await db.company.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
-
-      const finalUser = dbUser || dbCompany;
-
-      if (!finalUser) {
+      if (!dbUser) {
         if (user) {
           token.id = user?.id;
         }
@@ -167,10 +127,10 @@ export const authOptions: NextAuthOptions = {
       }
 
       return {
-        id: finalUser.id,
-        name: finalUser.name,
-        email: finalUser.email,
-        picture: finalUser.image,
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        picture: dbUser.image,
       };
     },
   },

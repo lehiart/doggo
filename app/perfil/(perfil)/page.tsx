@@ -2,23 +2,30 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
 
 import { Separator } from "@/components/ui/separator";
-import { ProfileForm } from "./profile-form";
+import { ProfileForm, ProfileFormProps } from "./profile-form";
 import { getCurrentUser } from "@/lib/session";
-import { EditableUserData, CurrentUserSession } from "@/types/user";
+import { CurrentUserSession } from "@/types/user";
+import { Profile, User } from "@prisma/client";
 
 const getEditableUserPofile = async (userId: string) => {
-  const userProfile: EditableUserData = await db.user.findUnique({
+  const userProfile = await db.user.findUnique({
     where: {
       id: userId,
     },
     select: {
+      id: true,
       name: true,
       email: true,
       image: true,
-      bio: true,
-      links: true,
-      phone: true,
-      location: true,
+      profile: {
+        select: {
+          id: true,
+          bio: true,
+          location: true,
+          links: true,
+          phone: true,
+        },
+      },
     },
   });
 
@@ -32,7 +39,12 @@ export default async function SettingsProfilePage() {
     redirect("/login");
   }
 
-  const profile: EditableUserData = await getEditableUserPofile(user.id);
+  const profile: any = await getEditableUserPofile(user.id);
+  console.log("profile", profile);
+
+  if (!profile) {
+    redirect("/login");
+  }
 
   return (
     <div className="space-y-6">
@@ -43,7 +55,7 @@ export default async function SettingsProfilePage() {
         </p>
       </div>
       <Separator />
-      <ProfileForm userProfile={profile} id={user.id} />
+      <ProfileForm userProfile={profile} />
     </div>
   );
 }
