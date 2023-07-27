@@ -21,7 +21,13 @@ export async function POST(request: Request) {
       },
     });
 
-    if (userExists) {
+    const userCompanyExists = await db.company.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists || userCompanyExists) {
       return new NextResponse("User already exists", { status: 400 });
     }
 

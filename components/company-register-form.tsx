@@ -34,6 +34,7 @@ export function CompanyRegistrationForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -61,6 +62,7 @@ export function CompanyRegistrationForm() {
       if (!response.ok) {
         showErrorToast();
       } else {
+        reset();
         return toast({
           title: "Revise su correo electrónico ",
           description:
@@ -157,7 +159,7 @@ export function CompanyRegistrationForm() {
 
           <Button disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Registrarse como empresa
+            Registrarse como negocio
           </Button>
         </div>
       </form>

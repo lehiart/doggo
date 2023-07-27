@@ -79,6 +79,7 @@ model User {
   links          String?
   location       String?
   phone          String?
+  role           Role     @default(USER)
 
   accounts           Account[]
   sessions           Session[]
@@ -200,8 +201,14 @@ model Company {
   createdAt      DateTime @default(now()) @map(name: "created_at")
   updatedAt      DateTime @default(now()) @map(name: "updated_at")
 
-  pro Boolean @default(false)
+  pro  Boolean @default(false)
+  role Role    @default(COMPANY)
 
   verificationTokens VerificationToken[]
   items              Item[]              @relation("CompanyItems")
+}
+
+enum Role {
+  USER
+  COMPANY
 }

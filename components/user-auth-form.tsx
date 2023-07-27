@@ -19,6 +19,7 @@ import { GoogleIcon } from "./ui/google-icon";
 import {
   INVALID_CREDENTIALS_MSG,
   NOT_VERIFIED_EMAIL_MSG,
+  ROLE,
 } from "@/lib/constants";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -49,6 +50,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     const signInResult = await signIn("credentials", {
+      role: ROLE.USER,
       email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,
@@ -145,7 +147,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
-          <Button disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Iniciar sesión
           </Button>

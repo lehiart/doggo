@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/user-auth-form";
 import { ChevronLeft, Dog } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CompanyAuthForm } from "@/components/company-auth-form";
 
 export const metadata: Metadata = {
   title: "Inicia sesión",
@@ -34,7 +36,19 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <UserAuthForm />
+        <Tabs defaultValue="user" className="min-h-[356px]">
+          <TabsList className="mb-4 grid w-full grid-cols-2">
+            <TabsTrigger value="user">Usuario</TabsTrigger>
+            <TabsTrigger value="company">Negocio</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="user">
+            <UserAuthForm />
+          </TabsContent>
+          <TabsContent value="company">
+            <CompanyAuthForm />
+          </TabsContent>
+        </Tabs>
 
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link

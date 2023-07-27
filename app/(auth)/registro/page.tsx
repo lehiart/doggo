@@ -36,7 +36,7 @@ export default function RegisterPage() {
           <Tabs defaultValue="user" className="min-h-[356px]">
             <TabsList className="mb-4 grid w-full grid-cols-2">
               <TabsTrigger value="user">Usuario</TabsTrigger>
-              <TabsTrigger value="company">Empresa</TabsTrigger>
+              <TabsTrigger value="company">Negocio</TabsTrigger>
             </TabsList>
 
             <TabsContent value="user">

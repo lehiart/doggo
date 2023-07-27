@@ -5,7 +5,6 @@ import { randomUUID } from "crypto";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import VerifyTokenEmail from "@/emails/verify-token-email";
-import { use } from "react";
 
 export async function POST(request: Request) {
   try {
@@ -16,13 +15,19 @@ export async function POST(request: Request) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    const userExists = await db.company.findUnique({
+    const userExists = await db.user.findUnique({
       where: {
         email,
       },
     });
 
-    if (userExists) {
+    const userCompanyExists = await db.company.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists || userCompanyExists) {
       return new NextResponse("User already exists", { status: 400 });
     }
 
