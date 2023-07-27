@@ -52,7 +52,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       email: data.email.toLowerCase(),
       password: data.password,
       redirect: false,
-      callbackUrl: searchParams?.get("from") || "/",
     });
 
     setIsLoading(false);
@@ -80,6 +79,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       });
     }
 
+    router.refresh();
     router.push(searchParams?.get("from") || "/");
   }
 
