@@ -131,6 +131,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 size="icon"
                 onClick={(e) => handlePasswordIconClick(e)}
                 tabIndex={-1}
+                disabled={isLoading || isSocialLoading}
               >
                 <span className="sr-only">Ver contraseña</span>
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}

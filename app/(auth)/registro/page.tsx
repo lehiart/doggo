@@ -2,7 +2,9 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { UserRegisterForm } from "@/components/user-register-form";
-import { Dog } from "lucide-react";
+import { DogIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CompanyRegistrationForm } from "@/components/company-register-form";
 
 export const metadata = {
   title: "Crea una cuenta",
@@ -22,16 +24,28 @@ export default function RegisterPage() {
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <Dog className="mx-auto h-6 w-6" />
+            <DogIcon className="mx-auto h-6 w-6" />
             <h1 className="text-2xl font-semibold tracking-tight">
               Crea una cuenta
             </h1>
             <p className="text-sm text-muted-foreground">
-              Introduce tu correo para crear tu cuenta
+              Introduce tus datos para crear tu cuenta
             </p>
           </div>
 
-          <UserRegisterForm />
+          <Tabs defaultValue="user" className="min-h-[356px]">
+            <TabsList className="mb-4 grid w-full grid-cols-2">
+              <TabsTrigger value="user">Usuario</TabsTrigger>
+              <TabsTrigger value="company">Empresa</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="user">
+              <UserRegisterForm />
+            </TabsContent>
+            <TabsContent value="company">
+              <CompanyRegistrationForm />
+            </TabsContent>
+          </Tabs>
 
           <p className="px-8 text-center text-sm text-muted-foreground">
             Al hacer clic en Continuar, acepta nuestros{" "}

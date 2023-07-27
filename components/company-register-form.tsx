@@ -2,79 +2,78 @@
 
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Label } from "@/components/ui/label";
 
-import { cn } from "@/lib/utils";
-import { userRegisterSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
-import { GoogleIcon } from "@/components/ui/google-icon";
 
-interface UserRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+const formSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  password: z.string(),
+});
 
-type FormData = z.infer<typeof userRegisterSchema>;
+const showErrorToast = () => {
+  toast({
+    title: "Oh no! Algo salió mal.",
+    description:
+      "Tu registro falló. Por favor, inténtalo de nuevo. Si el problema persiste, contactenos.",
+    variant: "destructive",
+  });
+};
 
-export function UserRegisterForm({
-  className,
-  ...props
-}: UserRegisterFormProps) {
+export function CompanyRegistrationForm() {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(userRegisterSchema),
+  } = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
-
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isSocialLoading, setIsSocialLoading] = React.useState<boolean>(false);
-  const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   function handlePasswordIconClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     setShowPassword((prev) => !prev);
   }
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const registrationResult = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email.toLowerCase(),
-        password: data.password,
-      }),
-    });
-
-    setIsLoading(false);
-
-    if (!registrationResult?.ok) {
-      return toast({
-        title: "Oh no! Algo salió mal.",
-        description:
-          "Tu registro falló. Por favor, inténtalo de nuevo. Si el problema persiste, contactenos.",
-        variant: "destructive",
+    try {
+      const response = await fetch("/api/register/company", {
+        method: "POST",
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email.toLowerCase(),
+          password: data.password,
+        }),
       });
-    } else {
-      return toast({
-        title: "Revise su correo electrónico ",
-        description:
-          "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
-      });
+
+      setIsLoading(false);
+
+      if (!response.ok) {
+        showErrorToast();
+      } else {
+        return toast({
+          title: "Revise su correo electrónico ",
+          description:
+            "Hemos enviado un enlace para confirmar su correo electrónico. Asegúrese de revisar su bandeja de correo no deseado.",
+        });
+      }
+    } catch (error) {
+      showErrorToast();
     }
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -89,7 +88,7 @@ export function UserRegisterForm({
               autoCapitalize="none"
               autoComplete="username"
               autoCorrect="off"
-              disabled={isLoading || isSocialLoading}
+              disabled={isLoading}
               {...register("name")}
             />
 
@@ -110,7 +109,7 @@ export function UserRegisterForm({
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isSocialLoading}
+              disabled={isLoading}
               {...register("email")}
             />
 
@@ -134,7 +133,7 @@ export function UserRegisterForm({
                 autoCapitalize="none"
                 autoComplete="password"
                 autoCorrect="off"
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading}
                 {...register("password")}
               />
               <Button
@@ -142,7 +141,7 @@ export function UserRegisterForm({
                 size="icon"
                 onClick={(e) => handlePasswordIconClick(e)}
                 tabIndex={-1}
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading}
               >
                 <span className="sr-only">Ver contraseña</span>
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
@@ -158,38 +157,10 @@ export function UserRegisterForm({
 
           <Button disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Registrarse
+            Registrarse como empresa
           </Button>
         </div>
       </form>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            O continuar con
-          </span>
-        </div>
-      </div>
-
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => {
-          setIsSocialLoading(true);
-          signIn("google");
-        }}
-        disabled={isLoading || isSocialLoading}
-      >
-        {isSocialLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <GoogleIcon className="h-4" />
-        )}
-        Google
-      </Button>
     </div>
   );
 }

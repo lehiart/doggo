@@ -49,15 +49,18 @@ model VerificationToken {
   id          String    @id @default(uuid())
   token       String    @unique
   activatedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  userId    String?
+  companyId String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([id, token])
   @@index([userId])
+  @@index([companyId])
   @@map(name: "verification_tokens")
 }
 
@@ -199,5 +202,6 @@ model Company {
 
   pro Boolean @default(false)
 
-  items Item[] @relation("CompanyItems")
+  verificationTokens VerificationToken[]
+  items              Item[]              @relation("CompanyItems")
 }

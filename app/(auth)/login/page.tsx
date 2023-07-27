@@ -30,7 +30,7 @@ export default function LoginPage() {
             Bienvenido de vuelta
           </h1>
           <p className="text-sm text-muted-foreground">
-            Introduce tu correo para iniciar sesión en tu cuenta
+            Introduce tus datos para iniciar sesión en tu cuenta
           </p>
         </div>
 
