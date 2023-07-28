@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Dog } from "lucide-react";
+import { useSession, getSession } from "next-auth/react";
+import { ROLE } from "@/lib/constants";
 
-export function MainNav() {
+export function MainNav({ role }: { role: string | undefined }) {
   const pathname = usePathname();
 
   return (
@@ -19,15 +21,30 @@ export function MainNav() {
         </Link>
 
         <nav className="flex items-center space-x-6 text-sm font-medium">
-          <Link
-            href="/manada"
-            className={cn(
-              "transition-colors hover:text-foreground/80",
-              pathname === "/docs" ? "text-foreground" : "text-foreground/60"
-            )}
-          >
-            Mi manada
-          </Link>
+          {role === ROLE.COMPANY && (
+            <Link
+              href="/dashboard"
+              className={cn(
+                "transition-colors hover:text-foreground/80",
+                pathname === "/docs" ? "text-foreground" : "text-foreground/60"
+              )}
+            >
+              Mi negocio
+            </Link>
+          )}
+
+          {role === ROLE.USER && (
+            <Link
+              href="/manada"
+              className={cn(
+                "transition-colors hover:text-foreground/80",
+                pathname === "/docs" ? "text-foreground" : "text-foreground/60"
+              )}
+            >
+              Mi manada
+            </Link>
+          )}
+
           <Link
             href="/aventuras"
             className={cn(
@@ -37,7 +54,7 @@ export function MainNav() {
                 : "text-foreground/60"
             )}
           >
-            Aventuras
+            Explorar
           </Link>
 
           <Link
@@ -46,7 +63,7 @@ export function MainNav() {
               "hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block"
             )}
           >
-            Proveedores
+            Blog
           </Link>
         </nav>
       </div>

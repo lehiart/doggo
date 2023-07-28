@@ -12,19 +12,6 @@ export default async function SettingsAccountPage() {
     redirect("/login");
   }
 
-  const role = await db.user.findUnique({
-    where: {
-      id: user.id,
-    },
-    select: {
-      role: true,
-    },
-  });
-
-  if (!role) {
-    redirect("/login");
-  }
-
   return (
     <div className="space-y-6">
       <div>
@@ -36,7 +23,7 @@ export default async function SettingsAccountPage() {
 
       <Separator />
 
-      <AccountForm id={user.id} email={user.email} role={role.role} />
+      <AccountForm id={user.id} email={user.email} role={user.role} />
     </div>
   );
 }

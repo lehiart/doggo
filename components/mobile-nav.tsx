@@ -16,26 +16,16 @@ const nav = [
     href: "/manada",
   },
   {
-    title: "Aventuras",
+    title: "Mi negocio",
+    href: "/manada",
+  },
+  {
+    title: "Explorar",
     href: "/aventuras",
   },
   {
-    title: "Proveedores",
+    title: "Blog",
     href: "/proveedores",
-  },
-  {
-    title: "Figma",
-    href: "/docs/figma",
-  },
-  {
-    title: "GitHub",
-    href: "https://github.com/shadcn/ui",
-    external: true,
-  },
-  {
-    title: "Twitter",
-    href: "https://twitter.com/shadcn",
-    external: true,
   },
 ];
 

@@ -1,19 +1,17 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
 import { UserAccountNav } from "@/components/user-account-nav";
+import { getCurrentUser } from "@/lib/session";
 
-function RightNav() {
-  const { data: session } = useSession();
+async function RightNav() {
+  const user = await getCurrentUser();
 
   return (
     <div className="flex flex-1 items-center justify-end space-x-2">
-      {session?.user ? (
+      {user ? (
         <div className="flex">
-          <UserAccountNav user={session.user} />
+          <UserAccountNav user={user} />
         </div>
       ) : (
         <>
