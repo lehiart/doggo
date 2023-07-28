@@ -3,11 +3,25 @@ import { AccountForm } from "./account-form";
 import { getCurrentUser } from "@/lib/session";
 import { CurrentUserSession } from "@/types/user";
 import { redirect } from "next/navigation";
+import { db } from "@/lib/prisma";
 
 export default async function SettingsAccountPage() {
   const user: CurrentUserSession = await getCurrentUser();
 
   if (!user) {
+    redirect("/login");
+  }
+
+  const role = await db.user.findUnique({
+    where: {
+      id: user.id,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  if (!role) {
     redirect("/login");
   }
 
@@ -22,7 +36,7 @@ export default async function SettingsAccountPage() {
 
       <Separator />
 
-      <AccountForm id={user.id} email={user.email} />
+      <AccountForm id={user.id} email={user.email} role={role.role} />
     </div>
   );
 }

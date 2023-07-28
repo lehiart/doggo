@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-
 import {
   Form,
   FormControl,
@@ -16,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import { toast } from "@/components/ui/use-toast";
 import {
   Card,
@@ -29,15 +27,15 @@ import {
 import { useState } from "react";
 import { AppearanceForm } from "./appereance-form";
 import { DeleteUserForm } from "./delete-user-form";
-import { el } from "date-fns/locale";
+import { ChangeRoleCard } from "./change-role-card";
 
 const accountFormSchema = z
   .object({
     currentPassword: z.string(),
-    newPassword: z.string().min(8, {
+    newPassword: z.string().min(1, {
       message: "La contraseña debe tener al menos 8 caracteres.",
     }),
-    confirmPassword: z.string().min(8, {
+    confirmPassword: z.string().min(1, {
       message: "La contraseña debe tener al menos 8 caracteres.",
     }),
   })
@@ -57,9 +55,11 @@ const defaultValues: Partial<AccountFormValues> = {
 export function AccountForm({
   id,
   email,
+  role,
 }: {
   id: string;
   email: string | null;
+  role: string;
 }) {
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({
     showCurrentPassword: false,
@@ -113,7 +113,6 @@ export function AccountForm({
         });
       }
     } catch (error) {
-      console.log(error);
       toast({
         title: "No pudimos actualizar tu contraseña.",
         description:
@@ -126,6 +125,8 @@ export function AccountForm({
 
   return (
     <div className="space-y-8">
+      <ChangeRoleCard role={role} />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Card>
