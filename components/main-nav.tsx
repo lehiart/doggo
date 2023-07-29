@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Dog } from "lucide-react";
-import { useSession, getSession } from "next-auth/react";
 import { ROLE } from "@/lib/constants";
 
 export function MainNav({ role }: { role: string | undefined }) {
@@ -58,7 +57,7 @@ export function MainNav({ role }: { role: string | undefined }) {
           </Link>
 
           <Link
-            href="/proveedores"
+            href="/blog"
             className={cn(
               "hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block"
             )}

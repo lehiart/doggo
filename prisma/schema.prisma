@@ -111,15 +111,29 @@ model Profile {
 
 model Company {
   id        String   @id @default(uuid())
-  name      String?
-  image     String?
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   ownerId   String
-
   pro   Boolean @default(false)
-  owner User    @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
 
+
+  image     String?
+  name      String?
+  description      String?
+  streetAddress    String?
+  streetNumber     String?
+  streetAddress2   String?
+  locality         String?
+  city             String?
+  state            String?
+  zip              String?
+  phone            String?
+  email            String?
+  website          String?
+  socialMediaLinks String?
+
+  categories Category[] @relation("CompanyCategories")
+  owner User    @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
   items Item[] @relation("CompanyItems")
 
   @@index([ownerId])
@@ -174,10 +188,6 @@ model Item {
   id          String @id @default(uuid())
   title       String
   description String
-  // addressStreet String
-  // addressCity   String
-  // addressState  String
-  // addressZip    String
   // openingHours  String
   // closingHours  String
 
@@ -207,6 +217,7 @@ model Category {
 
   items         Item[]        @relation("ItemCategory")
   subcategories Subcategory[] @relation("SubcategoriesOfCategory")
+  companies     Company[]     @relation("CompanyCategories")
 }
 
 model Subcategory {

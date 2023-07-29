@@ -54,15 +54,20 @@ const statesOfMexico = [
   { value: "ZAC", label: "Zacatecas" },
 ];
 
-export function StatesSelector({ control }: { control: any }) {
+interface StatesSelectorProps {
+  control: any;
+  inputName: string;
+}
+
+export function StatesSelector({ control, inputName }: StatesSelectorProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <div>
       <Controller
         control={control}
-        name="location"
-        render={({ field: { onChange, onBlur, value, name, ref } }) => (
+        name={inputName}
+        render={({ field: { onChange, value } }) => (
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button

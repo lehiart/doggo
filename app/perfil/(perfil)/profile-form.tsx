@@ -21,8 +21,8 @@ import { toast } from "@/components/ui/use-toast";
 
 import SocialMediaURLSelect from "./social-media-url-select";
 import { StatesSelector } from "@/components/states-selector";
-import { Loader2Icon } from "lucide-react";
-import ImageUploadInput from "./image-upload-input";
+import { Loader2Icon, User2Icon } from "lucide-react";
+import ImageUploadInput from "../../../components/image-upload-input";
 
 const profileFormSchema = z.object({
   name: z
@@ -170,7 +170,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <ImageUploadInput form={form} type="user" />
+        <ImageUploadInput form={form} Icon={User2Icon} />
 
         <FormField
           control={form.control}
@@ -265,7 +265,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
             <FormItem>
               <FormLabel>Estado de residencia (opcional)</FormLabel>
               <FormControl>
-                <StatesSelector control={form.control} />
+                <StatesSelector control={form.control} inputName="location" />
               </FormControl>
               <FormDescription>
                 El estado de México donde actualmente vives.

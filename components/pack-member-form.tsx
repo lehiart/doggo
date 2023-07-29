@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,7 +14,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BreedSelector } from "./breed-selector-input";
-import ImageUploadInput from "../app/perfil/(perfil)/image-upload-input";
+import ImageUploadInput from "./image-upload-input";
 import { toast } from "@/components/ui/use-toast";
 import {
   Select,
@@ -28,6 +27,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PackMember } from "@prisma/client";
+import { DogIcon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1).max(25),
@@ -132,7 +132,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <ImageUploadInput form={form} />
+        <ImageUploadInput form={form} Icon={DogIcon} />
 
         <div className="grid grid-cols-2 items-end gap-4">
           <FormField
