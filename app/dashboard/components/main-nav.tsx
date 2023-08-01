@@ -3,19 +3,13 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-export function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
+export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
   return (
-    <nav
-      className={cn("flex w-full items-center justify-between", className)}
-      {...props}
-    >
+    <nav className={cn("flex w-full items-center justify-between", className)}>
       <div className="space-x-4">
         <Link
           href="/dashboard"
-          className="text-sm font-medium transition-colors hover:text-primary"
+          className="text-sm font-medium transition-colors hover:text-primary "
         >
           Resumen
         </Link>

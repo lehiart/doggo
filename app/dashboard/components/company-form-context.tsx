@@ -13,6 +13,8 @@ interface IFormContext {
   onHandleBack: () => void;
   onHandleNext: () => void;
   step: number;
+  type: "EDIT" | "NEW";
+  id: string | undefined;
 }
 
 const FormContext = createContext<IFormContext>({
@@ -21,13 +23,17 @@ const FormContext = createContext<IFormContext>({
   onHandleNext: () => {},
   setFormData: () => {},
   step: 0,
+  type: "NEW",
+  id: "",
 });
 
 interface IProps {
   children: ReactNode;
+  id: string;
+  type: "EDIT" | "NEW";
 }
 
-export function FormProvider({ children }: IProps) {
+export function FormProvider({ children, id, type }: IProps) {
   const [formData, setFormData] = useState();
   const [step, setStep] = useState(1);
 
@@ -41,7 +47,15 @@ export function FormProvider({ children }: IProps) {
 
   return (
     <FormContext.Provider
-      value={{ formData, setFormData, onHandleBack, onHandleNext, step }}
+      value={{
+        formData,
+        setFormData,
+        onHandleBack,
+        onHandleNext,
+        step,
+        type,
+        id,
+      }}
     >
       {children}
     </FormContext.Provider>

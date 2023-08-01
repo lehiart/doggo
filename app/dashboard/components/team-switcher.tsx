@@ -1,7 +1,6 @@
 "use client";
 
-import * as React from "react";
-import { ChevronDown, CheckIcon, PlusCircleIcon } from "lucide-react";
+import { ChevronDown, CheckIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,68 +12,46 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Dialog } from "@/components/ui/dialog";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Company } from "@prisma/client";
+import { useDashboardContext } from "./dashboard-context";
+import { useEffect, useState } from "react";
 
-const groups = [
-  {
-    label: "Mis Negocios",
-    teams: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-];
+type BasicCompanyData = Pick<Company, "id" | "pro" | "name">;
 
-type Team = (typeof groups)[number]["teams"][number];
-
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<
-  typeof PopoverTrigger
->;
-
-interface TeamSwitcherProps extends PopoverTriggerProps {}
+interface TeamSwitcherProps {
+  className?: string;
+}
 
 export default function TeamSwitcher({ className }: TeamSwitcherProps) {
-  const [open, setOpen] = React.useState(false);
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(
-    groups[0].teams[0]
-  );
+  const [open, setOpen] = useState(false);
+  const { setSelectedCompany, selectedCompany, companies } =
+    useDashboardContext();
+
+  const handleSelectedCompanyChange = (company: BasicCompanyData) => {
+    setSelectedCompany(company);
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (companies.length > 0) {
+      setSelectedCompany(companies[0]);
+    }
+  }, [companies, setSelectedCompany]);
 
   return (
-    <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
+    <Dialog>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            disabled={companies.length === 0}
             variant="outline"
             role="combobox"
             aria-expanded={open}
@@ -83,116 +60,55 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
+                src={`https://avatar.vercel.sh/${
+                  selectedCompany?.id || "default"
+                }.png`}
+                alt={selectedCompany?.name || undefined}
               />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>DH</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
+            {selectedCompany?.name}
             <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
+
         <PopoverContent className="w-[200px] p-0">
           <Command>
             <CommandList>
               <CommandInput placeholder="Buscar..." />
-              <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
+              <CommandEmpty>No encontrado.</CommandEmpty>
+              <CommandGroup heading="Mis negocios">
+                {companies.length > 0 &&
+                  companies.map((company: BasicCompanyData) => (
                     <CommandItem
-                      key={team.value}
-                      onSelect={() => {
-                        setSelectedTeam(team);
-                        setOpen(false);
-                      }}
+                      key={company.id}
+                      onSelect={() => handleSelectedCompanyChange(company)}
                       className="text-sm"
                     >
                       <Avatar className="mr-2 h-5 w-5">
                         <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
+                          src={`https://avatar.vercel.sh/${company.id}.png`}
+                          alt={company.name || "Negocio"}
+                          // className='grayscale'
                         />
-                        <AvatarFallback>SC</AvatarFallback>
+                        <AvatarFallback>DH</AvatarFallback>
                       </Avatar>
-                      {team.label}
+                      {company.name}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          selectedCompany?.id === company.id
                             ? "opacity-100"
-                            : "opacity-0"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>
                   ))}
-                </CommandGroup>
-              ))}
-            </CommandList>
-            <CommandSeparator />
-            <CommandList>
-              <CommandGroup>
-                <DialogTrigger asChild>
-                  <CommandItem
-                    onSelect={() => {
-                      setOpen(false);
-                      setShowNewTeamDialog(true);
-                    }}
-                  >
-                    <PlusCircleIcon className="mr-2 h-5 w-5" />
-                    Crear Negocio
-                  </CommandItem>
-                </DialogTrigger>
               </CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Crear negocio</DialogTitle>
-          <DialogDescription>
-            Add a new team to manage products and customers.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
-            Cancel
-          </Button>
-          <Button type="submit">Continue</Button>
-        </DialogFooter>
-      </DialogContent>
     </Dialog>
   );
 }

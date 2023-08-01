@@ -16,6 +16,9 @@ import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { ChevronLeft } from "lucide-react";
 import SocialMediaURLSelect from "./social-media-url-select";
+import { toast } from "./ui/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   phone: z.string(),
@@ -33,7 +36,10 @@ interface DetailsStepFormProps {
 }
 
 export default function ContactStepForm({ company }: DetailsStepFormProps) {
-  const { onHandleNext, onHandleBack, setFormData, formData } = useFormState();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const { onHandleBack, setFormData, formData, id, type } = useFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,10 +56,39 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
   console.log(form.getValues());
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     setFormData((prev: any) => ({ ...prev, ...data }));
-    // onHandleNext();
-    // add new succes page or trigger the create/edit company mutation
-    console.log(formData);
+
+    const payload = {
+      ...formData,
+      id,
+    };
+
+    // socialMediaLinks needs to be an string
+    if (payload.socialMediaLinks) {
+      payload.socialMediaLinks = JSON.stringify(payload.socialMediaLinks);
+    }
+
+    try {
+      const result = await fetch("/api/company", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      if (result.ok) {
+        router.refresh();
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      toast({
+        title:
+          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
+        description: "Si el problema persiste, contacta a soporte.",
+        variant: "destructive",
+      });
+    }
+
+    setIsLoading(false);
   }
 
   return (
@@ -68,11 +103,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
                 Telefono <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  // placeholder='Nombre o apodo'
-                  autoComplete="off"
-                  {...field}
-                />
+                <Input autoComplete="off" maxLength={10} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -88,11 +119,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
                 Email <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  // placeholder='Nombre o apodo'
-                  autoComplete="off"
-                  {...field}
-                />
+                <Input autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -122,7 +149,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
             <ChevronLeft className="mr-2" />
             Atras
           </Button>
-          <Button type="submit" disabled={!form.formState.isValid}>
+          <Button type="submit" disabled={isLoading || !form.formState.isValid}>
             Completar
           </Button>
         </div>

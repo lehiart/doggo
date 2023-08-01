@@ -11,7 +11,7 @@ import {
 import CompanyFormHeader from "@/components/company-form-header";
 
 interface MemberFormProps {
-  id: string | undefined;
+  id: string;
   type: "EDIT" | "NEW";
   company?: Company | undefined;
 }
@@ -31,16 +31,10 @@ const ActiveStepFormComponent = () => {
   }
 };
 
-// const STEPS = {
-//   1: <DetailsStepForm />,
-//   2: <AddressStepForm />,
-//   3: <ContactStepForm />,
-// };
-
 export default function CompanyForm({ id, type, company }: MemberFormProps) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <FormProvider>
+      <FormProvider id={id} type={type}>
         <div className="w-full rounded-xl border p-6">
           <CompanyFormHeader />
 

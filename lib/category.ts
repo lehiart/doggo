@@ -1,3 +1,18 @@
+import useSWR from "swr";
+
+// @ts-ignore
+const fetcher = (...args: any[]) => fetch(...args).then((res) => res.json());
+
+export function useCategories() {
+  const { data, error, isLoading } = useSWR("/api/categories", fetcher);
+
+  return {
+    categories: data?.categories || [],
+    isLoading,
+    isError: error,
+  };
+}
+
 export const CATEGORY_NAMES = [
   {
     category: "Accesorios para mascotas",

@@ -4,7 +4,6 @@ import ImageUploadInput from "./image-upload-input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,22 +15,27 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Company } from "@prisma/client";
+import { Category, Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { CategoriesMultiSelect } from "./categories-multi-select";
+import { useDashboardContext } from "@/app/dashboard/components/dashboard-context";
 
 const formSchema = z.object({
   image: z.string().optional(),
   name: z.string().min(1).max(25),
   description: z.string().min(1).max(300),
-  categories: z.array(z.string()).min(1), //why categories not working?
+  categories: z.array(z.string()).min(1),
 });
 
 interface DetailsStepFormProps {
   company?: Pick<Company, "image" | "name" | "description"> | undefined;
+  categories?: Category[] | undefined;
 }
 
-export default function DetailsStepForm({ company }: DetailsStepFormProps) {
+export default function DetailsStepForm({
+  company,
+  categories,
+}: DetailsStepFormProps) {
   const { onHandleNext, setFormData, formData } = useFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,7 +44,7 @@ export default function DetailsStepForm({ company }: DetailsStepFormProps) {
       image: company?.image || formData?.image,
       name: company?.name || formData?.name,
       description: company?.description || formData?.description,
-      categories: company?.categories || formData?.categories || [],
+      categories: categories || formData?.categories || [],
     },
   });
 
@@ -53,7 +57,6 @@ export default function DetailsStepForm({ company }: DetailsStepFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <ImageUploadInput form={form} Icon={ImageIcon} />
-
         <FormField
           control={form.control}
           name="name"
@@ -92,24 +95,7 @@ export default function DetailsStepForm({ company }: DetailsStepFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="categories"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categorias</FormLabel>
-              <FormControl>
-                <CategoriesMultiSelect
-                  onChange={(values) => {
-                    field.onChange(values.map(({ value }) => value));
-                  }}
-                />
-              </FormControl>
-              <FormDescription>All the categories you like.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <CategoriesMultiSelect control={form.control} />
 
         <Button type="submit" disabled={!form.formState.isValid}>
           siguiente
