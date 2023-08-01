@@ -57,9 +57,14 @@ const statesOfMexico = [
 interface StatesSelectorProps {
   control: any;
   inputName: string;
+  className?: string;
 }
 
-export function StatesSelector({ control, inputName }: StatesSelectorProps) {
+export function StatesSelector({
+  control,
+  inputName,
+  className,
+}: StatesSelectorProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -75,12 +80,12 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
                 role="combobox"
                 className={cn(
                   "w-[200px] justify-between",
-                  !value && "text-muted-foreground"
+                  !value && "text-muted-foreground",
                 )}
               >
                 {value
                   ? statesOfMexico.find(
-                      (state) => state.value === value.toUpperCase()
+                      (state) => state.value === value.toUpperCase(),
                     )?.label
                   : "Selecciona el estado"}
                 <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -106,7 +111,7 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          state.value === value ? "opacity-100" : "opacity-0"
+                          state.value === value ? "opacity-100" : "opacity-0",
                         )}
                       />
                       {state.label}

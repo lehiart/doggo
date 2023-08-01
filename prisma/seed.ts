@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import createUsers from "./factories/user.factory";
-import createPacksAndAssociateToUser from "./factories/pack.factory";
-import createPackMembers from "./factories/pack-member.factory";
 import createCategories from "./factories/category.factory";
-import createCompanies from "./factories/company.factory";
 import createItemsAndAssociateToCompany from "./factories/item.factory";
 import createFavoriteItemsListToUser from "./factories/favorite-items-list.factory";
 
@@ -28,8 +25,8 @@ async function seed() {
       deleteSubcategories,
       deleteCategories,
       deletePackMembers,
-      deletePacks,
       deleteVerificationTokens,
+      deletePacks,
       deleteUsers,
       deleteCompanies,
     ]);
@@ -37,17 +34,15 @@ async function seed() {
     // 1 - create categories and subcategories
     await createCategories();
 
-    // 2 - create users, create packs and associate them to the existing users, thencreate pack members
-    const usersIds = await createUsers();
-    const packsIds = await createPacksAndAssociateToUser(usersIds);
-    await createPackMembers(packsIds);
+    // 2 - create users, role: user and company, create pack with members for role:user and companies for role:company
+    const { usersId, companiesId } = await createUsers();
 
-    // 3 - create company users, create items and associate them to the existing companies
-    const companiesIds = await createCompanies();
-    const itemsIds = await createItemsAndAssociateToCompany(companiesIds);
+    // 3 - create items and associate them to the existing companies
+    const itemsId = await createItemsAndAssociateToCompany(companiesId);
+    console.log(itemsId, "itemsId");
 
-    // 4 - create favorite items list to each user, with pre-existing items
-    await createFavoriteItemsListToUser(usersIds, itemsIds);
+    // 4 - add items to favorite items list to role:user
+    await createFavoriteItemsListToUser(usersId, itemsId);
 
     console.log("🌱 -  Database seeded - 🌱");
   } catch (err) {

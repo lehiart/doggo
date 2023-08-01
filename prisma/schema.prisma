@@ -114,11 +114,11 @@ model Company {
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   ownerId   String
-  pro   Boolean @default(false)
 
+  pro Boolean @default(false)
 
-  image     String?
-  name      String?
+  image            String?
+  name             String?
   description      String?
   streetAddress    String?
   streetNumber     String?
@@ -133,8 +133,8 @@ model Company {
   socialMediaLinks String?
 
   categories Category[] @relation("CompanyCategories")
-  owner User    @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
-  items Item[] @relation("CompanyItems")
+  owner      User       @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
+  items      Item[]     @relation("CompanyItems")
 
   @@index([ownerId])
 }
@@ -198,7 +198,7 @@ model Item {
   category      Category      @relation("ItemCategory", fields: [categoryId], references: [id])
   subcategories Subcategory[] @relation("ItemSubcategories")
 
-  FavoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
+  favoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
 
   company Company @relation("CompanyItems", fields: [companyId], references: [id])
 

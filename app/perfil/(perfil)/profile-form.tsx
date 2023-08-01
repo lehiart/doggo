@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
-import SocialMediaURLSelect from "./social-media-url-select";
+import SocialMediaURLSelect from "@/components/social-media-url-select";
 import { StatesSelector } from "@/components/states-selector";
 import { Loader2Icon, User2Icon } from "lucide-react";
 import ImageUploadInput from "../../../components/image-upload-input";
@@ -130,7 +130,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
     const cleanedData = cleanData(data); // {password: "123", email: "email@example.com"}
 
     const payload: { [key: string]: string | null } = Object.keys(
-      cleanedData
+      cleanedData,
     ).reduce((acc: { [key: string]: string | null }, key: string) => {
       if (dirtyFields[key as keyof DirtyFields]) {
         acc[key] = cleanedData[key as keyof typeof cleanedData];
@@ -227,7 +227,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           )}
         />
 
-        <SocialMediaURLSelect form={form} />
+        <SocialMediaURLSelect form={form} inputName="links" />
 
         <FormField
           control={form.control}

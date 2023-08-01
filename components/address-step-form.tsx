@@ -23,6 +23,7 @@ import { StatesSelector } from "./states-selector";
 import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { Button } from "./ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const formSchema = z.object({
   streetAddress: z.string(),
@@ -30,8 +31,8 @@ const formSchema = z.object({
   streetAddress2: z.string().optional(),
   locality: z.string(),
   city: z.string(),
-  state: z.string().optional(),
-  zip: z.string(),
+  state: z.string(),
+  zip: z.string().length(5).regex(/^\d+$/),
 });
 
 interface AddressStepFormProps {
@@ -90,11 +91,7 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                     <FormItem>
                       <FormLabel>Calle</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Nombre o apodo"
-                          autoComplete="off"
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -109,11 +106,7 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                     <FormItem>
                       <FormLabel>Numero exterior</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Nombre o apodo"
-                          autoComplete="off"
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -130,11 +123,7 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                     <FormItem>
                       <FormLabel>Numero interior</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Nombre o apodo"
-                          autoComplete="off"
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,11 +138,7 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                     <FormItem>
                       <FormLabel>Colonia</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Nombre o apodo"
-                          autoComplete="off"
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -170,19 +155,19 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                     <FormItem>
                       <FormLabel>Alcaldia/Municipio/Ciudad</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Nombre o apodo"
-                          autoComplete="off"
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="grid gap-2">
-                <StatesSelector control={form.control} inputName="state" />
+              <div className="grid gap-2 items-end w-full">
+                <StatesSelector
+                  control={form.control}
+                  inputName="state"
+                  className="w-full"
+                />
               </div>
             </div>
 
@@ -194,23 +179,24 @@ export default function AddressStepForm({ company }: AddressStepFormProps) {
                   <FormItem>
                     <FormLabel>Codigo Postal</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Nombre o apodo"
-                        autoComplete="off"
-                        {...field}
-                      />
+                      <Input type="text" maxLength={5} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <Button type="button" onClick={onHandleBack}>
-              atras
-            </Button>
-            <Button type="submit" disabled={!form.formState.isValid}>
-              siguiente
-            </Button>
+
+            <div className="flex gap-2 w-full justify-between">
+              <Button type="button" onClick={onHandleBack}>
+                <ChevronLeftIcon />
+                atras
+              </Button>
+              <Button type="submit" disabled={!form.formState.isValid}>
+                siguiente
+                <ChevronRightIcon />
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

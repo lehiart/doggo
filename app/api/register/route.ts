@@ -5,9 +5,7 @@ import { randomUUID } from "crypto";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import VerifyTokenEmail from "@/emails/verify-token-email";
-import { RegistrationData } from "@/types/next-auth";
 import { ROLE } from "@/lib/constants";
-// import { type UserCreateArgs } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {

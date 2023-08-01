@@ -14,13 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
+import { ChevronLeft } from "lucide-react";
+import SocialMediaURLSelect from "./social-media-url-select";
 
 const formSchema = z.object({
   phone: z.string(),
-  email: z.string(),
-  website: z.string(),
-  socialMediaLinks: z.string(),
-  // categories: z.array(z.string()).optional(), //why categories not working?
+  email: z.string().email(),
+  website: z.string().optional(),
+  socialMediaLinks: z
+    .array(z.object({ url: z.string(), value: z.string(), id: z.string() }))
+    .optional(),
 });
 
 interface DetailsStepFormProps {
@@ -38,15 +41,19 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
       phone: company?.phone || formData?.phone,
       email: company?.email || formData?.email,
       website: company?.website || formData?.website,
-      socialMediaLinks: company?.socialMediaLinks || formData?.socialMediaLinks,
-      // categories: company?.categories || formData?.categories,
+      socialMediaLinks:
+        (company?.socialMediaLinks && JSON.parse(company.socialMediaLinks)) ||
+        (formData?.socialMediaLink && JSON.parse(formData?.socialMediaLinks)) ||
+        "",
     },
   });
+  console.log(form.getValues());
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setFormData((prev: any) => ({ ...prev, ...data }));
     // onHandleNext();
     // add new succes page or trigger the create/edit company mutation
+    console.log(formData);
   }
 
   return (
@@ -62,7 +69,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Nombre o apodo"
+                  // placeholder='Nombre o apodo'
                   autoComplete="off"
                   {...field}
                 />
@@ -82,7 +89,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Nombre o apodo"
+                  // placeholder='Nombre o apodo'
                   autoComplete="off"
                   {...field}
                 />
@@ -101,42 +108,24 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
                 Sitio web <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Nombre o apodo"
-                  autoComplete="off"
-                  {...field}
-                />
+                <Input autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="socialMediaLinks"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Redes sociales <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Nombre o apodo"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="button" onClick={onHandleBack}>
-          atras
-        </Button>
-        <Button type="submit" disabled={!form.formState.isValid}>
-          Completar
-        </Button>
+        <SocialMediaURLSelect form={form} inputName="socialMediaLinks" />
+
+        <div className="flex gap-2 w-full justify-between">
+          <Button type="button" onClick={onHandleBack}>
+            <ChevronLeft className="mr-2" />
+            Atras
+          </Button>
+          <Button type="submit" disabled={!form.formState.isValid}>
+            Completar
+          </Button>
+        </div>
       </form>
     </Form>
   );

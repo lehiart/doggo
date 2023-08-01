@@ -1,7 +1,6 @@
-import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
 
-import { CATEGORY_NAMES } from "../../config/category";
+import { CATEGORY_NAMES } from "../../lib/category";
 import { slugify } from "../../lib/utils";
 
 const prisma = new PrismaClient();
@@ -11,7 +10,7 @@ const createCategories = async () => {
     // create category
     const categoryResult = await prisma.category.create({
       data: {
-        id: faker.string.uuid(),
+        // id: faker.string.uuid(),
         name: element.category,
         route: slugify(element.category),
       },
@@ -21,7 +20,7 @@ const createCategories = async () => {
     element.subcategories.map(async (subcategory) => {
       await prisma.subcategory.create({
         data: {
-          id: faker.string.uuid(),
+          // id: faker.string.uuid(),
           name: subcategory,
           route: slugify(subcategory),
           categoryId: categoryResult.id,

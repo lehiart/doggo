@@ -7,7 +7,6 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, ...values } = body;
-    console.log(userId, values, "PROFILE_UPDATE");
 
     // Ensure user is authenticated and has access to this user.
     const session = await getServerSession(authOptions);

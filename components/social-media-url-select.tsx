@@ -79,10 +79,10 @@ const socialMap = [
   { value: "tiktok", label: "TikTok" },
 ];
 
-function SocialMediaURLSelect({ form }: any) {
+function SocialMediaURLSelect({ form, inputName }: any) {
   const [open, setOpen] = React.useState(false);
   const { fields, append, remove } = useFieldArray({
-    name: "links",
+    name: inputName,
     control: form.control,
   });
 
@@ -90,7 +90,7 @@ function SocialMediaURLSelect({ form }: any) {
 
   function handleDeleteURL(
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number
+    index: number,
   ) {
     e.preventDefault();
     remove(index);
@@ -194,7 +194,7 @@ function SocialMediaURLSelect({ form }: any) {
 
                         <div className="w-full">
                           <Input
-                            {...form.register(`links.${index}.url`)}
+                            {...form.register(`${inputName}.${index}.url`)}
                             disabled
                           />
                         </div>

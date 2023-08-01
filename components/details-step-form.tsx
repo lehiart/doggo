@@ -4,6 +4,7 @@ import ImageUploadInput from "./image-upload-input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,11 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
+import { CategoriesMultiSelect } from "./categories-multi-select";
 
 const formSchema = z.object({
   image: z.string().optional(),
   name: z.string().min(1).max(25),
-  description: z.string(),
+  description: z.string().min(1).max(300),
+  categories: z.array(z.string()).min(1), //why categories not working?
 });
 
 interface DetailsStepFormProps {
@@ -37,6 +40,7 @@ export default function DetailsStepForm({ company }: DetailsStepFormProps) {
       image: company?.image || formData?.image,
       name: company?.name || formData?.name,
       description: company?.description || formData?.description,
+      categories: company?.categories || formData?.categories || [],
     },
   });
 
@@ -87,6 +91,26 @@ export default function DetailsStepForm({ company }: DetailsStepFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="categories"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Categorias</FormLabel>
+              <FormControl>
+                <CategoriesMultiSelect
+                  onChange={(values) => {
+                    field.onChange(values.map(({ value }) => value));
+                  }}
+                />
+              </FormControl>
+              <FormDescription>All the categories you like.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" disabled={!form.formState.isValid}>
           siguiente
         </Button>

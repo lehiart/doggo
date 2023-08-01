@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 export default function Home() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      location: "",
+      state: "",
     },
     mode: "onChange",
   });
@@ -39,7 +39,7 @@ export default function Home() {
               en
             </p>
 
-            <StatesSelector control={control} />
+            <StatesSelector control={control} inputName="state" />
 
             <Button type="submit" className="ml-4">
               Buscar

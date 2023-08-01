@@ -40,7 +40,6 @@ export default async function SettingsProfilePage() {
   }
 
   const profile: any = await getEditableUserPofile(user.id);
-  console.log("profile", profile);
 
   if (!profile) {
     redirect("/login");

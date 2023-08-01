@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const createItemsAndAssociateToCompany = async (companiesIds: string[]) => {
+const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
   const realCategoryIds = await prisma.category.findMany({
     select: {
       id: true,
@@ -11,30 +11,39 @@ const createItemsAndAssociateToCompany = async (companiesIds: string[]) => {
     },
   });
 
-  const itemsIds = (
+  const itemsId = (
     await Promise.all(
-      companiesIds.map((currentCompanyData) => {
+      companiesId.map(async (currentCompanyId) => {
         const { id, subcategories } =
           faker.helpers.arrayElement(realCategoryIds);
 
-        const data = {
-          id: faker.string.uuid(),
-          title: faker.commerce.productName(),
-          description: faker.commerce.productDescription(),
-          categoryId: id,
-          companyId: currentCompanyData,
-          favoriteItemsId: "a",
-          subcategories: {
-            connect: { id: faker.helpers.arrayElement(subcategories).id },
+        return await prisma.item.create({
+          data: {
+            title: faker.commerce.productName(),
+            description: faker.commerce.productDescription(),
+            category: {
+              connect: {
+                id,
+              },
+            },
+            company: {
+              connect: {
+                id: currentCompanyId,
+              },
+            },
+            subcategories: {
+              connect: {
+                id: faker.helpers.arrayElement(subcategories).id,
+              },
+            },
           },
-        };
-
-        return prisma.item.create({ data });
-      })
+        });
+      }),
     )
   ).map((el) => el.id);
 
-  return itemsIds;
+  //////////////////
+  return itemsId;
 };
 
 export default createItemsAndAssociateToCompany;

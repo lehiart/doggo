@@ -15,11 +15,13 @@ async function getMemberData(memberId: PackMember["id"]) {
   });
 }
 
-interface EditorPageProps {
+interface MemberEditorPageProps {
   params: { memberId: string };
 }
 
-export default async function EditMemberPage({ params }: EditorPageProps) {
+export default async function EditMemberPage({
+  params,
+}: MemberEditorPageProps) {
   const user = await getCurrentUser();
 
   if (!user) {

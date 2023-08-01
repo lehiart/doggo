@@ -5,28 +5,21 @@ const prisma = new PrismaClient();
 
 // Add a items list to each user created with one random item
 const createFavoriteItemsListToUser = async (
-  usersIds: string[],
-  itemsIds: string[]
+  usersId: string[],
+  itemsId: string[],
 ) => {
-  const itemsListIds = (
-    await Promise.all(
-      usersIds.map((userId) => {
-        const data = {
-          id: faker.string.uuid(),
-          userId: userId,
-          items: {
-            connect: {
-              id: faker.helpers.arrayElement(itemsIds), // add an existing item randomly
-            },
-          },
-        };
+  usersId.map((userId) => {
+    const data = {
+      userId: userId,
+      items: {
+        connect: {
+          id: faker.helpers.arrayElement(itemsId), // add an existing item randomly
+        },
+      },
+    };
 
-        return prisma.favoriteItems.create({ data });
-      })
-    )
-  ).map((el) => el.id);
-
-  return itemsListIds;
+    return prisma.favoriteItems.create({ data });
+  });
 };
 
 export default createFavoriteItemsListToUser;
