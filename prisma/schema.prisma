@@ -66,6 +66,22 @@ model VerificationToken {
   @@map(name: "verification_tokens")
 }
 
+model ResetPasswordToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  userId String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([id, token])
+  @@index([userId])
+  @@map(name: "reset_password_tokens")
+}
+
 ////////////////////////////////////////// USER   ///////////////////////////////////////////////////////
 
 model User {
@@ -82,6 +98,7 @@ model User {
   accounts           Account[]
   sessions           Session[]
   verificationTokens VerificationToken[]
+  resetPasswordToken ResetPasswordToken[]
   profile            Profile?
 
   pack          Pack?          @relation("UserPack") // user can have zero (role: company) or one pack (role: user)

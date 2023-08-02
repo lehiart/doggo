@@ -20,6 +20,7 @@ import {
   INVALID_CREDENTIALS_MSG,
   NOT_VERIFIED_EMAIL_MSG,
 } from "@/lib/constants";
+import Link from "next/link";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -143,6 +144,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 {errors.password.message}
               </p>
             )}
+            <p className="text-xs text-muted-foreground flex justify-end">
+              <Link
+                href="/recuperar-contrasena"
+                className="hover:text-brand underline underline-offset-4"
+              >
+                Olvidaste tu contraseña?
+              </Link>
+            </p>
           </div>
 
           <Button type="submit" disabled={isLoading}>
