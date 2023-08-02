@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { sendRecoveryEmail } from "./actions";
 import { toast } from "@/components/ui/use-toast";
 
-export const formDataSchema = z.object({
+const formDataSchema = z.object({
   email: z.string().email(),
 });
 
