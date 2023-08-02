@@ -13,7 +13,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const formDataSchema = z
+const formDataSchema = z
   .object({
     newPassword: z.string().min(1, {
       message: "La contraseña debe tener al menos 8 caracteres.",
