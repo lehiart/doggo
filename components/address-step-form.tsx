@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { StatesSelector } from "./states-selector";
-import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { Button } from "./ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -35,23 +34,9 @@ const formSchema = z.object({
   zip: z.string().length(5).regex(/^\d+$/),
 });
 
-interface AddressStepFormProps {
-  company?:
-    | Pick<
-        Company,
-        | "streetAddress"
-        | "streetNumber"
-        | "streetAddress2"
-        | "locality"
-        | "city"
-        | "state"
-        | "zip"
-      >
-    | undefined;
-}
-
-export default function AddressStepForm({ company }: AddressStepFormProps) {
-  const { onHandleNext, onHandleBack, setFormData, formData } = useFormState();
+export default function AddressStepForm() {
+  const { onHandleNext, onHandleBack, setFormData, formData, company } =
+    useFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -12,9 +12,8 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Company } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2Icon } from "lucide-react";
 import SocialMediaURLSelect from "./social-media-url-select";
 import { toast } from "./ui/use-toast";
 import { useState } from "react";
@@ -29,17 +28,12 @@ const formSchema = z.object({
     .optional(),
 });
 
-interface DetailsStepFormProps {
-  company?:
-    | Pick<Company, "phone" | "email" | "website" | "socialMediaLinks">
-    | undefined;
-}
-
-export default function ContactStepForm({ company }: DetailsStepFormProps) {
+export default function ContactStepForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const { onHandleBack, setFormData, formData, id, type } = useFormState();
+  const { onHandleBack, setFormData, formData, id, type, company } =
+    useFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,10 +47,43 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
         "",
     },
   });
-  console.log(form.getValues());
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
+  const editCompanyData = async (data: z.infer<typeof formSchema>) => {
+    setFormData((prev: any) => ({ ...prev, ...data }));
+
+    const payload = {
+      ...formData,
+      ...data, // merge with data captured from this step, so we dont wait for the setFormData
+      companyId: company?.id,
+      id,
+    };
+
+    // socialMediaLinks needs to be an string
+    if (payload.socialMediaLinks) {
+      payload.socialMediaLinks = JSON.stringify(payload.socialMediaLinks);
+    }
+
+    try {
+      const result = await fetch("/api/company", {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+
+      if (result.ok) {
+        router.refresh();
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      toast({
+        title:
+          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
+        description: "Si el problema persiste, contacta a soporte.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  async function AddNewCompany(data: z.infer<typeof formSchema>) {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
     const payload = {
@@ -86,6 +113,18 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
         description: "Si el problema persiste, contacta a soporte.",
         variant: "destructive",
       });
+    }
+  }
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+
+    if (type === "EDIT") {
+      await editCompanyData(data);
+    }
+
+    if (type === "NEW") {
+      await AddNewCompany(data);
     }
 
     setIsLoading(false);
@@ -150,6 +189,7 @@ export default function ContactStepForm({ company }: DetailsStepFormProps) {
             Atras
           </Button>
           <Button type="submit" disabled={isLoading || !form.formState.isValid}>
+            {isLoading && <Loader2Icon className="mr-2 animate-spin" />}{" "}
             Completar
           </Button>
         </div>

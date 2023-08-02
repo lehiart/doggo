@@ -15,10 +15,9 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Category, Company } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { CategoriesMultiSelect } from "./categories-multi-select";
-import { useDashboardContext } from "@/app/dashboard/components/dashboard-context";
 
 const formSchema = z.object({
   image: z.string().optional(),
@@ -27,16 +26,8 @@ const formSchema = z.object({
   categories: z.array(z.string()).min(1),
 });
 
-interface DetailsStepFormProps {
-  company?: Pick<Company, "image" | "name" | "description"> | undefined;
-  categories?: Category[] | undefined;
-}
-
-export default function DetailsStepForm({
-  company,
-  categories,
-}: DetailsStepFormProps) {
-  const { onHandleNext, setFormData, formData } = useFormState();
+export default function DetailsStepForm() {
+  const { onHandleNext, setFormData, formData, company } = useFormState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,7 +35,10 @@ export default function DetailsStepForm({
       image: company?.image || formData?.image,
       name: company?.name || formData?.name,
       description: company?.description || formData?.description,
-      categories: categories || formData?.categories || [],
+      categories:
+        formData?.categories ||
+        company?.categories.map((c: Category) => c.id) ||
+        [],
     },
   });
 

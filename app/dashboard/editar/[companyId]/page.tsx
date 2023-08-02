@@ -13,6 +13,13 @@ async function getCompanyData(companyId: Company["id"]) {
     where: {
       id: companyId,
     },
+    include: {
+      categories: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 }
 
@@ -29,7 +36,7 @@ export default async function EditCompanyPage({
     redirect("/login");
   }
 
-  const company = await getCompanyData(params.companyId);
+  const company: any = await getCompanyData(params.companyId);
 
   if (!company) {
     redirect("/dashboard");

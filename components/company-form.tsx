@@ -1,6 +1,6 @@
 "use client";
 
-import { Company } from "@prisma/client";
+import { Category, Company } from "@prisma/client";
 import DetailsStepForm from "./details-step-form";
 import AddressStepForm from "./address-step-form";
 import ContactStepForm from "./contact-step-form";
@@ -10,10 +10,12 @@ import {
 } from "@/app/dashboard/components/company-form-context";
 import CompanyFormHeader from "@/components/company-form-header";
 
+type CompanyWithCategories = Company & { categories: Category[] };
+
 interface MemberFormProps {
   id: string;
   type: "EDIT" | "NEW";
-  company?: Company | undefined;
+  company?: CompanyWithCategories | undefined;
 }
 
 const ActiveStepFormComponent = () => {
@@ -34,7 +36,7 @@ const ActiveStepFormComponent = () => {
 export default function CompanyForm({ id, type, company }: MemberFormProps) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <FormProvider id={id} type={type}>
+      <FormProvider id={id} type={type} company={company}>
         <div className="w-full rounded-xl border p-6">
           <CompanyFormHeader />
 

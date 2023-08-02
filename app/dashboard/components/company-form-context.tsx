@@ -1,3 +1,4 @@
+import { Category, Company } from "@prisma/client";
 import {
   Dispatch,
   ReactNode,
@@ -7,6 +8,8 @@ import {
   useState,
 } from "react";
 
+type CompanyWithCategories = Company & { categories: Category[] };
+
 interface IFormContext {
   formData: any;
   setFormData: Dispatch<SetStateAction<any>>;
@@ -15,6 +18,7 @@ interface IFormContext {
   step: number;
   type: "EDIT" | "NEW";
   id: string | undefined;
+  company: CompanyWithCategories | undefined;
 }
 
 const FormContext = createContext<IFormContext>({
@@ -25,15 +29,17 @@ const FormContext = createContext<IFormContext>({
   step: 0,
   type: "NEW",
   id: "",
+  company: undefined,
 });
 
 interface IProps {
   children: ReactNode;
   id: string;
   type: "EDIT" | "NEW";
+  company: CompanyWithCategories | undefined;
 }
 
-export function FormProvider({ children, id, type }: IProps) {
+export function FormProvider({ children, id, type, company }: IProps) {
   const [formData, setFormData] = useState();
   const [step, setStep] = useState(1);
 
@@ -55,6 +61,7 @@ export function FormProvider({ children, id, type }: IProps) {
         step,
         type,
         id,
+        company,
       }}
     >
       {children}
