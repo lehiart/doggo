@@ -39,7 +39,6 @@ async function seed() {
 
     // 3 - create items and associate them to the existing companies
     const itemsId = await createItemsAndAssociateToCompany(companiesId);
-    console.log(itemsId, "itemsId");
 
     // 4 - add items to favorite items list to role:user
     await createFavoriteItemsListToUser(usersId, itemsId);

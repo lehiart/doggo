@@ -2,13 +2,13 @@ import { useFormState } from "@/app/dashboard/components/company-form-context";
 import { cn } from "@/lib/utils";
 
 export default function CompanyFormHeader() {
-  const { step, formData } = useFormState();
+  const { step } = useFormState();
 
   if (step > 3) return null;
 
   return (
     <div>
-      {JSON.stringify(formData, null, 2)}
+      {/* {JSON.stringify(formData, null, 2)} */}
       <h2 className="sr-only">Steps</h2>
 
       <div className="relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-gray-100">

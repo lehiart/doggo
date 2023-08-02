@@ -48,7 +48,7 @@ export default async function EditCompanyPage({
         <h2 className="text-2xl font-bold tracking-tight">Editar negocio</h2>
         <p className="text-muted-foreground">Sobre mi negocio</p>
 
-        <Link href="/dashboard" className="mt-4">
+        <Link href={`/dashboard/ajustes/${company.id}`} className="mt-4">
           <Button>
             <ChevronLeftIcon className="mr-2 h-4 w-4" />
             Atras

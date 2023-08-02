@@ -31,10 +31,10 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
           Clientes
         </Link>
         <Link
-          href={`/dashboard/editar/${selectedCompany?.id}`}
+          href={`/dashboard/ajustes/${selectedCompany?.id}`}
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
         >
-          Editar
+          Ajustes
         </Link>
       </div>
 

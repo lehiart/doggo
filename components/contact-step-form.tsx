@@ -52,8 +52,8 @@ export default function ContactStepForm() {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
     const payload = {
-      ...formData,
       ...data, // merge with data captured from this step, so we dont wait for the setFormData
+      ...formData,
       companyId: company?.id,
       id,
     };
@@ -88,6 +88,7 @@ export default function ContactStepForm() {
 
     const payload = {
       ...formData,
+      ...data,
       id,
     };
 

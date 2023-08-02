@@ -63,7 +63,6 @@ export function DeleteUserForm() {
   async function onSubmit(data: AccountDeleteFormValues) {
     setIsSaving(true);
 
-    // console.log("data", data);
     //TODO: CREATE DELETE USER  ROUTE.TS
 
     toast({

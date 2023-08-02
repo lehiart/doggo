@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     if (role !== ROLE.USER && role === ROLE.COMPANY) {
       data.role = role;
-      data.companies = { create: {} };
+      // data.companies = { create: {} };
     }
 
     if (role === ROLE.USER) {

@@ -7,7 +7,6 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { id, categories, ...values } = body;
-    console.log(id, values, "BODY");
 
     // Ensure user is authenticated and has access to this user.
     const session = await getServerSession(authOptions);
@@ -15,7 +14,7 @@ export async function POST(request: Request) {
       return new Response(null, { status: 403 });
     }
 
-    const created = await db.company.create({
+    await db.company.create({
       data: {
         ...values,
         owner: {
@@ -28,8 +27,6 @@ export async function POST(request: Request) {
         },
       },
     });
-
-    console.log(created, "CREATED");
 
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -13,7 +13,7 @@ import {
 interface DashboardContext {
   selectedCompany: Pick<Company, "id" | "name" | "pro"> | null;
   setSelectedCompany: Dispatch<SetStateAction<any>>;
-  companies: Pick<Company, "id" | "name" | "pro">[];
+  companies?: Pick<Company, "id" | "name" | "pro">[];
 }
 
 const DashboardContext = createContext<DashboardContext>({
@@ -24,7 +24,7 @@ const DashboardContext = createContext<DashboardContext>({
 
 interface IProps {
   children: ReactNode;
-  companies: Pick<Company, "id" | "name" | "pro">[];
+  companies?: Pick<Company, "id" | "name" | "pro">[];
 }
 
 function DashboardContextProvider({ children, companies }: IProps) {
