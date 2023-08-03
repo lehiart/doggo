@@ -33,7 +33,7 @@ export default function DetailsStepForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       image: company?.image || formData?.image,
-      name: company?.name || formData?.name,
+      name: company?.name || formData?.name || "",
       description: company?.description || formData?.description,
       categories:
         formData?.categories ||
@@ -51,6 +51,7 @@ export default function DetailsStepForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <ImageUploadInput form={form} Icon={ImageIcon} />
+
         <FormField
           control={form.control}
           name="name"
@@ -60,11 +61,7 @@ export default function DetailsStepForm() {
                 Nombre <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Nombre o apodo"
-                  autoComplete="off"
-                  {...field}
-                />
+                <Input placeholder="Nombre" autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,18 +1,21 @@
 import { Metadata } from "next";
 
+import NavigationBar from "../components/navigation-bar";
+import { DashboardContextProvider } from "../components/dashboard-context";
 import { ROLE } from "@/lib/constants";
 import { db } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
-import EmptyInitialScreen from "./empty-iinitial-screen";
-import NavigationBar from "./navigation-bar";
-import MainContent from "./main-content";
-import { DashboardContextProvider } from "../components/dashboard-context";
+import { getCurrentUser } from "@/lib/session";
+import EmptyInitialScreen from "../components/empty-iinitial-screen";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Administra tu negocio con el dashboard.",
 };
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
 
 async function getDashboardData() {
   const user = await getCurrentUser();
@@ -40,7 +43,9 @@ async function getDashboardData() {
   return data;
 }
 
-export default async function DashboardPage() {
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
   const data = await getDashboardData();
 
   if (!data?.companies || data?.companies.length === 0) {
@@ -54,16 +59,12 @@ export default async function DashboardPage() {
   }
 
   return (
-    <DashboardContextProvider companies={data.companies}>
+    <DashboardContextProvider companies={data?.companies}>
       <section className="h-screen">
         <div className="flex flex-col h-screen">
-          {/* NAVBAR */}
-
           <NavigationBar />
 
-          {/* CONTENT */}
-
-          <MainContent />
+          {children}
         </div>
       </section>
     </DashboardContextProvider>

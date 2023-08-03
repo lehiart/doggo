@@ -22,10 +22,10 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
           href="/dashboard/items"
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
         >
-          Items
+          Servicios y productos
         </Link>
         <Link
-          href="/dashboard"
+          href="/dashboard/clientes"
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
         >
           Clientes

@@ -1,6 +1,6 @@
 import React from "react";
-import TeamSwitcher from "../components/team-switcher";
-import { MainNav } from "../components/main-nav";
+import TeamSwitcher from "./team-switcher";
+import { MainNav } from "./main-nav";
 
 export default async function NavigationBar() {
   return (

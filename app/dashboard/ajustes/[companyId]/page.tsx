@@ -7,7 +7,8 @@ import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import DeleteCard from "../delete-card";
+import DeleteCard from "../../components/delete-card";
+import { ChevronLeftIcon } from "lucide-react";
 
 async function getCompanyData(companyId: Company["id"]) {
   return await db.company.findUnique({
@@ -51,6 +52,12 @@ export default async function CompanySettingsPage({
         <p className="text-muted-foreground">
           Administra la configuración de tu negocio
         </p>
+        <Link href="/dashboard">
+          <Button>
+            <ChevronLeftIcon className="mr-2 h-4 w-4" />
+            <span>Atras</span>
+          </Button>
+        </Link>
         <div className="flex gap-2 justify-end">
           <Button>
             <Link href={`/dashboard/ajustes/${company.id}/editar`}>Editar</Link>

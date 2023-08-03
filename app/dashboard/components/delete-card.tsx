@@ -38,8 +38,6 @@ export default function DeleteCard({ companyId }: DeleteCardProps) {
         method: "DELETE",
       });
 
-      console.log("response", response);
-
       if (response.ok) {
         router.refresh();
         router.push("/dashboard");

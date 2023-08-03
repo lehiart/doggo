@@ -41,9 +41,9 @@ export default function AddressStepForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      streetAddress: company?.streetAddress || formData?.streetAddress,
-      streetNumber: company?.streetNumber || formData?.streetNumber,
-      streetAddress2: company?.streetAddress2 || formData?.streetAddress2,
+      streetAddress: company?.streetAddress || formData?.streetAddress || "",
+      streetNumber: company?.streetNumber || formData?.streetNumber || "",
+      streetAddress2: company?.streetAddress2 || formData?.streetAddress2 || "",
       locality: company?.locality || formData?.locality,
       city: company?.city || formData?.city,
       state: company?.state || formData?.state,

@@ -41,7 +41,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
   };
 
   useEffect(() => {
-    if (companies.length > 0) {
+    if (companies && companies.length > 0) {
       setSelectedCompany(companies[0]);
     }
   }, [companies, setSelectedCompany]);
@@ -51,7 +51,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            disabled={companies.length === 0}
+            disabled={companies?.length === 0}
             variant="outline"
             role="combobox"
             aria-expanded={open}
@@ -78,7 +78,8 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
               <CommandInput placeholder="Buscar..." />
               <CommandEmpty>No encontrado.</CommandEmpty>
               <CommandGroup heading="Mis negocios">
-                {companies.length > 0 &&
+                {companies &&
+                  companies.length > 0 &&
                   companies.map((company: BasicCompanyData) => (
                     <CommandItem
                       key={company.id}

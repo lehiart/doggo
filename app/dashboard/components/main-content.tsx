@@ -8,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Overview } from "../components/overview";
-import { RecentSales } from "../components/recent-sales";
-import { useDashboardContext } from "../components/dashboard-context";
+import { Overview } from "./overview";
+import { RecentSales } from "./recent-sales";
+import { useDashboardContext } from "./dashboard-context";
 
 export default function MainContent() {
   const { selectedCompany } = useDashboardContext();
