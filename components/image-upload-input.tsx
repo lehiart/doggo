@@ -1,43 +1,43 @@
-import { useRef } from "react";
-import type { ChangeEvent } from "react";
-import { toast } from "@/components/ui/use-toast";
+import { useRef } from 'react'
+import type { ChangeEvent } from 'react'
+import { toast } from '@/components/ui/use-toast'
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { getImagesData } from "@/lib/validations/image";
-import Image from "next/image";
-import { CameraIcon, LucideIcon } from "lucide-react";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+} from '@/components/ui/tooltip'
+import { getImagesData } from '@/lib/validations/image'
+import Image from 'next/image'
+import { CameraIcon, LucideIcon } from 'lucide-react'
+import { FormControl, FormField, FormItem } from '@/components/ui/form'
 
 export const ImageUploadInput = ({
   form,
   Icon,
 }: {
-  form: any;
-  Icon: LucideIcon;
+  form: any
+  Icon: LucideIcon
 }) => {
-  const profileInputFileRef = useRef<HTMLInputElement>(null);
+  const profileInputFileRef = useRef<HTMLInputElement>(null)
 
   const editImage = ({
     target: { files },
   }: ChangeEvent<HTMLInputElement>): void => {
-    const imagesData = getImagesData(files);
+    const imagesData = getImagesData(files)
 
     if (!imagesData) {
-      toast({ title: "Por favor, elige una imagen válida." });
-      return;
+      toast({ title: 'Por favor, elige una imagen válida.' })
+      return
     }
 
-    const { imagesPreviewData, selectedImagesData } = imagesData;
+    const { imagesPreviewData, selectedImagesData } = imagesData
 
-    const newImage = imagesPreviewData[0].src;
+    const newImage = imagesPreviewData[0].src
     //TODO: upload image to server with and save the url string to user profile
-    form.setValue("image", newImage);
-  };
+    form.setValue('image', newImage)
+  }
 
   return (
     <div className="relative mx-auto my-16 flex w-32 justify-center md:w-[200px]">
@@ -46,7 +46,7 @@ export const ImageUploadInput = ({
         name="image"
         render={({ field }) => {
           return (
-            <FormItem>
+            <FormItem className="space-y-6">
               <FormControl>
                 <>
                   <input
@@ -95,11 +95,11 @@ export const ImageUploadInput = ({
                 </>
               </FormControl>
             </FormItem>
-          );
+          )
         }}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ImageUploadInput;
+export default ImageUploadInput

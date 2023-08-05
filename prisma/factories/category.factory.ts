@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client'
 
-import { CATEGORY_NAMES } from "../../lib/category";
-import { slugify } from "../../lib/utils";
+import { CATEGORY_NAMES } from '../../lib/category'
+import { slugify } from '../../lib/utils'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const createCategories = async () => {
   CATEGORY_NAMES.map(async (element) => {
@@ -11,21 +11,21 @@ const createCategories = async () => {
     const categoryResult = await prisma.category.create({
       data: {
         name: element.category,
-        route: slugify(element.category),
+        slug: slugify(element.category),
       },
-    });
+    })
 
     // then insert subcategories to that category
     element.subcategories.map(async (subcategory) => {
       await prisma.subcategory.create({
         data: {
           name: subcategory,
-          route: slugify(subcategory),
+          slug: slugify(subcategory),
           categoryId: categoryResult.id,
         },
-      });
-    });
-  });
-};
+      })
+    })
+  })
+}
 
-export default createCategories;
+export default createCategories

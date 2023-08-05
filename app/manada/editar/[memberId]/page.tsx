@@ -1,37 +1,37 @@
-import { getCurrentUser } from "@/lib/session";
-import PackMemberForm from "../../../../components/pack-member-form";
-import Link from "next/link";
-import { ChevronLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { PackMember, User } from "@prisma/client";
-import { db } from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { getCurrentUser } from '@/lib/session'
+import PackMemberForm from '../../../../components/pack-form/pack-member-form'
+import Link from 'next/link'
+import { ChevronLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { PackMember, User } from '@prisma/client'
+import { db } from '@/lib/prisma'
+import { notFound, redirect } from 'next/navigation'
 
-async function getMemberData(memberId: PackMember["id"]) {
+async function getMemberData(memberId: PackMember['id']) {
   return await db.packMember.findFirst({
     where: {
       id: memberId,
     },
-  });
+  })
 }
 
 interface MemberEditorPageProps {
-  params: { memberId: string };
+  params: { memberId: string }
 }
 
 export default async function EditMemberPage({
   params,
 }: MemberEditorPageProps) {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
   if (!user) {
-    redirect("/login");
+    redirect('/login')
   }
 
-  const member = await getMemberData(params.memberId);
+  const member = await getMemberData(params.memberId)
 
   if (!member) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -47,5 +47,5 @@ export default async function EditMemberPage({
 
       <PackMemberForm id={user?.id} type="EDIT" member={member} />
     </div>
-  );
+  )
 }

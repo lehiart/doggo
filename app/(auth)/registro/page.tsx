@@ -1,13 +1,13 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { Button } from "@/components/ui/button";
-import { UserRegisterForm } from "@/components/user-register-form";
-import { DogIcon } from "lucide-react";
+import { Button } from '@/components/ui/button'
+import { UserRegisterForm } from '@/components/auth/user-register-form'
+import { DogIcon } from 'lucide-react'
 
 export const metadata = {
-  title: "Crea una cuenta",
-  description: "Crea una cuenta en Doghouse.",
-};
+  title: 'Crea una cuenta',
+  description: 'Crea una cuenta en Doghouse.',
+}
 
 export default function RegisterPage() {
   return (
@@ -34,14 +34,14 @@ export default function RegisterPage() {
           <UserRegisterForm />
 
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Al hacer clic en Continuar, acepta nuestros{" "}
+            Al hacer clic en Continuar, acepta nuestros{' '}
             <Link
               href="/terms"
               className="hover:text-brand underline underline-offset-4"
             >
               Terminos de servicio
-            </Link>{" "}
-            y{" "}
+            </Link>{' '}
+            y{' '}
             <Link
               href="/privacy"
               className="hover:text-brand underline underline-offset-4"
@@ -53,5 +53,5 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import { getCurrentUser } from "@/lib/session";
-import Link from "next/link";
-import { ChevronLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import CompanyForm from "@/components/company-form";
-import { redirect } from "next/navigation";
+import { getCurrentUser } from '@/lib/session'
+import Link from 'next/link'
+import { ChevronLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import CompanyForm from '@/components/company-form/company-form'
+import { redirect } from 'next/navigation'
 
 export default async function AddNewCompanyPage() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
   if (!user || !user?.id) {
-    redirect("/login");
+    redirect('/login')
   }
 
   return (
@@ -37,5 +37,5 @@ export default async function AddNewCompanyPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,28 +1,28 @@
-import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import AuthProvider from "@/components/auth-provider";
-import { Toaster } from "@/components/ui/toaster";
-import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from '@/components/theme-provider'
+import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { SiteHeader } from '@/components/site-header/site-header'
+import { SiteFooter } from '@/components/site-footer'
+import AuthProvider from '@/components/auth/auth-provider'
+import { Toaster } from '@/components/ui/toaster'
+import { Analytics } from '@vercel/analytics/react'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Doghouse",
+  title: 'Doghouse',
   description:
-    "Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.",
+    'Guía de servicios para perros en México: entrenamiento, paseos, eventos, proveedores y más.',
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
-};
+}
 
 interface RootLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
@@ -42,5 +42,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

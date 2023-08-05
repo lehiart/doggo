@@ -1,11 +1,11 @@
-import { getCurrentUser } from "@/lib/session";
-import PackMemberForm from "../../../components/pack-member-form";
-import Link from "next/link";
-import { ChevronLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { getCurrentUser } from '@/lib/session'
+import PackMemberForm from '../../../components/pack-form/pack-member-form'
+import Link from 'next/link'
+import { ChevronLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default async function AddNewMemberPage() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
   return (
     <div>
@@ -20,5 +20,5 @@ export default async function AddNewMemberPage() {
 
       <PackMemberForm id={user?.id} type="NEW" />
     </div>
-  );
+  )
 }

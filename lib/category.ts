@@ -1,218 +1,217 @@
-"use client";
+'use client'
 
-import useSWR from "swr";
+import useSWR from 'swr'
 
-// @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export function useCategories() {
-  const { data, error, isLoading } = useSWR("/api/categories", fetcher);
+  const { data, error, isLoading } = useSWR('/api/categories', fetcher)
 
   return {
     categories: data?.categories || [],
     isLoading,
     isError: error,
-  };
+  }
 }
 
 export const CATEGORY_NAMES = [
   {
-    category: "Accesorios para mascotas",
+    category: 'Accesorios para mascotas',
     subcategories: [
-      "Juguetes para mascotas",
-      "Ropa para mascotas",
-      "Comida para mascotas",
+      'Juguetes para mascotas',
+      'Ropa para mascotas',
+      'Comida para mascotas',
     ],
   },
   {
-    category: "Adiestramiento y deportes caninos",
-    subcategories: ["Agility", "Flyball", "Obediencia avanzada"],
+    category: 'Adiestramiento y deportes caninos',
+    subcategories: ['Agility', 'Flyball', 'Obediencia avanzada'],
   },
   {
-    category: "Alimentación",
-    subcategories: ["Comida seca", "Comida húmeda", "Golosinas"],
+    category: 'Alimentación',
+    subcategories: ['Comida seca', 'Comida húmeda', 'Golosinas'],
   },
   {
-    category: "Cremación y servicios funerarios",
+    category: 'Cremación y servicios funerarios',
     subcategories: [
-      "Cremación de mascotas",
-      "Servicios conmemorativos",
-      "Urna para cenizas",
+      'Cremación de mascotas',
+      'Servicios conmemorativos',
+      'Urna para cenizas',
     ],
   },
   {
-    category: "Comportamiento y modificación de conducta",
+    category: 'Comportamiento y modificación de conducta',
     subcategories: [
-      "Terapia conductual",
-      "Corrección de malos hábitos",
-      "Socialización de mascotas",
+      'Terapia conductual',
+      'Corrección de malos hábitos',
+      'Socialización de mascotas',
     ],
   },
   {
-    category: "Cuidado especial",
+    category: 'Cuidado especial',
     subcategories: [
-      "Cuidado de mascotas con necesidades médicas especiales",
-      "Cuidado de mascotas mayores",
-      "Cuidado de mascotas con discapacidad",
+      'Cuidado de mascotas con necesidades médicas especiales',
+      'Cuidado de mascotas mayores',
+      'Cuidado de mascotas con discapacidad',
     ],
   },
   {
-    category: "Cuidado nocturno",
+    category: 'Cuidado nocturno',
     subcategories: [
-      "Guardería nocturna",
-      "Cuidado de mascotas durante la noche",
-      "Servicios de cuidador de mascotas en casa",
+      'Guardería nocturna',
+      'Cuidado de mascotas durante la noche',
+      'Servicios de cuidador de mascotas en casa',
     ],
   },
   {
-    category: "Entretenimiento",
-    subcategories: ["Paseo diario", "Guardería", "Adiestramiento"],
+    category: 'Entretenimiento',
+    subcategories: ['Paseo diario', 'Guardería', 'Adiestramiento'],
   },
   {
-    category: "Entierro y cementerio para mascotas",
+    category: 'Entierro y cementerio para mascotas',
     subcategories: [
-      "Servicios funerarios",
-      "Cementerios y nichos para mascotas",
-      "Lápidas y monumentos conmemorativos",
+      'Servicios funerarios',
+      'Cementerios y nichos para mascotas',
+      'Lápidas y monumentos conmemorativos',
     ],
   },
   {
-    category: "Entrenamiento",
+    category: 'Entrenamiento',
     subcategories: [
-      "Entrenamiento de obediencia",
-      "Entrenamiento de comportamiento",
-      "Entrenamiento para competencias",
+      'Entrenamiento de obediencia',
+      'Entrenamiento de comportamiento',
+      'Entrenamiento para competencias',
     ],
   },
   {
-    category: "Entrenamiento online",
+    category: 'Entrenamiento online',
     subcategories: [
-      "Clases de obediencia virtuales",
-      "Entrenamiento en línea personalizado",
-      "Sesiones de entrenamiento por videoconferencia",
+      'Clases de obediencia virtuales',
+      'Entrenamiento en línea personalizado',
+      'Sesiones de entrenamiento por videoconferencia',
     ],
   },
   {
-    category: "Espacios para eventos",
+    category: 'Espacios para eventos',
     subcategories: [
-      "Espacios para fiestas de cumpleaños",
-      "Salas de eventos para mascotas",
-      "Locaciones para sesiones de fotos",
+      'Espacios para fiestas de cumpleaños',
+      'Salas de eventos para mascotas',
+      'Locaciones para sesiones de fotos',
     ],
   },
   {
-    category: "Fotografía",
+    category: 'Fotografía',
     subcategories: [
-      "Sesión de fotos de mascotas",
-      "Fotografía para eventos",
-      "Packs de fotografía",
+      'Sesión de fotos de mascotas',
+      'Fotografía para eventos',
+      'Packs de fotografía',
     ],
   },
   {
-    category: "Higiene dental",
+    category: 'Higiene dental',
     subcategories: [
-      "Limpieza dental",
-      "Tratamientos y productos para el cuidado dental",
+      'Limpieza dental',
+      'Tratamientos y productos para el cuidado dental',
     ],
   },
   {
-    category: "Hospedaje",
+    category: 'Hospedaje',
     subcategories: [
-      "Alojamiento en casa de familia",
-      "Alojamiento en hotel para mascotas",
-      "Servicio de guardería nocturna",
+      'Alojamiento en casa de familia',
+      'Alojamiento en hotel para mascotas',
+      'Servicio de guardería nocturna',
     ],
   },
   {
-    category: "Masaje y relajación",
+    category: 'Masaje y relajación',
     subcategories: [
-      "Masaje terapéutico",
-      "Relajación con aromaterapia",
-      "Terapias de agua",
+      'Masaje terapéutico',
+      'Relajación con aromaterapia',
+      'Terapias de agua',
     ],
   },
   {
-    category: "Moda y estilismo",
+    category: 'Moda y estilismo',
     subcategories: [
-      "Diseño de moda para mascotas",
-      "Estilismo y grooming",
-      "Accesorios de moda",
+      'Diseño de moda para mascotas',
+      'Estilismo y grooming',
+      'Accesorios de moda',
     ],
   },
   {
-    category: "Peluquería",
-    subcategories: ["Corte de pelo", "Corte de uñas", "Baño"],
+    category: 'Peluquería',
+    subcategories: ['Corte de pelo', 'Corte de uñas', 'Baño'],
   },
   {
-    category: "Peluquería a domicilio",
+    category: 'Peluquería a domicilio',
     subcategories: [
-      "Corte de pelo a domicilio",
-      "Baño a domicilio",
-      "Corte de uñas a domicilio",
+      'Corte de pelo a domicilio',
+      'Baño a domicilio',
+      'Corte de uñas a domicilio',
     ],
   },
   {
-    category: "Rehabilitación",
+    category: 'Rehabilitación',
     subcategories: [
-      "Rehabilitación postoperatoria",
-      "Fisioterapia para mascotas",
-      "Acupuntura",
+      'Rehabilitación postoperatoria',
+      'Fisioterapia para mascotas',
+      'Acupuntura',
     ],
   },
   {
-    category: "Salud",
-    subcategories: ["Vacunación", "Desparasitación", "Consulta veterinaria"],
+    category: 'Salud',
+    subcategories: ['Vacunación', 'Desparasitación', 'Consulta veterinaria'],
   },
   {
-    category: "Seguros para mascotas",
+    category: 'Seguros para mascotas',
     subcategories: [
-      "Seguro de salud",
-      "Seguro de responsabilidad civil",
-      "Seguro de pérdida o robo",
+      'Seguro de salud',
+      'Seguro de responsabilidad civil',
+      'Seguro de pérdida o robo',
     ],
   },
   {
-    category: "Servicios de acicalamiento",
+    category: 'Servicios de acicalamiento',
     subcategories: [
-      "Lavado y cepillado",
-      "Corte de uñas y limpieza de oídos",
-      "Tratamientos de belleza",
+      'Lavado y cepillado',
+      'Corte de uñas y limpieza de oídos',
+      'Tratamientos de belleza',
     ],
   },
   {
-    category: "Servicios de adopción",
+    category: 'Servicios de adopción',
     subcategories: [
-      "Adopción de mascotas",
-      "Asesoramiento para adopción",
-      "Reubicación de mascotas",
+      'Adopción de mascotas',
+      'Asesoramiento para adopción',
+      'Reubicación de mascotas',
     ],
   },
   {
-    category: "Servicios de emergencia",
+    category: 'Servicios de emergencia',
     subcategories: [
-      "Atención de emergencias veterinarias",
-      "Rescate y salvamento de mascotas",
-      "Servicios de ambulancia para mascotas",
+      'Atención de emergencias veterinarias',
+      'Rescate y salvamento de mascotas',
+      'Servicios de ambulancia para mascotas',
     ],
   },
   {
-    category: "Servicios de spa para mascotas",
-    subcategories: ["Baño relajante", "Mascoterapia", "Tratamiento estético"],
+    category: 'Servicios de spa para mascotas',
+    subcategories: ['Baño relajante', 'Mascoterapia', 'Tratamiento estético'],
   },
   {
-    category: "Servicios de terapia asistida con mascotas",
+    category: 'Servicios de terapia asistida con mascotas',
     subcategories: [
-      "Terapia para habilidades sociales",
-      "Terapia para discapacidades",
-      "Terapia emocional y de apoyo",
+      'Terapia para habilidades sociales',
+      'Terapia para discapacidades',
+      'Terapia emocional y de apoyo',
     ],
   },
   {
-    category: "Tiendas de mascotas y suministros",
+    category: 'Tiendas de mascotas y suministros',
     subcategories: [
-      "Tiendas de alimentos y accesorios",
-      "Suministros para mascotas",
-      "Juguetes y productos para el cuidado",
+      'Tiendas de alimentos y accesorios',
+      'Suministros para mascotas',
+      'Juguetes y productos para el cuidado',
     ],
   },
-];
+]

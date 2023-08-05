@@ -1,14 +1,14 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from 'next'
+import Link from 'next/link'
 
-import { Button } from "@/components/ui/button";
-import { UserAuthForm } from "@/components/user-auth-form";
-import { ChevronLeft, Dog } from "lucide-react";
+import { Button } from '@/components/ui/button'
+import { UserAuthForm } from '@/components/auth/user-auth-form'
+import { ChevronLeft, Dog } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: "Inicia sesión",
-  description: "Inicia sesión en tu cuenta de Doghouse.",
-};
+  title: 'Inicia sesión',
+  description: 'Inicia sesión en tu cuenta de Doghouse.',
+}
 
 export default function LoginPage() {
   return (
@@ -46,5 +46,5 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
-  );
+  )
 }

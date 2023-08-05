@@ -104,6 +104,7 @@ model User {
   pack          Pack?          @relation("UserPack") // user can have zero (role: company) or one pack (role: user)
   favoriteItems FavoriteItems? @relation("UserFavoriteItems") // only user (role: user) can have favorite items
   companies     Company[]      @relation("UserCompanies") // user can have zero (role: user) or many companies (role: company)
+  opinions      Opinion[]
 
   @@map(name: "users")
 }
@@ -132,7 +133,8 @@ model Company {
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   ownerId   String
 
-  pro Boolean @default(false)
+  pro  Boolean @default(false)
+  slug String  @unique
 
   image            String?
   name             String?
@@ -202,22 +204,22 @@ model FavoriteItems {
 }
 
 model Item {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String
   // openingHours  String
   // closingHours  String
+  published   Boolean @default(false)
 
   categoryId      String
   companyId       String
   favoriteItemsId String?
 
-  category      Category      @relation("ItemCategory", fields: [categoryId], references: [id])
-  subcategories Subcategory[] @relation("ItemSubcategories")
-
+  category      Category       @relation("ItemCategory", fields: [categoryId], references: [id])
+  subcategories Subcategory[]  @relation("ItemSubcategories")
   favoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
-
-  company Company @relation("CompanyItems", fields: [companyId], references: [id])
+  company       Company        @relation("CompanyItems", fields: [companyId], references: [id])
+  opinions      Opinion[]
 
   @@index([favoriteItemsId])
   @@index([categoryId])
@@ -228,9 +230,9 @@ model Item {
 ////// Category has many subcategories, subcategories have only one category
 
 model Category {
-  id    String @id @default(uuid())
-  name  String @unique
-  route String @unique
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
 
   items         Item[]        @relation("ItemCategory")
   subcategories Subcategory[] @relation("SubcategoriesOfCategory")
@@ -240,11 +242,30 @@ model Category {
 model Subcategory {
   id         String @id @default(uuid())
   name       String @unique
-  route      String @unique
+  slug       String @unique
   categoryId String
 
   items    Item[]   @relation("ItemSubcategories")
   category Category @relation("SubcategoriesOfCategory", fields: [categoryId], references: [id])
 
   @@index([categoryId])
+}
+
+////////////////////////////////////////////////   OPINIONS   //////////////////////////////////////////////////
+///// role:user can have many opinions for many items, item can have many opinions
+model Opinion {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  userId    String
+  itemId    String
+
+  rating  Int
+  comment String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([itemId])
 }

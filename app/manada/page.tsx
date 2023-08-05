@@ -1,8 +1,8 @@
-import React from "react";
-import { db } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import React from 'react'
+import { db } from '@/lib/prisma'
+import { getCurrentUser } from '@/lib/session'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import {
   Card,
   CardContent,
@@ -10,16 +10,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DogIcon } from "lucide-react";
-import { DeletePackMemberBtn } from "../../components/delete-pack-member-btn";
+} from '@/components/ui/card'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { DogIcon } from 'lucide-react'
+import { DeletePackMemberBtn } from '../../components/pack-form/delete-pack-member-btn'
 
 async function MyPackPage() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
   if (!user) {
-    return <div>Debes estar logueado</div>;
+    return <div>Debes estar logueado</div>
   }
 
   const myPack = await db.pack.findUnique({
@@ -30,7 +30,7 @@ async function MyPackPage() {
       id: true,
       members: true,
     },
-  });
+  })
 
   return (
     <div>
@@ -87,7 +87,7 @@ async function MyPackPage() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default MyPackPage;
+export default MyPackPage
