@@ -37,6 +37,7 @@ async function getDashboardData() {
           id: true,
           name: true,
           pro: true,
+          slug: true,
         },
       },
     },

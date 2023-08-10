@@ -39,9 +39,7 @@ export default function CompanySelectInput({
   const pathname = usePathname()
 
   useEffect(() => {
-    // Check if selectedCompany is null
     if (!selectedCompany) {
-      // Set the first company as the selected company
       setSelectedCompany(companies[0])
     }
   }, [selectedCompany, companies, setSelectedCompany])
@@ -58,7 +56,9 @@ export default function CompanySelectInput({
         <PopoverTrigger asChild>
           <Button
             disabled={
-              companies?.length === 0 || pathname === '/dashboard/items/nuevo'
+              companies?.length === 0 ||
+              pathname === '/dashboard/items/nuevo' ||
+              pathname.startsWith('/dashboard/items/editar')
             }
             variant="outline"
             role="combobox"
@@ -98,7 +98,6 @@ export default function CompanySelectInput({
                         <AvatarImage
                           src={`https://avatar.vercel.sh/${company.id}.png`}
                           alt={company.name || 'Negocio'}
-                          // className='grayscale'
                         />
                         <AvatarFallback>DH</AvatarFallback>
                       </Avatar>

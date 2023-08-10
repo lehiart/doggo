@@ -1,11 +1,9 @@
 import { getCurrentUser } from '@/lib/session'
-import Link from 'next/link'
-import { ChevronLeftIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Item } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
+import { Sidebar } from '../../nuevo/sidebar'
+import EditItemForm from '@/components/dashboard/items/edit-item-form'
 
 async function getCompanyData(itemId: Item['id']) {
   return await db.item.findUnique({
@@ -35,8 +33,19 @@ export default async function EditCompanyPage({
   }
 
   return (
-    <div className="block min-h-screen space-y-6 p-10 pb-16">
-      item {params.itemId}
+    <div className="border-t">
+      <div className="bg-background">
+        <div className="grid lg:grid-cols-5">
+          <Sidebar />
+          <div className="col-span-3 lg:col-span-4 lg:border-l">
+            <div className="h-full px-4 py-6 lg:px-8">
+              <p>{params.itemId}</p>
+              <p>{item.id}</p>
+              <EditItemForm userId={user.id} item={item} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

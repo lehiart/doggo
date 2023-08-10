@@ -16,9 +16,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { CategoriesMultiSelect } from '@/components/company-form/categories-multi-select'
-import { useDashboardContext } from '../dashboard-context'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
+import { Item } from '@prisma/client'
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -26,36 +26,35 @@ const formSchema = z.object({
   category: z.array(z.string()).min(1).max(1),
 })
 
-interface NewItemFormProps {
+interface EditItemFormProps {
+  item: Item
   userId: string
 }
 
-export default function NewItemForm({ userId }: NewItemFormProps) {
+export default function EditItemForm({ item, userId }: EditItemFormProps) {
   const [isLoading, setIsLoading] = React.useState(false)
-  const { selectedCompany } = useDashboardContext()
   const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      category: [],
+      title: item.title || '',
+      description: item.description || '',
+      category: [item.categoryId] || [],
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    if (!selectedCompany) return
 
     const payload = {
       ...values,
+      itemId: item.id,
       userId,
-      companyId: selectedCompany.id,
     }
 
     const response = await fetch('/api/items', {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +116,7 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
         <CategoriesMultiSelect control={form.control} inputName="category" />
 
         <Button type="submit" disabled={isLoading}>
-          Submit
+          Actualizar
         </Button>
       </form>
     </Form>

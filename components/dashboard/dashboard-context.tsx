@@ -11,20 +11,17 @@ import {
 } from 'react'
 
 interface DashboardContext {
-  selectedCompany: Pick<Company, 'id' | 'name' | 'pro'> | null
+  selectedCompany: Pick<Company, 'id' | 'name' | 'pro' | 'slug'> | null
   setSelectedCompany: Dispatch<SetStateAction<any>>
-  // companies?: Pick<Company, "id" | "name" | "pro">[];
 }
 
 const DashboardContext = createContext<DashboardContext>({
   setSelectedCompany: () => {},
   selectedCompany: null,
-  // companies: [],
 })
 
 interface IProps {
   children: ReactNode
-  // companies?: Pick<Company, 'id' | 'name' | 'pro'>[]
 }
 
 function DashboardContextProvider({ children }: IProps) {

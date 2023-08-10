@@ -1,20 +1,6 @@
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-
-export const playlists = [
-  'Recently Added',
-  'Recently Played',
-  'Top Songs',
-  'Top Albums',
-  'Top Artists',
-  'Logic Discography',
-  'Bedtime Beats',
-  'Feeling Happy',
-  'I miss Y2K Pop',
-  'Runtober',
-  'Mellow Days',
-  'Eminem Essentials',
-]
+import Link from 'next/link'
 
 function Stepper() {
   return (
@@ -96,6 +82,9 @@ export function Sidebar() {
     <div className="pb-12 hidden lg:block">
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
+          <Link href="/dashboard/items">
+            <Button>Atras</Button>
+          </Link>
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Discover
           </h2>

@@ -6,9 +6,11 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useDashboardContext } from './dashboard-context'
 
 export default function DashboardMainHeader() {
   const pathname = usePathname()
+  const { selectedCompany } = useDashboardContext()
 
   return (
     <nav className="flex w-full items-center justify-between ml-6">
@@ -26,9 +28,7 @@ export default function DashboardMainHeader() {
           href="/dashboard/items"
           className={cn(
             'text-sm font-medium transition-colors hover:text-primary text-muted-foreground',
-            (pathname === '/dashboard/items' ||
-              pathname === '/dashboard/items/nuevo') &&
-              'text-primary',
+            pathname.startsWith('/dashboard/items') && 'text-primary',
           )}
         >
           Servicios y productos
@@ -70,6 +70,10 @@ export default function DashboardMainHeader() {
           Ajustes
         </Link>
       </div>
+
+      <Link href={`/empresa/${selectedCompany?.slug}`}>
+        <Button>Vista previa</Button>
+      </Link>
 
       <Link href="/dashboard/nuevo">
         <Button>Agregar nuevo negocio</Button>
