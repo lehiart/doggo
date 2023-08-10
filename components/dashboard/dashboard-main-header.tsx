@@ -26,7 +26,9 @@ export default function DashboardMainHeader() {
           href="/dashboard/items"
           className={cn(
             'text-sm font-medium transition-colors hover:text-primary text-muted-foreground',
-            pathname === '/dashboard/items' && 'text-primary',
+            (pathname === '/dashboard/items' ||
+              pathname === '/dashboard/items/nuevo') &&
+              'text-primary',
           )}
         >
           Servicios y productos

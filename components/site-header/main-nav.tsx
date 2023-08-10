@@ -25,7 +25,9 @@ export function MainNav({ role }: { role: string | undefined }) {
               href="/dashboard"
               className={cn(
                 'transition-colors hover:text-foreground/80',
-                pathname === '/docs' ? 'text-foreground' : 'text-foreground/60',
+                pathname.startsWith('/dashboard')
+                  ? 'text-foreground'
+                  : 'text-foreground/60',
               )}
             >
               Mi negocio
@@ -37,7 +39,9 @@ export function MainNav({ role }: { role: string | undefined }) {
               href="/manada"
               className={cn(
                 'transition-colors hover:text-foreground/80',
-                pathname === '/docs' ? 'text-foreground' : 'text-foreground/60',
+                pathname.startsWith('/manada')
+                  ? 'text-foreground'
+                  : 'text-foreground/60',
               )}
             >
               Mi manada

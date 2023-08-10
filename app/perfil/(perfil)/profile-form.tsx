@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,24 +14,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/components/ui/use-toast'
 
-import SocialMediaURLSelect from "@/components/social-media-url-select";
-import { StatesSelector } from "@/components/states-selector";
-import { Loader2Icon, User2Icon } from "lucide-react";
-import ImageUploadInput from "../../../components/image-upload-input";
+import SocialMediaURLSelect from '@/components/social-media-url-select'
+import { StatesSelector } from '@/components/states-selector'
+import { Loader2Icon, User2Icon } from 'lucide-react'
+import ImageUploadInput from '../../../components/image-upload-input'
 
 const profileFormSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: "El nombre debe ser por lo menos de dos caracteres.",
+      message: 'El nombre debe ser por lo menos de dos caracteres.',
     })
     .max(30, {
-      message: "El nombre debe ser maximo de 30 caracteres.",
+      message: 'El nombre debe ser maximo de 30 caracteres.',
     }),
   email: z.string().email(),
   image: z.string().optional(),
@@ -42,129 +42,129 @@ const profileFormSchema = z.object({
     .optional(),
   phone: z.string().optional(),
   location: z.string().optional(),
-});
+})
 
-type FormData = z.infer<typeof profileFormSchema>;
+type FormData = z.infer<typeof profileFormSchema>
 
 export interface ProfileFormProps
   extends React.HTMLAttributes<HTMLFormElement> {
   userProfile: {
-    id: string;
-    name: string;
-    email: string;
-    image: string | null;
+    id: string
+    name: string
+    email: string
+    image: string | null
     profile: {
-      id: string;
-      bio: string | null;
-      location: string | null;
-      phone: string | null;
-      links: string | null;
-    };
-  };
+      id: string
+      bio: string | null
+      location: string | null
+      phone: string | null
+      links: string | null
+    }
+  }
 }
 
 const cleanData = (data: any) => {
   // we dont need the url on the payload
-  const { url, ...remainingData } = data;
+  const { url, ...remainingData } = data
 
   // links needs to be an string
   if (remainingData.links) {
-    remainingData.links = JSON.stringify(remainingData.links);
+    remainingData.links = JSON.stringify(remainingData.links)
   }
 
   // phone needs to be a number without mask
   if (remainingData.phone) {
-    remainingData.phone = remainingData.phone.replace(/\D/g, "");
+    remainingData.phone = remainingData.phone.replace(/\D/g, '')
   }
 
-  return remainingData;
-};
+  return remainingData
+}
 
 const addMaskToPhone = (phone: string) => {
-  if (!phone) return "";
+  if (!phone) return ''
 
   const phoneMask = phone
-    .replace(/\D/g, "")
-    .replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1)-$2-$3"); // Apply mask pattern
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d{4})(\d{4}).*/, '($1)-$2-$3') // Apply mask pattern
 
-  return phoneMask;
-};
+  return phoneMask
+}
 
 export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
-  const [isSaving, setIsSaving] = React.useState<boolean>(false);
+  const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: userProfile?.name || "",
-      email: userProfile?.email || "",
-      image: userProfile?.image || "",
-      bio: userProfile?.profile?.bio || "",
-      url: "",
+      name: userProfile?.name || '',
+      email: userProfile?.email || '',
+      image: userProfile?.image || '',
+      bio: userProfile?.profile?.bio || '',
+      url: '',
       links:
         (userProfile?.profile?.links &&
           JSON.parse(userProfile.profile?.links)) ||
-        "",
+        '',
       phone:
         (userProfile?.profile?.phone &&
           addMaskToPhone(userProfile.profile?.phone)) ||
-        "",
-      location: userProfile?.profile?.location || "",
+        '',
+      location: userProfile?.profile?.location || '',
     },
-    mode: "onChange",
-  });
+    mode: 'onChange',
+  })
 
   async function onSubmit(data: FormData) {
-    setIsSaving(true);
+    setIsSaving(true)
 
     type DirtyField = {
-      [key: string]: boolean;
-    };
+      [key: string]: boolean
+    }
 
     type DirtyFields = {
-      dirtyFields: DirtyField;
-    };
+      dirtyFields: DirtyField
+    }
 
     // Only add the dirty fields to the payload
-    const { dirtyFields }: any = form.formState; // {password: true, email: true}
-    const cleanedData = cleanData(data); // {password: "123", email: "email@example.com"}
+    const { dirtyFields }: any = form.formState // {password: true, email: true}
+    const cleanedData = cleanData(data) // {password: "123", email: "email@example.com"}
 
     const payload: { [key: string]: string | null } = Object.keys(
       cleanedData,
     ).reduce((acc: { [key: string]: string | null }, key: string) => {
       if (dirtyFields[key as keyof DirtyFields]) {
-        acc[key] = cleanedData[key as keyof typeof cleanedData];
+        acc[key] = cleanedData[key as keyof typeof cleanedData]
       }
-      return acc;
-    }, {});
+      return acc
+    }, {})
 
     //is client so make it on the server route.ts
     try {
-      const result = await fetch("/api/profile", {
-        method: "POST",
+      await fetch('/api/profile', {
+        method: 'POST',
         body: JSON.stringify({
           ...payload,
           userId: userProfile.id,
           updatedAt: new Date(),
         }),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
 
       toast({
-        title: "Tu perfil se ha actualizado correctamente.",
-      });
+        title: 'Tu perfil se ha actualizado correctamente.',
+      })
     } catch (err) {
       toast({
         title:
-          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
-        description: "Si el problema persiste, contacta a soporte.",
-        variant: "destructive",
-      });
+          'Hubo un error al guardar los datos. Por favor intenta de nuevo.',
+        description: 'Si el problema persiste, contacta a soporte.',
+        variant: 'destructive',
+      })
     }
 
-    setIsSaving(false);
+    setIsSaving(false)
   }
 
   return (
@@ -242,10 +242,10 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
                   {...field}
                   maxLength={10}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    const formattedValue = addMaskToPhone(value);
+                    const value = e.target.value
+                    const formattedValue = addMaskToPhone(value)
 
-                    field.onChange(formattedValue);
+                    field.onChange(formattedValue)
                   }}
                 />
               </FormControl>
@@ -275,9 +275,9 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
         />
 
         <Button type="submit" disabled={!form.formState.isDirty || isSaving}>
-          {isSaving ? <Loader2Icon /> : "Actualizar perfil"}
+          {isSaving ? <Loader2Icon /> : 'Actualizar perfil'}
         </Button>
       </form>
     </Form>
-  );
-};
+  )
+}

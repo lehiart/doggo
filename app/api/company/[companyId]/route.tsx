@@ -57,8 +57,6 @@ export async function DELETE(
       },
     })
 
-    console.log('companyId', companyId)
-
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error(error, 'DELETE_COMPANY_ERROR')

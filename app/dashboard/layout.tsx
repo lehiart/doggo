@@ -9,6 +9,7 @@ import EmptyInitialScreen from '../../components/dashboard/empty-iinitial-screen
 import CompanySelectInput from '../../components/dashboard/company-select-input'
 import { DashboardContextProvider } from '../../components/dashboard/dashboard-context'
 import DashboardMainHeader from '@/components/dashboard/dashboard-main-header'
+
 export const metadata: Metadata = {
   title: 'Dashboard',
   description: 'Administra tu negocio con el dashboard.',

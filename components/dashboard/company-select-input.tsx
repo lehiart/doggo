@@ -23,6 +23,7 @@ import {
 import { Company } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import { useDashboardContext } from './dashboard-context'
+import { usePathname } from 'next/navigation'
 
 type BasicCompanyData = Pick<Company, 'id' | 'pro' | 'name'>
 
@@ -35,10 +36,11 @@ export default function CompanySelectInput({
 }: CompanySelectInputProps) {
   const [open, setOpen] = useState(false)
   const { selectedCompany, setSelectedCompany } = useDashboardContext()
+  const pathname = usePathname()
 
   useEffect(() => {
-    // Check if selectedCompany is null and companies array is not empty
-    if (!selectedCompany && companies.length > 0) {
+    // Check if selectedCompany is null
+    if (!selectedCompany) {
       // Set the first company as the selected company
       setSelectedCompany(companies[0])
     }
@@ -46,6 +48,7 @@ export default function CompanySelectInput({
 
   const handleSelectedCompanyChange = (company: BasicCompanyData) => {
     setSelectedCompany(company)
+
     setOpen(false)
   }
 
@@ -54,7 +57,9 @@ export default function CompanySelectInput({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            disabled={companies?.length === 0}
+            disabled={
+              companies?.length === 0 || pathname === '/dashboard/items/nuevo'
+            }
             variant="outline"
             role="combobox"
             aria-expanded={open}

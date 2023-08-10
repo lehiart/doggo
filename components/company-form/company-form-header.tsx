@@ -17,7 +17,7 @@ export default function CompanyFormHeader() {
             <span
               className={cn(
                 'h-6 w-6 rounded-full bg-gray-100 text-center text-[10px]/6 font-bold  ',
-                step >= 1 && 'bg-blue-600 text-white',
+                step >= 1 && 'bg-primary text-primary-foreground ',
               )}
             >
               1
@@ -30,7 +30,7 @@ export default function CompanyFormHeader() {
             <span
               className={cn(
                 'h-6 w-6 rounded-full bg-gray-100 text-center text-[10px]/6 font-bold  ',
-                step >= 2 && 'bg-blue-600 text-white',
+                step >= 2 && 'bg-primary text-primary-foreground ',
               )}
             >
               2
@@ -43,7 +43,7 @@ export default function CompanyFormHeader() {
             <span
               className={cn(
                 'h-6 w-6 rounded-full bg-gray-100 text-center text-[10px]/6 font-bold  ',
-                step >= 3 && 'bg-blue-600 text-white',
+                step >= 3 && 'bg-primary text-primary-foreground ',
               )}
             >
               3

@@ -6,21 +6,18 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import DeleteCard from '../../../components/dashboard/delete-card'
 import { ChevronLeftIcon } from 'lucide-react'
-import useSWR from 'swr'
 
 import { useDashboardContext } from '../../../components/dashboard/dashboard-context'
 import CompanySettingsContainer from '@/components/company-form/company-settings-container'
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+import { useCompany } from '@/lib/swr'
 
 export default function CompanySettingsPage() {
   const { selectedCompany } = useDashboardContext()
-  const { data, error, isLoading } = useSWR(
-    selectedCompany?.id ? `/api/company/${selectedCompany.id}` : null,
-    fetcher,
-  )
+
+  const { company, isError, isLoading } = useCompany(selectedCompany?.id)
 
   if (isLoading) return <div>Loading...</div>
-  if (!selectedCompany) return null
+  if (!selectedCompany || !company) return null
 
   return (
     <div className="block min-h-screen space-y-6 p-10 pb-16">
@@ -47,7 +44,7 @@ export default function CompanySettingsPage() {
 
       <Separator className="my-6" />
 
-      <CompanySettingsContainer company={data.company} />
+      <CompanySettingsContainer company={company} />
     </div>
   )
 }

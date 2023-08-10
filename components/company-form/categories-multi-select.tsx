@@ -1,7 +1,5 @@
 'use client'
 
-import { useCategories } from '@/lib/category'
-
 import {
   FormControl,
   FormDescription,
@@ -11,16 +9,25 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Checkbox } from '../ui/checkbox'
+import { useCategories } from '@/lib/swr'
 
 type Category = Record<'value' | 'label' | 'id', string>
 
-export function CategoriesMultiSelect({ control }: any) {
+interface CategoriesMultiSelectProps {
+  control: any
+  inputName?: string
+}
+
+export function CategoriesMultiSelect({
+  control,
+  inputName = 'categories',
+}: CategoriesMultiSelectProps) {
   const { categories } = useCategories()
 
   return (
     <FormField
       control={control}
-      name="categories"
+      name={inputName}
       render={() => (
         <FormItem>
           <div className="mb-4">
@@ -34,7 +41,7 @@ export function CategoriesMultiSelect({ control }: any) {
               <FormField
                 key={item.id}
                 control={control}
-                name="categories"
+                name={inputName}
                 render={({ field }) => {
                   return (
                     <FormItem
