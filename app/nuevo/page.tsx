@@ -5,13 +5,16 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import CompanyForm from '@/components/company-form/company-form'
 import { redirect } from 'next/navigation'
+import { ROLE } from '@/lib/constants'
 
 export default async function AddNewCompanyPage() {
   const user = await getCurrentUser()
 
-  if (!user || !user?.id) {
+  if (!user || !user?.id || user?.role !== ROLE.COMPANY) {
     redirect('/login')
   }
+
+  console.log(user, 'entro a nuevo page')
 
   return (
     <div className="block min-h-screen space-y-6 p-10 pb-16">

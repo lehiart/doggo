@@ -71,11 +71,11 @@ export default function DashboardMainHeader() {
         </Link>
       </div>
 
-      <Link href={`/empresa/${selectedCompany?.slug}`}>
+      <Link href={`/empresa/${selectedCompany?.slug}?preview=true`}>
         <Button>Vista previa</Button>
       </Link>
 
-      <Link href="/dashboard/nuevo">
+      <Link href="/nuevo">
         <Button>Agregar nuevo negocio</Button>
       </Link>
     </nav>

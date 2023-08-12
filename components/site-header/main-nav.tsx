@@ -63,7 +63,7 @@ export function MainNav({ role }: { role: string | undefined }) {
           <Link
             href="/blog"
             className={cn(
-              'hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block',
+              'hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:flex items-center space-x-1',
             )}
           >
             Blog

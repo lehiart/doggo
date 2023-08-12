@@ -154,6 +154,7 @@ model Company {
   categories Category[] @relation("CompanyCategories")
   owner      User       @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
   items      Item[]     @relation("CompanyItems")
+  opinions   Opinion[]
 
   @@index([ownerId])
 }
@@ -219,7 +220,6 @@ model Item {
   subcategories Subcategory[]  @relation("ItemSubcategories")
   favoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
   company       Company        @relation("CompanyItems", fields: [companyId], references: [id])
-  opinions      Opinion[]
 
   @@index([favoriteItemsId])
   @@index([categoryId])
@@ -253,19 +253,24 @@ model Subcategory {
 
 ////////////////////////////////////////////////   OPINIONS   //////////////////////////////////////////////////
 ///// role:user can have many opinions for many items, item can have many opinions
+//a company hold all opinions for all items, in case an item is deleted
+// item name is a default value for the case when item is deleted
+
 model Opinion {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   userId    String
   itemId    String
+  itemName  String
+  companyId String
 
   rating  Int
   comment String
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([itemId])
+  @@index([companyId])
 }

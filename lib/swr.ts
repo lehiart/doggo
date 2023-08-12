@@ -80,3 +80,16 @@ export function useCompanyItems(id: string | null | undefined) {
     updateItemPublishStatus,
   }
 }
+
+export function useCompanyOpinions(id: string | null | undefined) {
+  const { data, error, isLoading } = useSWR(
+    id ? `/api/opinions/${id}` : null,
+    fetcher,
+  )
+
+  return {
+    opinions: data?.opinions || null,
+    isLoading,
+    isError: error,
+  }
+}

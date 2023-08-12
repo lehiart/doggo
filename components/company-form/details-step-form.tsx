@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form'
 import { Category } from '@prisma/client'
 import { useFormState } from '@/components/company-form/company-form-context'
 import { CategoriesMultiSelect } from './categories-multi-select'
-import checkSlugIsUnique from '@/app/dashboard/nuevo/actions'
+import checkSlugIsUnique from '@/app/nuevo/actions'
 import { useEffect } from 'react'
 import { slugify } from '@/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -58,15 +58,17 @@ export default function DetailsStepForm() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setFormData((prev: any) => ({ ...prev, ...data }))
 
-    const slugIsUnique = await checkSlugIsUnique(data.slug)
-    console.log(slugIsUnique)
+    // check if slug is unique, only if slug has changed
+    if (company?.slug !== data.slug) {
+      const slugIsUnique = await checkSlugIsUnique(data.slug)
 
-    if (!slugIsUnique) {
-      form.setError('slug', {
-        type: 'manual',
-        message: 'Slug is already taken',
-      })
-      return
+      if (!slugIsUnique) {
+        form.setError('slug', {
+          type: 'manual',
+          message: 'Slug is already taken',
+        })
+        return
+      }
     }
 
     onHandleNext()
@@ -96,12 +98,7 @@ export default function DetailsStepForm() {
                 Nombre <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Nombre"
-                  autoComplete="off"
-                  // onChange={handleNameChange}
-                  {...field}
-                />
+                <Input placeholder="Nombre" autoComplete="off" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
