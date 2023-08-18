@@ -6,28 +6,9 @@ import { useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Dog, Menu } from 'lucide-react'
-
-const nav = [
-  {
-    title: 'Mi manada',
-    href: '/manada',
-  },
-  {
-    title: 'Mi negocio',
-    href: '/manada',
-  },
-  {
-    title: 'Explorar',
-    href: '/aventuras',
-  },
-  {
-    title: 'Blog',
-    href: '/proveedores',
-  },
-]
+import { ROLE } from '@/lib/constants'
 
 interface MobileLinkProps extends LinkProps {
   onOpenChange?: (open: boolean) => void
@@ -59,7 +40,7 @@ function MobileLink({
   )
 }
 
-export function MobileNav() {
+export function MobileNav({ role }: { role: string | undefined }) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -84,22 +65,27 @@ export function MobileNav() {
           <span className="font-bold">DogHouse</span>
         </MobileLink>
 
-        <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-          <div className="flex flex-col space-y-3">
-            {nav.map(
-              (item) =>
-                item.href && (
-                  <MobileLink
-                    key={item.href}
-                    href={item.href}
-                    onOpenChange={setOpen}
-                  >
-                    {item.title}
-                  </MobileLink>
-                ),
-            )}
-          </div>
-        </ScrollArea>
+        <div className="flex flex-col space-y-3 my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+          {role === ROLE.COMPANY && (
+            <MobileLink href="/dashboard" onOpenChange={setOpen}>
+              Mi negocio
+            </MobileLink>
+          )}
+
+          {role === ROLE.USER && (
+            <MobileLink href="/manada" onOpenChange={setOpen}>
+              Mi manada
+            </MobileLink>
+          )}
+
+          <MobileLink href="/explorar" onOpenChange={setOpen}>
+            Explorar
+          </MobileLink>
+
+          <MobileLink href="/blog" onOpenChange={setOpen}>
+            Blog
+          </MobileLink>
+        </div>
       </SheetContent>
     </Sheet>
   )

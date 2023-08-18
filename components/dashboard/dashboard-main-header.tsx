@@ -58,7 +58,7 @@ export default function DashboardMainHeader() {
             pathname === '/dashboard/pagos' && 'text-primary',
           )}
         >
-          Facturacion
+          Pagos
         </Link>
         <Link
           href="/dashboard/ajustes"

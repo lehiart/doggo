@@ -32,6 +32,27 @@ async function MyPackPage() {
     },
   })
 
+  const myRequests = await db.request.findMany({
+    where: {
+      userId: user.id,
+    },
+  })
+
+  const myFavorites = await db.favoriteItems.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      items: true,
+    },
+  })
+
+  const MyOpinions = await db.opinion.findMany({
+    where: {
+      userId: user.id,
+    },
+  })
+
   return (
     <div>
       <div className="my-4">
@@ -86,6 +107,15 @@ async function MyPackPage() {
           </ul>
         </div>
       )}
+
+      <div className="my-4 text-2xl">Mis solicitudes</div>
+      <pre>{JSON.stringify(myRequests, null, 2)}</pre>
+
+      <div className="my-4 text-2xl">Mis items favoritos</div>
+      <pre>{JSON.stringify(myFavorites, null, 2)}</pre>
+
+      <div className="my-4 text-2xl">Mis opiniones</div>
+      <pre>{JSON.stringify(MyOpinions, null, 2)}</pre>
     </div>
   )
 }

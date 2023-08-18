@@ -49,10 +49,10 @@ export function MainNav({ role }: { role: string | undefined }) {
           )}
 
           <Link
-            href="/aventuras"
+            href="/explorar"
             className={cn(
               'transition-colors hover:text-foreground/80',
-              pathname?.startsWith('/aventuras')
+              pathname?.startsWith('/explorar')
                 ? 'text-foreground'
                 : 'text-foreground/60',
             )}

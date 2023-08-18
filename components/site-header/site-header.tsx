@@ -12,7 +12,7 @@ export async function SiteHeader() {
         {/* LEFT SIDE NAV */}
 
         <MainNav role={user?.role} />
-        <MobileNav />
+        <MobileNav role={user?.role} />
 
         {/* RIGHT SIDE NAV */}
 

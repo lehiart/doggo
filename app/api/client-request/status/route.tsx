@@ -3,15 +3,15 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { userId, companyId, message, selectedItems } = body
+  const { requestId, status } = body
 
   try {
-    await db.request.create({
+    await db.request.update({
+      where: {
+        id: requestId,
+      },
       data: {
-        message,
-        userId,
-        companyId,
-        selectedItems,
+        status,
       },
     })
 
