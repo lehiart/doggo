@@ -105,6 +105,7 @@ model User {
   favoriteItems FavoriteItems? @relation("UserFavoriteItems") // only user (role: user) can have favorite items
   companies     Company[]      @relation("UserCompanies") // user can have zero (role: user) or many companies (role: company)
   opinions      Opinion[]
+  requests      Request[]
 
   @@map(name: "users")
 }
@@ -155,6 +156,7 @@ model Company {
   owner      User       @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner
   items      Item[]     @relation("CompanyItems")
   opinions   Opinion[]
+  requests   Request[]
 
   @@index([ownerId])
 }
@@ -205,12 +207,11 @@ model FavoriteItems {
 }
 
 model Item {
-  id          String  @id @default(uuid())
-  title       String
-  description String
-  // openingHours  String
-  // closingHours  String
-  published   Boolean @default(false)
+  id             String  @id @default(uuid())
+  title          String
+  description    String
+  published      Boolean @default(false)
+  onlineBusiness Boolean @default(false)
 
   categoryId      String
   companyId       String
@@ -267,6 +268,34 @@ model Opinion {
 
   rating  Int
   comment String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([companyId])
+}
+
+///////////////////////  CLIENT REQUESTS ///////////////////////
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Request {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  userId    String
+  companyId String
+
+  status         Status  @default(PENDING)
+  message        String
+  selectedItems  String?
+  reasonToReject String?
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)

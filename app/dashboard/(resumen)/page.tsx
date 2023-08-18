@@ -139,6 +139,9 @@ export default function CompanySummaryPage() {
               <div className="flex gap-4 items-center my-4">
                 <Progress value={33} /> <span>33%</span>
               </div>
+              {/* 1 - datos de detalles 2 - datos de direccion 3 - datos de contacto ( podria ser solo uno sobre completar datos de contacto) */}
+              {/* 4 - agregar 1 servicio */}
+              {/* 5 - agregar datos completos de 1 servicio */}
             </CardDescription>
           </CardHeader>
           {/* <CardContent>

@@ -93,3 +93,16 @@ export function useCompanyOpinions(id: string | null | undefined) {
     isError: error,
   }
 }
+
+export function useCompanyClientRequests(id: string | null | undefined) {
+  const { data, error, isLoading } = useSWR(
+    id ? `/api/client-request/${id}` : null,
+    fetcher,
+  )
+
+  return {
+    clientRequests: data?.clientRequests || null,
+    isLoading,
+    isError: error,
+  }
+}

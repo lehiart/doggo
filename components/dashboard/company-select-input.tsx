@@ -58,7 +58,8 @@ export default function CompanySelectInput({
             disabled={
               companies?.length === 0 ||
               pathname === '/dashboard/items/nuevo' ||
-              pathname.startsWith('/dashboard/items/editar')
+              pathname.startsWith('/dashboard/items/editar') ||
+              pathname.startsWith('/dashboard/clientes/')
             }
             variant="outline"
             role="combobox"

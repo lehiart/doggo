@@ -5,6 +5,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { TerminalIcon } from 'lucide-react'
 import AddOpinionDialog from '@/components/dashboard/opinions/add-opinion-dialog'
 import { getCurrentUser } from '@/lib/session'
+
+import ClientRequestForm from './client-request-form'
 // import { ROLE } from '@/lib/constants'
 
 async function getCompanyData(companySlug: Company['slug']) {
@@ -54,6 +56,7 @@ export default async function CompanyPublicPage({
           </Alert>
         </div>
       )}
+
       <div className="flex flex-col items-center mt-4 space-y-4">
         <h1 className="text-2xl">{company.name}</h1>
         <Alert className="w-[300px]">
@@ -61,6 +64,16 @@ export default async function CompanyPublicPage({
           <AlertTitle>formulario solo para registrados</AlertTitle>
           <AlertDescription>This page is in preview mode.</AlertDescription>
         </Alert>
+        {/* ONLY VISIBLE TO USERS WITH ROLE:USER */}
+        {user?.id && (
+          <ClientRequestForm
+            userId={user?.id}
+            companyId={company?.id}
+            email={company?.email}
+            phone={company?.phone}
+            items={company?.items}
+          />
+        )}
         <code className="max-w-2xl">{JSON.stringify(company, null, 2)}</code>
         Items:
         {company.items.map((item: Item) => (

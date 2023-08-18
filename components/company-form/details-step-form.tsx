@@ -24,7 +24,6 @@ import { CategoriesMultiSelect } from './categories-multi-select'
 import checkSlugIsUnique from '@/app/nuevo/actions'
 import { useEffect } from 'react'
 import { slugify } from '@/lib/utils'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const formSchema = z.object({
   image: z.string().optional(),
