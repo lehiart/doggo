@@ -5,7 +5,15 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { userId, companyId, title, description, category } = body
+  const {
+    userId,
+    companyId,
+    title,
+    description,
+    category,
+    state,
+    onlineBusiness,
+  } = body
 
   // Ensure user is authenticated and has access to this user.
   const session = await getServerSession(authOptions)
@@ -18,6 +26,8 @@ export async function POST(request: NextRequest) {
       data: {
         title,
         description,
+        state,
+        onlineBusiness,
         company: {
           connect: { id: companyId },
         },

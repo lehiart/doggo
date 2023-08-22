@@ -34,6 +34,13 @@ const createMultipleUsers = (amount: number, role: ROLE) => {
           image: faker.image.avatar(),
           createdAt: faker.date.past(),
           updatedAt: faker.date.recent(),
+          state: faker.helpers.arrayElement([
+            'DUR',
+            'COA',
+            'MEX',
+            'YUC',
+            'GRO',
+          ]),
         },
       }
     }

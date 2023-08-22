@@ -19,11 +19,15 @@ import { CategoriesMultiSelect } from '@/components/company-form/categories-mult
 import { useDashboardContext } from '../dashboard-context'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
+import { StatesSelector } from '@/components/states-selector'
+import { Switch } from '@/components/ui/switch'
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   description: z.string().min(2).max(50),
   category: z.array(z.string()).min(1).max(1),
+  state: z.string().length(3),
+  onlineBusiness: z.boolean(),
 })
 
 interface NewItemFormProps {
@@ -41,6 +45,8 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
       title: '',
       description: '',
       category: [],
+      state: '',
+      onlineBusiness: false,
     },
   })
 
@@ -115,6 +121,33 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
         />
 
         <CategoriesMultiSelect control={form.control} inputName="category" />
+
+        {/* if there is no state. we need to make this required, so its either online or state + online */}
+        <FormField
+          control={form.control}
+          name="onlineBusiness"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Este servicio es en linea?
+                </FormLabel>
+                <FormDescription>
+                  Receive emails about new products, features, and more.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <StatesSelector control={form.control} inputName="state" />
+        {/* TODO: add message that is required */}
 
         <Button type="submit" disabled={isLoading}>
           Submit

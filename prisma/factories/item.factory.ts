@@ -1,7 +1,7 @@
-import { faker } from "@faker-js/faker";
-import { PrismaClient } from "@prisma/client";
+import { faker } from '@faker-js/faker'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
   const realCategoryIds = await prisma.category.findMany({
@@ -9,18 +9,19 @@ const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
       id: true,
       subcategories: true,
     },
-  });
+  })
 
   const itemsId = (
     await Promise.all(
       companiesId.map(async (currentCompanyId) => {
         const { id, subcategories } =
-          faker.helpers.arrayElement(realCategoryIds);
+          faker.helpers.arrayElement(realCategoryIds)
 
         return await prisma.item.create({
           data: {
             title: faker.commerce.productName(),
             description: faker.commerce.productDescription(),
+            state: faker.helpers.arrayElement(['HID', 'JAL', 'MEX', 'ZAC']),
             category: {
               connect: {
                 id,
@@ -37,13 +38,13 @@ const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
               },
             },
           },
-        });
+        })
       }),
     )
-  ).map((el) => el.id);
+  ).map((el) => el.id)
 
   //////////////////
-  return itemsId;
-};
+  return itemsId
+}
 
-export default createItemsAndAssociateToCompany;
+export default createItemsAndAssociateToCompany

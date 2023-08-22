@@ -195,7 +195,6 @@ model PackMember {
 ///////////////////////////////////////  ITEMS & FAVORITE ITEMS LIST   //////////////////////////////////////////////////
 ////// Item can be part of a favoriteItems list, favoriteItems list has many items
 ////// Item has a required 1 category, category has many items
-///// Item has many subcategories, subcategories have only one item
 ////// Item has a required 1 company, company has many items
 
 model FavoriteItems {
@@ -212,13 +211,13 @@ model Item {
   description    String
   published      Boolean @default(false)
   onlineBusiness Boolean @default(false)
+  state          String
 
   categoryId      String
   companyId       String
   favoriteItemsId String?
 
   category      Category       @relation("ItemCategory", fields: [categoryId], references: [id])
-  subcategories Subcategory[]  @relation("ItemSubcategories")
   favoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
   company       Company        @relation("CompanyItems", fields: [companyId], references: [id])
 
@@ -227,29 +226,15 @@ model Item {
   @@index([companyId])
 }
 
-////////////////////////////////////////////////   CATEGORY & SUBCATEGORY   //////////////////////////////////////////////////
-////// Category has many subcategories, subcategories have only one category
+////////////////////////////////////////////////   CATEGORY    //////////////////////////////////////////////////
 
 model Category {
   id   String @id @default(uuid())
   name String @unique
   slug String @unique
 
-  items         Item[]        @relation("ItemCategory")
-  subcategories Subcategory[] @relation("SubcategoriesOfCategory")
-  companies     Company[]     @relation("CompanyCategories")
-}
-
-model Subcategory {
-  id         String @id @default(uuid())
-  name       String @unique
-  slug       String @unique
-  categoryId String
-
-  items    Item[]   @relation("ItemSubcategories")
-  category Category @relation("SubcategoriesOfCategory", fields: [categoryId], references: [id])
-
-  @@index([categoryId])
+  items     Item[]    @relation("ItemCategory")
+  companies Company[] @relation("CompanyCategories")
 }
 
 ////////////////////////////////////////////////   OPINIONS   //////////////////////////////////////////////////
