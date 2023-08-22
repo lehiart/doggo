@@ -1,5 +1,6 @@
 import { db } from '@/lib/prisma'
 import { statesOfMexico } from '@/lib/states-of-mexico'
+import Link from 'next/link'
 import React from 'react'
 
 const getStateValueFromSlug = (slug: string) => {
@@ -29,6 +30,9 @@ async function getItemsFromSearchParams(
         },
         published: true,
       },
+      include: {
+        company: true,
+      },
     })
 
     return items
@@ -41,6 +45,9 @@ async function getItemsFromSearchParams(
         },
         published: true,
       },
+      include: {
+        company: true,
+      },
     })
 
     return items
@@ -50,7 +57,6 @@ async function getItemsFromSearchParams(
 // http://localhost:3002/buscar/?categoria=perro&lugar=zacatecas&lugar=mexico&online=true
 async function SearchPage({ searchParams }: SearchPageProps) {
   const items = await getItemsFromSearchParams(searchParams)
-  console.log(items)
 
   return (
     <div>
@@ -65,11 +71,13 @@ async function SearchPage({ searchParams }: SearchPageProps) {
               key={item.id}
               className="flex flex-col  justify-center h-full p-4 border border-gray-300"
             >
-              <p>Titulo: {item.title}</p>
-              <p>Description: {item.description}</p>
-              <p>Lugar: {item.state}</p>
-              <p>Online: {item.onlineBusiness ? 'en linea' : 'no '}</p>
-              <p>Categoria: {searchParams.categoria}</p>
+              <Link href={`/empresa/${item.company.slug}`}>
+                <p>Titulo: {item.title}</p>
+                <p>Description: {item.description}</p>
+                <p>Lugar: {item.state}</p>
+                <p>Online: {item.onlineBusiness ? 'en linea' : 'no '}</p>
+                <p>Categoria: {searchParams.categoria}</p>
+              </Link>
             </div>
           ))}
         </div>

@@ -7,15 +7,13 @@ const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
   const realCategoryIds = await prisma.category.findMany({
     select: {
       id: true,
-      subcategories: true,
     },
   })
 
   const itemsId = (
     await Promise.all(
       companiesId.map(async (currentCompanyId) => {
-        const { id, subcategories } =
-          faker.helpers.arrayElement(realCategoryIds)
+        const { id } = faker.helpers.arrayElement(realCategoryIds)
 
         return await prisma.item.create({
           data: {
@@ -30,11 +28,6 @@ const createItemsAndAssociateToCompany = async (companiesId: string[]) => {
             company: {
               connect: {
                 id: currentCompanyId,
-              },
-            },
-            subcategories: {
-              connect: {
-                id: faker.helpers.arrayElement(subcategories).id,
               },
             },
           },
