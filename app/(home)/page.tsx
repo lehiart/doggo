@@ -13,7 +13,6 @@ export default function Home() {
 
           <SearchCommand className="animation-delay-[300ms]" />
 
-          {/* el texto se ira cambiando, ver si es seo friendly  manada/familia/mascota/perrhijo */}
           <div className="text-xl md:text-4xl [text-wrap:balance] mt-10  animate-slide-down animation-delay-[500ms]">
             <p>
               Somos el directorio de servicios <br /> para tu{' '}
