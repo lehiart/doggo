@@ -26,6 +26,7 @@ async function ExplorePage() {
         <h1 className="text-4xl bold">Buscador pro</h1>
         <p>Explora los servicios que otros usuarios han compartido</p>
       </div>
+
       <SearchCommand />
 
       <div>
