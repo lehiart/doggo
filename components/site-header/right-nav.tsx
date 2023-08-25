@@ -1,14 +1,15 @@
 import React from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { UserAccountNav } from '@/components/site-header/user-account-nav'
 import { getCurrentUser } from '@/lib/session'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 async function RightNav() {
   const user = await getCurrentUser()
 
   return (
-    <div className="flex flex-1 items-center justify-end space-x-2">
+    <div className="flex space-x-2">
       {user ? (
         <div className="flex">
           <UserAccountNav user={user} />
@@ -16,24 +17,30 @@ async function RightNav() {
       ) : (
         <>
           <nav className="hidden items-center md:flex">
-            <Link href="/login">
-              <Button variant="secondary" size="sm">
-                Acceder
-              </Button>
+            <Link
+              href="/login"
+              className={cn('mr-4', buttonVariants({ variant: 'ghost' }))}
+            >
+              Iniciar sesión
             </Link>
 
-            <Link href="/registro" className="pl-4 pr-2">
-              <Button variant="secondary" size="sm">
-                Registrate
-              </Button>
+            <Link
+              href="/registro"
+              className={cn(
+                'pl-4 pr-2',
+                buttonVariants({ variant: 'secondary' }),
+              )}
+            >
+              Registrate
             </Link>
           </nav>
 
           <nav className="md:hidden">
-            <Link href="/login">
-              <Button variant="secondary" size="sm">
-                Acceder
-              </Button>
+            <Link
+              href="/login"
+              className={buttonVariants({ variant: 'secondary' })}
+            >
+              Iniciar sesión
             </Link>
           </nav>
         </>

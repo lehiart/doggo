@@ -54,7 +54,7 @@ async function getItemsFromSearchParams(
   }
 }
 
-// http://localhost:3002/buscar/?categoria=perro&lugar=zacatecas&lugar=mexico&online=true
+// http://localhost:3002/buscar/?categoria=alimentacion&lugar=zacatecas&lugar=mexico&online=true
 async function SearchPage({ searchParams }: SearchPageProps) {
   const items = await getItemsFromSearchParams(searchParams)
 

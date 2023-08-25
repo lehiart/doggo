@@ -38,7 +38,7 @@ async function MyPackPage() {
     },
   })
 
-  const myFavorites = await db.favoriteItems.findMany({
+  const myFavorites = await db.favoriteItems.findUnique({
     where: {
       userId: user.id,
     },

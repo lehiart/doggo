@@ -7,13 +7,15 @@ import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Dog, Menu } from 'lucide-react'
+import { Dog, FacebookIcon, Menu, TwitterIcon, YoutubeIcon } from 'lucide-react'
 import { ROLE } from '@/lib/constants'
+import { usePathname } from 'next/navigation'
 
 interface MobileLinkProps extends LinkProps {
   onOpenChange?: (open: boolean) => void
   children: React.ReactNode
   className?: string
+  active?: boolean
 }
 
 function MobileLink({
@@ -21,6 +23,7 @@ function MobileLink({
   onOpenChange,
   className,
   children,
+  active,
   ...props
 }: MobileLinkProps) {
   const router = useRouter()
@@ -32,7 +35,10 @@ function MobileLink({
         router.push(href.toString())
         onOpenChange?.(false)
       }}
-      className={cn(className)}
+      className={cn(
+        className,
+        active ? 'text-foreground' : 'text-foreground/60',
+      )}
       {...props}
     >
       {children}
@@ -42,6 +48,7 @@ function MobileLink({
 
 export function MobileNav({ role }: { role: string | undefined }) {
   const [open, setOpen] = React.useState(false)
+  const pathname = usePathname()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -55,38 +62,162 @@ export function MobileNav({ role }: { role: string | undefined }) {
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="left" className="pr-0">
-        <MobileLink
-          href="/"
-          className="flex items-center"
-          onOpenChange={setOpen}
-        >
-          <Dog className="mr-2 h-4 w-4" />
-          <span className="font-bold">DogHouse</span>
-        </MobileLink>
+      <SheetContent
+        side="left"
+        className="pr-0 flex flex-col justify-between h-full"
+      >
+        <div className="flex items-center text-xl">
+          <MobileLink
+            href="/"
+            className="flex items-center text-lg"
+            onOpenChange={setOpen}
+            active
+          >
+            <Dog className="mr-2 h-8 w-8" />
+            <span className="font-bold">DogHouse</span>
+          </MobileLink>
+        </div>
 
-        <div className="flex flex-col space-y-3 my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+        <div className="flex flex-col px-[24px] gap-[8px] align-center justify-center">
+          <MobileLink
+            href="/"
+            onOpenChange={setOpen}
+            active={pathname === '/'}
+            className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent hover:opacity-70"
+          >
+            Inicio
+          </MobileLink>
+
           {role === ROLE.COMPANY && (
-            <MobileLink href="/dashboard" onOpenChange={setOpen}>
+            <MobileLink
+              href="/dashboard"
+              onOpenChange={setOpen}
+              active={pathname === '/dashboard'}
+              className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent hover:opacity-70"
+            >
               Mi negocio
             </MobileLink>
           )}
 
           {role === ROLE.USER && (
-            <MobileLink href="/manada" onOpenChange={setOpen}>
+            <MobileLink
+              href="/manada"
+              onOpenChange={setOpen}
+              active={pathname === '/manada'}
+              className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent hover:opacity-70"
+            >
               Mi manada
             </MobileLink>
           )}
 
-          <MobileLink href="/explorar" onOpenChange={setOpen}>
+          <MobileLink
+            href="/explorar"
+            onOpenChange={setOpen}
+            active={pathname === '/explorar'}
+            className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent hover:opacity-70"
+          >
             Explorar
           </MobileLink>
 
-          <MobileLink href="/blog" onOpenChange={setOpen}>
+          <MobileLink
+            href="/blog"
+            onOpenChange={setOpen}
+            active={pathname === '/blog'}
+            className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent hover:opacity-70"
+          >
             Blog
           </MobileLink>
         </div>
+
+        <div className="flex gap-2">
+          <Button variant="ghost" size="icon">
+            <FacebookIcon className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <TwitterIcon className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <YoutubeIcon className="h-4 w-4" />
+          </Button>
+        </div>
       </SheetContent>
+
+      {/* <SheetContent side="left" className="pr-0 w-full">
+        <MobileLink
+          href="/"
+          className="flex items-center text-xl"
+          onOpenChange={setOpen}
+          active
+        >
+          <Dog className="mr-2 h-10 w-10" />
+          <span className="font-bold">DogHouse</span>
+        </MobileLink>
+
+        <div className="flex flex-col px-[24px] gap-[8px] align-center justify-center h-full relative top-[-40px]">
+          <div>
+            <MobileLink
+              href="/"
+              onOpenChange={setOpen}
+              active={pathname === '/'}
+              className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent"
+            >
+              Inicio
+            </MobileLink>
+
+            {role === ROLE.COMPANY && (
+              <MobileLink
+                href="/dashboard"
+                onOpenChange={setOpen}
+                active={pathname === '/dashboard'}
+                className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent"
+              >
+                Mi negocio
+              </MobileLink>
+            )}
+
+            {role === ROLE.USER && (
+              <MobileLink
+                href="/manada"
+                onOpenChange={setOpen}
+                active={pathname === '/manada'}
+                className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent"
+              >
+                Mi manada
+              </MobileLink>
+            )}
+
+            <MobileLink
+              href="/explorar"
+              onOpenChange={setOpen}
+              active={pathname === '/explorar'}
+              className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent"
+            >
+              Explorar
+            </MobileLink>
+
+            <MobileLink
+              href="/blog"
+              onOpenChange={setOpen}
+              active={pathname === '/blog'}
+              className="px-[16px] py-[8px] flex flex-row items-center justify-center text-4xl text-center transition-colors bg-transparent"
+            >
+              Blog
+            </MobileLink>
+          </div>
+
+          <div className="flex gap-2">
+            <Button variant="outline" size="icon">
+              <FacebookIcon className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon">
+              <TwitterIcon className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon">
+              <YoutubeIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </SheetContent> */}
     </Sheet>
   )
 }

@@ -14,7 +14,7 @@ import {
 import { CATEGORIES_NAME } from '@/lib/categories'
 import { Search } from 'lucide-react'
 import { statesOfMexico } from '@/lib/states-of-mexico'
-import { normalizeString, slugify } from '@/lib/utils'
+import { cn, normalizeString, slugify } from '@/lib/utils'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { SEARCH_WORDS } from '@/lib/search-words'
@@ -22,27 +22,38 @@ import { useRouter } from 'next/navigation'
 
 type page = 'STATES' | 'CATEGORIES'
 
-export default function SearchCommand() {
+export default function SearchCommand({ className }: { className?: string }) {
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
   const [query, setQuery] = React.useState('buscar')
   const [activePage, setActivePage] = React.useState<page>('CATEGORIES')
   const router = useRouter()
 
+  const openCommand = () => {
+    setOpen(true)
+    setSearch('')
+  }
+
   return (
     <>
-      <div className="flex items-center border-b px-3">
-        <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+      <div
+        className={cn('relative text-gray-600 animate-slide-down', className)}
+      >
         <input
-          placeholder="Type a command or search..."
-          onClick={() => setOpen(true)}
-          onKeyDown={() => setOpen(true)}
-          className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          type="text"
           autoComplete="off"
           autoCorrect="off"
           spellCheck="false"
-          type="text"
+          placeholder="Que necesita tu perro?"
+          className="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-purple-500 border-gray-600 border min-w-[340px]"
+          onClick={() => openCommand()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') openCommand()
+          }}
         />
+        <div className="absolute right-0 top-0 mt-3 mr-4">
+          <Search className=" h-4 w-4" />
+        </div>
       </div>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -73,12 +84,6 @@ export default function SearchCommand() {
             }
           }}
         >
-          <div className="flex mx-4 mt-4">
-            <span className="mr-2 rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground w-fit">
-              {activePage}
-            </span>
-          </div>
-
           <CommandInput
             placeholder="Buscar..."
             value={search}

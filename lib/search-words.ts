@@ -11,11 +11,9 @@ export const SEARCH_WORDS: Category[] = [
     category: CATEGORIES.Alimentación,
     slug: 'alimentacion',
     words: [
-      'croquetas',
       'alimentos',
       'croquetas',
       'comidas',
-      'alimentos',
       'alimentacion canina',
       'dieta',
       'nutricion',
