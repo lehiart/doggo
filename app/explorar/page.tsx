@@ -4,7 +4,13 @@ import { statesOfMexico } from '@/lib/states-of-mexico'
 import Link from 'next/link'
 import SearchCommand from '../../components/search-command'
 import createCategories from '@/prisma/factories/category.factory'
+import type { Metadata } from 'next'
 
+export const metadata: Metadata = {
+  title: 'Explorar',
+  description:
+    'Explora todos los servicios para tu perro disponibles por categorua o en tu estado.',
+}
 async function getCategoriesData() {
   const categoriesCount = await db.category.count()
 
@@ -12,7 +18,11 @@ async function getCategoriesData() {
     await createCategories()
   }
 
-  const categories = await db.category.findMany({})
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  })
 
   return categories
 }
@@ -21,47 +31,57 @@ async function ExplorePage() {
   const categories = await getCategoriesData()
 
   return (
-    <div className="space-y-8 flex flex-col lg:justify-center items-center  h-full">
-      <div>
-        <h1 className="text-4xl bold">Buscador pro</h1>
-        <p>Explora los servicios que otros usuarios han compartido</p>
-      </div>
+    <section className="px-2">
+      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+        <div className="mx-auto max-w-lg text-center pb-16">
+          <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
+            Explorar
+          </h2>
+          <SearchCommand />
+        </div>
 
-      <SearchCommand />
+        {/* CATEOGIRES GRID */}
 
-      <div>
-        <h2 className="text-4xl bold">busqueda libre por categoria</h2>
-        <p>Explora los servicios que otros usuarios han compartido</p>
+        <div className="max-w-lg pb-2">
+          <h2 className="text-3xl font-bold sm:text-4xl mb-4">Categorias</h2>
+          <p className="tracking-light text-xl">
+            Explora las principales categorias de servicios para tu perro.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 max-w-3xl">
+        <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <Link
               key={category.id}
               href={`/explorar/categorias/${category.slug}`}
             >
-              <div className="flex items-center justify-center h-full p-4 border border-gray-300">
-                <p className="flex-grow text-center">{category.name}</p>
+              <div className="flex h-full items-center justify-center rounded-xl border p-6 shadow-lg text-center transition hover:border-primary hover:shadow-primary/20">
+                <h2 className="text-md font-bold ">{category.name}</h2>
               </div>
             </Link>
           ))}
         </div>
-      </div>
 
-      <div>
-        <h2 className="text-4xl bold">busqueda libre por estado</h2>
-        <p>Explora los servicios que otros usuarios han compartido</p>
+        {/* STATES GRID */}
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          {statesOfMexico.map((state) => (
-            <Link key={state.value} href={`/explorar/lugares/${state.slug}`}>
-              <div className="flex items-center justify-center h-full p-4 border border-gray-300">
-                <p>{state.label}</p>
-              </div>
-            </Link>
-          ))}
+        <div className="pt-16 pb-2">
+          <h2 className="text-3xl font-bold sm:text-4xl mb-4">Estados</h2>
+          <p className="tracking-light text-xl">
+            Explora los servicios disponibles en tu estado.
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {statesOfMexico.map((state) => (
+              <Link key={state.value} href={`/explorar/lugares/${state.slug}`}>
+                <div className="flex h-full items-center justify-center rounded-xl border p-6  text-center shadow-lg transition hover:border-primary hover:shadow-primary/20">
+                  <h2 className="text-md font-bold ">{state.label}</h2>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

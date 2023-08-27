@@ -77,13 +77,6 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'slide-down': 'slide-down 0.75s ease both',
-        'word-animation': 'word-animation 12s infinite', // Adjust the duration as needed
-      },
-      'word-animation': {
-        '0%': { opacity: 0 },
-        '25%': { opacity: 1 },
-        '75%': { opacity: 1 },
-        '100%': { opacity: 0 },
       },
     },
   },

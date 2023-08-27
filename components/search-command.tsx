@@ -37,7 +37,10 @@ export default function SearchCommand({ className }: { className?: string }) {
   return (
     <>
       <div
-        className={cn('relative text-gray-600 animate-slide-down', className)}
+        className={cn(
+          'relative text-gray-600 animate-slide-down inline-flex',
+          className,
+        )}
       >
         <input
           type="text"
@@ -95,7 +98,7 @@ export default function SearchCommand({ className }: { className?: string }) {
 
             {activePage === 'CATEGORIES' && (
               <>
-                <CommandGroup className="overflow-scroll" heading="Categorias">
+                <CommandGroup heading="Categorias">
                   {CATEGORIES_NAME.map((category) => {
                     return (
                       <CommandItem
