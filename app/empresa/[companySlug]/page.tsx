@@ -106,7 +106,7 @@ export default async function CompanyPublicPage({
                 itemId={item.id}
                 userId={user.id}
                 filled={
-                  favoritesList.items.find(
+                  favoritesList?.items.find(
                     (fav: FavoriteItems) => fav.id === item.id,
                   )?.id
                 }

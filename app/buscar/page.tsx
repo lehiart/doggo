@@ -1,7 +1,21 @@
+import SearchCommand from '@/components/search-command'
+import { CATEGORIES_NAME } from '@/lib/categories'
 import { db } from '@/lib/prisma'
 import { statesOfMexico } from '@/lib/states-of-mexico'
+import { getStateByKey, slugify } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import Image from 'next/image'
+import { MapPinIcon, SearchIcon, WifiIcon } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const getStateValueFromSlug = (slug: string) => {
   const state = statesOfMexico.find((state) => state.slug === slug)
@@ -54,35 +68,96 @@ async function getItemsFromSearchParams(
   }
 }
 
+function getCategoryNameFromSlug(categorySlug: string): string | undefined {
+  const category = CATEGORIES_NAME.find(
+    (category) => slugify(category.name) === categorySlug,
+  )
+
+  return category?.name
+}
+
+function getStateNameFromSlug(stateSlug: string): string | undefined {
+  const state = statesOfMexico.find((state) => state.slug === stateSlug)
+
+  return state?.label
+}
+
 // http://localhost:3002/buscar/?categoria=alimentacion&lugar=zacatecas&lugar=mexico&online=true
 async function SearchPage({ searchParams }: SearchPageProps) {
   const items = await getItemsFromSearchParams(searchParams)
 
   return (
-    <div>
-      <h1 className="mb-4 text-3xl">busqueda</h1>
-      <div>con los parametros: {JSON.stringify(searchParams)}</div>
+    <section className="px-2 h-screen">
+      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+        <div className="mx-auto max-w-lg text-center pb-16">
+          <h2 className="lg:text-6xl font-bold text-4xl mb-12 ">Busqueda</h2>
+          <Alert className="border-t border-b border-primary bg-primary/10">
+            <SearchIcon className="h-4 w-4" />
+            <AlertTitle className="mb-4">Buscamos servicios de:</AlertTitle>
+            <AlertDescription>
+              {getCategoryNameFromSlug(searchParams.categoria)}{' '}
+              {searchParams?.lugar
+                ? ' en el estado de ' +
+                  getStateNameFromSlug(searchParams.lugar) +
+                  ','
+                : ' sin especificar lugar, '}
+              <br />
+              {searchParams.online && ' incluyendo servicios en linea.'}
+            </AlertDescription>
+          </Alert>
+        </div>
 
-      <div>
-        <h2 className="text-2xl">resultados: {items.length}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+        {/* SEARCH RESULT GRID */}
+
+        <div className="max-w-lg pb-2" id="categorias">
+          <h2 className="text-3xl font-bold sm:text-4xl mb-4">
+            Encontramos {items.length}{' '}
+            {items.length === 1 ? ' resultado' : ' resultados'}
+          </h2>
+          <p className="tracking-light text-xl mb-8">
+            {items.length === 0
+              ? 'Prueba haciendo una nueva busqueda.'
+              : 'Selecciona para ver mas detalles.'}
+          </p>
+          {items.length === 0 && <SearchCommand />}
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex flex-col  justify-center h-full p-4 border border-gray-300"
-            >
-              <Link href={`/empresa/${item.company.slug}`}>
-                <p>Titulo: {item.title}</p>
-                <p>Description: {item.description}</p>
-                <p>Lugar: {item.state}</p>
-                <p>Online: {item.onlineBusiness ? 'en linea' : 'no '}</p>
-                <p>Categoria: {searchParams.categoria}</p>
-              </Link>
-            </div>
+            <Link key={item.id} href={`/empresa/${item.company.slug}`}>
+              <Card className="hover:shadow-md h-full">
+                <CardHeader>
+                  <Image
+                    src="https://source.unsplash.com/IPheOySCW7A"
+                    alt={`Imagen de portada de ${item.title}`}
+                    width={500}
+                    height={500}
+                  />
+                </CardHeader>
+                <CardContent>
+                  <CardTitle className="mb-4">{item.title}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                </CardContent>
+                <CardFooter className="flex flex-col items-start">
+                  {item.onlineBusiness && (
+                    <div className="flex gap-2 text-sm items-center">
+                      <WifiIcon className="h-4 w-4" />
+                      Servicio disponible en línea
+                    </div>
+                  )}
+                  {item.state && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <MapPinIcon className="h-4 w-4" />
+                      {getStateByKey(item.state)?.label}
+                    </div>
+                  )}
+                </CardFooter>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

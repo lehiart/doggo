@@ -52,7 +52,7 @@ interface ExploreByCategoryPageProps {
   params: { categorySlug: string }
 }
 
-export function isCategoryNameValid(categoryName: string): boolean {
+function isCategoryNameValid(categoryName: string): boolean {
   return CATEGORIES_NAME.some(
     (category) => slugify(category.name) === categoryName,
   )
