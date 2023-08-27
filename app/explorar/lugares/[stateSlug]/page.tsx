@@ -1,6 +1,18 @@
+import React from 'react'
+import { Button } from '@/components/ui/button'
 import { db } from '@/lib/prisma'
 import { statesOfMexico } from '@/lib/states-of-mexico'
-import React from 'react'
+import Link from 'next/link'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import Image from 'next/image'
+import { WifiIcon } from 'lucide-react'
 
 async function getStateItems(state: string) {
   const items = await db.item.findMany({
@@ -13,6 +25,13 @@ async function getStateItems(state: string) {
           onlineBusiness: true,
         },
       ],
+    },
+    include: {
+      company: {
+        select: {
+          slug: true,
+        },
+      },
     },
   })
 
@@ -37,43 +56,123 @@ async function ExploreByStatePage({ params }: ExploreByStatePageProps) {
   const state = statesOfMexico.find((state) => state.slug === params.stateSlug)
 
   if (!state) {
-    return <div>Estado no encontrado</div>
+    return (
+      <section className="h-screen">
+        <div className="flex justify-center items-center h-full max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+          <div className=" max-w-lg text-center pb-16">
+            <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
+              Estado no encontrado
+            </h2>
+            <p className="mb-8">Por favor, intenta con otro estado</p>
+            <Link href="/explorar/lugares">
+              <Button>Ir a la lista de estados</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   const items = await getStateItems(state?.value)
   const companies = await getStateCompanies(state?.value)
 
-  // if (!items || items.length === 0) {
-  //   return <div>no hay items para {state?.label}</div>
-  // }
-
-  console.log(items)
-
   return (
-    <div>
-      <h1 className="mb-4 text-3xl">Explorar por estado</h1>
-      <div>Estado seleccionado: {params.stateSlug}</div>
+    <section className="px-2">
+      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+        <div className="mx-auto max-w-lg text-center">
+          <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
+            {state.label}
+          </h2>
+          <Link href="/explorar/lugares">
+            <Button>Ir a la lista de estados</Button>
+          </Link>
+        </div>
 
-      <div className="space-y-6 p-6">
-        <h2 className="text-2xl">Resultados items</h2>
-        {items.map((item) => (
-          <div key={item.id} className="p-4 border border-gray-300">
-            <h2>{item.title}</h2>
-            <p>{item.description}</p>
-          </div>
-        ))}
-      </div>
+        {/* ITEMS CARD GRID */}
 
-      <div className="space-y-6 p-6">
-        <h2 className="text-2xl">Resultados negocios</h2>
-        {companies.map((company) => (
-          <div key={company.id} className="p-4 border border-gray-300">
-            <h2>{company.name}</h2>
-            <p>{company.description}</p>
+        <div className="pt-16 pb-2" id="estados">
+          <h2 className="text-3xl font-bold sm:text-4xl mb-4">
+            Hemos encontrado {items.length}
+            {items.length === 1 ? ' servicio' : ' servicios'}
+          </h2>
+          <p className="tracking-light text-xl">
+            {items.length === 0 ? (
+              <span>
+                No hemos encontrado servicios disponibles en tu estado
+              </span>
+            ) : (
+              <span> Selecciona para ver mas detalles.</span>
+            )}
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <Link key={item.id} href={`/empresa/${item.company.slug}`}>
+                <Card className="hover:shadow-md h-full">
+                  <CardHeader>
+                    <Image
+                      src="https://source.unsplash.com/IPheOySCW7A"
+                      alt={`Imagen de portada de ${item.title}`}
+                      width={500}
+                      height={500}
+                    />
+                  </CardHeader>
+                  <CardContent>
+                    <CardTitle className="mb-4">{item.title}</CardTitle>
+                    <CardDescription>{item.description}</CardDescription>
+                  </CardContent>
+                  <CardFooter>
+                    {item.onlineBusiness && (
+                      <div className="flex gap-2 text-sm items-center">
+                        <WifiIcon className="h-4 w-4" />
+                        Servicio disponible en línea
+                      </div>
+                    )}
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* COMPANIES CARD GRID */}
+
+        <div className="pt-16 pb-2" id="estados">
+          <h2 className="text-3xl font-bold sm:text-4xl mb-4">
+            Hemos encontrado {companies.length}
+            {companies.length === 1 ? ' negocio' : ' negocios'}
+          </h2>
+          <p className="tracking-light text-xl">
+            {companies.length === 0 ? (
+              <span>No hemos encontrado negocios en tu estado</span>
+            ) : (
+              <span> Selecciona para ver mas detalles.</span>
+            )}
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {companies.map((company) => (
+              <Link key={company.id} href={`/empresa/${company.slug}`}>
+                <Card className="hover:shadow-md h-full">
+                  <CardHeader>
+                    <Image
+                      src="https://source.unsplash.com/nxZDMUQhN4o"
+                      alt={`Imagen de portada de ${company.name}`}
+                      width={500}
+                      height={500}
+                    />
+                  </CardHeader>
+                  <CardContent>
+                    <CardTitle className="mb-4">{company.name}</CardTitle>
+                    <CardDescription>{company.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

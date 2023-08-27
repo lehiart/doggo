@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { statesOfMexico } from './states-of-mexico'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,3 +23,7 @@ export const normalizeString = (str: string) =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^\w\s]/g, '') // Remove accents and special characters
+
+export const getStateByKey = (stateKey: string) => {
+  return statesOfMexico.find((state) => state.value === stateKey)
+}

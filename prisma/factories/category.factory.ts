@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
-import { CATEGORIES_NAME } from '@/lib/categories'
 import { slugify } from '../../lib/utils'
+import { CATEGORIES_NAME } from '../../lib/categories'
 
 const prisma = new PrismaClient()
 

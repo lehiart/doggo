@@ -206,12 +206,13 @@ model FavoriteItems {
 }
 
 model Item {
-  id             String  @id @default(uuid())
+  id             String      @id @default(uuid())
   title          String
   description    String
-  published      Boolean @default(false)
-  onlineBusiness Boolean @default(false)
+  published      Boolean     @default(false)
+  onlineBusiness Boolean     @default(false)
   state          String
+  images         ItemImage[]
 
   categoryId      String
   companyId       String
@@ -224,6 +225,18 @@ model Item {
   @@index([favoriteItemsId])
   @@index([categoryId])
   @@index([companyId])
+}
+
+model ItemImage {
+  id        String  @id @default(uuid())
+  itemId    String
+  imageUrl  String
+  principal Boolean @default(false)
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
+  @@map(name: "item_images")
 }
 
 ////////////////////////////////////////////////   CATEGORY    //////////////////////////////////////////////////

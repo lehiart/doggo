@@ -25,7 +25,7 @@ type page = 'STATES' | 'CATEGORIES'
 export default function SearchCommand({ className }: { className?: string }) {
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
-  const [query, setQuery] = React.useState('buscar')
+  const [query, setQuery] = React.useState('/buscar')
   const [activePage, setActivePage] = React.useState<page>('CATEGORIES')
   const router = useRouter()
 

@@ -1,17 +1,15 @@
 import React from 'react'
 import { db } from '@/lib/prisma'
-import { statesOfMexico } from '@/lib/states-of-mexico'
 import Link from 'next/link'
-import SearchCommand from '../../components/search-command'
 import createCategories from '@/prisma/factories/category.factory'
 import type { Metadata } from 'next'
+import SearchCommand from '@/components/search-command'
 
 export const metadata: Metadata = {
-  title: 'Explorar',
+  title: 'Explorar - categorias',
   description:
-    'Explora todos los servicios para tu perro disponibles por categoria o en tu estado.',
+    'Explora todos los servicios para tu perro disponibles por categoria.',
 }
-
 async function getCategoriesData() {
   const categoriesCount = await db.category.count()
 
@@ -28,7 +26,7 @@ async function getCategoriesData() {
   return categories
 }
 
-async function ExplorePage() {
+async function ExploreCategoriesPage() {
   const categories = await getCategoriesData()
 
   return (
@@ -62,28 +60,9 @@ async function ExplorePage() {
             </Link>
           ))}
         </div>
-
-        {/* STATES GRID */}
-
-        <div className="pt-16 pb-2" id="estados">
-          <h2 className="text-3xl font-bold sm:text-4xl mb-4">Estados</h2>
-          <p className="tracking-light text-xl">
-            Explora los servicios disponibles en tu estado.
-          </p>
-
-          <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {statesOfMexico.map((state) => (
-              <Link key={state.value} href={`/explorar/lugares/${state.slug}`}>
-                <div className="flex h-full items-center justify-center rounded-xl border p-6  text-center shadow-lg transition hover:border-primary hover:shadow-primary/20">
-                  <h2 className="text-md font-bold ">{state.label}</h2>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )
 }
 
-export default ExplorePage
+export default ExploreCategoriesPage

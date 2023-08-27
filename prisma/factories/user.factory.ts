@@ -34,6 +34,11 @@ const createMultipleUsers = (amount: number, role: ROLE) => {
           image: faker.image.avatar(),
           createdAt: faker.date.past(),
           updatedAt: faker.date.recent(),
+          categories: {
+            connect: {
+              slug: faker.helpers.arrayElement(['alimentacion', 'hospedaje']),
+            },
+          },
           state: faker.helpers.arrayElement([
             'DUR',
             'COA',
