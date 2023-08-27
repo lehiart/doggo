@@ -58,6 +58,14 @@ function isCategoryNameValid(categoryName: string): boolean {
   )
 }
 
+function getCategoryNameFromSlug(categorySlug: string): string {
+  const category = CATEGORIES_NAME.find(
+    (category) => slugify(category.name) === categorySlug,
+  )
+
+  return category?.name ?? categorySlug
+}
+
 async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
   const categoryExist = isCategoryNameValid(slugify(params.categorySlug))
 
@@ -89,7 +97,7 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
           <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down capitalize">
-            {params.categorySlug}
+            {getCategoryNameFromSlug(params.categorySlug)}
           </h2>
           <Link href="/explorar/categorias">
             <Button>Ir a la lista de categorias</Button>

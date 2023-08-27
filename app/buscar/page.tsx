@@ -17,6 +17,15 @@ import Image from 'next/image'
 import { MapPinIcon, SearchIcon, WifiIcon } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
+export async function generateMetadata({ searchParams }: SearchPageProps) {
+  return {
+    title: 'Busqueda',
+    description: `Servicios de ${getCategoryNameFromSlug(
+      searchParams.categoria,
+    )} en el estado de ${getStateNameFromSlug(searchParams.lugar)}`,
+  }
+}
+
 const getStateValueFromSlug = (slug: string) => {
   const state = statesOfMexico.find((state) => state.slug === slug)
 
@@ -97,12 +106,9 @@ async function SearchPage({ searchParams }: SearchPageProps) {
             <AlertDescription>
               {getCategoryNameFromSlug(searchParams.categoria)}{' '}
               {searchParams?.lugar
-                ? ' en el estado de ' +
-                  getStateNameFromSlug(searchParams.lugar) +
-                  ','
-                : ' sin especificar lugar, '}
-              <br />
-              {searchParams.online && ' incluyendo servicios en linea.'}
+                ? ' en el estado de ' + getStateNameFromSlug(searchParams.lugar)
+                : ' sin especificar lugar'}
+              {searchParams.online && ', incluyendo servicios en linea.'}
             </AlertDescription>
           </Alert>
         </div>
