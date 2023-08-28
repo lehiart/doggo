@@ -13,6 +13,16 @@ import {
 } from '@/components/ui/card'
 import Image from 'next/image'
 import { WifiIcon } from 'lucide-react'
+import { getStateNameFromSlug } from '@/lib/utils'
+
+export async function generateMetadata({ params }: ExploreByStatePageProps) {
+  return {
+    title: 'Explorar',
+    description: `Servicios en el estado de ${getStateNameFromSlug(
+      params.stateSlug,
+    )}`,
+  }
+}
 
 async function getStateItems(state: string) {
   const items = await db.item.findMany({

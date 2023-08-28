@@ -76,7 +76,7 @@ export function UserRegisterForm() {
     <div className="grid gap-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Tabs defaultValue="user">
-          <TabsList className="mb-4 grid w-full grid-cols-2">
+          <TabsList className="mb-4 grid w-full grid-cols-2 ">
             <TabsTrigger value="user" onClick={() => setRoleType('USER')}>
               Usuario
             </TabsTrigger>

@@ -1,94 +1,29 @@
-"use client";
-
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { CheckCircleIcon, MailCheckIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { Separator } from "@/components/ui/separator";
-import { Label } from "@/components/ui/label";
-import { getSession } from "next-auth/react";
+import React from 'react'
+import { MailIcon } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import ResendVerifyEmailForm from '@/components/auth/resend-verify-email-form'
 
 function EmailNotVerifiedPage() {
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-
-  async function onSubmit(data: FormData) {
-    const session = await getSession();
-    setIsSaving(true);
-
-    try {
-      if (session) {
-        return;
-      }
-
-      await fetch("/api/auth/refresh", {
-        method: "POST",
-        body: JSON.stringify({ email: data.get("email") }),
-      });
-    } catch (error) {
-      toast({
-        title:
-          "Hubo un error al guardar los datos. Por favor intenta de nuevo.",
-        description: "Si el problema persiste, contacta a soporte.",
-        variant: "destructive",
-      });
-    }
-  }
-
   return (
-    <section className="flex h-screen flex-col items-center justify-center">
-      <Card className="w-[350px] px-4 pb-4 pt-8">
-        <CardTitle className="mb-8">Tu cuenta no esta verificada</CardTitle>
-        <CardContent>
-          <p className="mb-4  text-center	">
-            por favor, revisa tu correo, es necesario verificar tu cuenta desde
-            el correo para poder iniciar sesion
-          </p>
+    <section className="h-screen flex flex-col items-center justify-center px-0 md:px-20">
+      <div className=" p-8 animate-slide-down ">
+        <h2 className="text-2xl lg:text-4xl font-bold mb-6  text-center">
+          Tu cuenta no esta verificada
+        </h2>
 
-          <Separator className="mb-4" />
+        <MailIcon className="w-28 h-28 mx-auto " />
 
-          {!isSaving && (
-            <p className="  text-center	">
-              Si no encuentras el correo, puedes solicitar uno nuevo
-              introduciendo tu correo en el siguiente campo:
-            </p>
-          )}
-        </CardContent>
-        <CardFooter className="w-full">
-          {isSaving ? (
-            <CheckCircleIcon
-              color="green"
-              className="mt-4 flex w-full items-center justify-center"
-            />
-          ) : (
-            <form action={onSubmit} className="w-full space-y-4">
-              <div>
-                <Label htmlFor="email" className="mb-2">
-                  Email
-                </Label>
-                <Input
-                  name="email"
-                  type="email"
-                  autoComplete="off"
-                  placeholder="tu correo con el que te registraste"
-                  required
-                />
-              </div>
+        <p className="text-md md:text-lg text-center w-full md:w-1/2 mx-auto mt-4">
+          Por favor revisa tu correo, para poder iniciar sesion es necesario
+          verificar tu cuenta desde el correo con el que te registraste.
+        </p>
 
-              <Button
-                disabled={isSaving}
-                type="submit"
-                className="w-full gap-2"
-              >
-                <MailCheckIcon /> Reenviar email
-              </Button>
-            </form>
-          )}
-        </CardFooter>
-      </Card>
+        <Separator className="my-8 w-full md:w-1/2mx-auto" />
+
+        <ResendVerifyEmailForm />
+      </div>
     </section>
-  );
+  )
 }
 
-export default EmailNotVerifiedPage;
+export default EmailNotVerifiedPage

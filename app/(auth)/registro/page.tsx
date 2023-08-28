@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { UserRegisterForm } from '@/components/auth/user-register-form'
 import { DogIcon } from 'lucide-react'
+import Image from 'next/image'
 
 export const metadata = {
   title: 'Crea una cuenta',
@@ -18,7 +19,14 @@ export default function RegisterPage() {
       >
         <Button variant="ghost">Iniciar </Button>
       </Link>
-      <div className="hidden h-full bg-muted lg:block" />
+      <div className="hidden h-full bg-primary/30 lg:block relative dark:brightness-75">
+        <Image
+          src="/images/register.jpg"
+          alt="Fotografia de un perro dando la pata a su dueño"
+          fill
+          objectFit="cover"
+        />
+      </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">

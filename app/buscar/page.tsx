@@ -1,8 +1,11 @@
 import SearchCommand from '@/components/search-command'
-import { CATEGORIES_NAME } from '@/lib/categories'
 import { db } from '@/lib/prisma'
-import { statesOfMexico } from '@/lib/states-of-mexico'
-import { getStateByKey, slugify } from '@/lib/utils'
+import {
+  getCategoryNameFromSlug,
+  getStateFromKey,
+  getStateNameFromSlug,
+  getStateValueFromSlug,
+} from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
 import {
@@ -24,12 +27,6 @@ export async function generateMetadata({ searchParams }: SearchPageProps) {
       searchParams.categoria,
     )} en el estado de ${getStateNameFromSlug(searchParams.lugar)}`,
   }
-}
-
-const getStateValueFromSlug = (slug: string) => {
-  const state = statesOfMexico.find((state) => state.slug === slug)
-
-  return state?.value
 }
 
 interface SearchPageProps {
@@ -75,20 +72,6 @@ async function getItemsFromSearchParams(
 
     return items
   }
-}
-
-function getCategoryNameFromSlug(categorySlug: string): string | undefined {
-  const category = CATEGORIES_NAME.find(
-    (category) => slugify(category.name) === categorySlug,
-  )
-
-  return category?.name
-}
-
-function getStateNameFromSlug(stateSlug: string): string | undefined {
-  const state = statesOfMexico.find((state) => state.slug === stateSlug)
-
-  return state?.label
 }
 
 // http://localhost:3002/buscar/?categoria=alimentacion&lugar=zacatecas&lugar=mexico&online=true
@@ -154,7 +137,7 @@ async function SearchPage({ searchParams }: SearchPageProps) {
                   {item.state && (
                     <div className="flex items-center gap-2 text-sm">
                       <MapPinIcon className="h-4 w-4" />
-                      {getStateByKey(item.state)?.label}
+                      {getStateFromKey(item.state)?.label}
                     </div>
                   )}
                 </CardFooter>

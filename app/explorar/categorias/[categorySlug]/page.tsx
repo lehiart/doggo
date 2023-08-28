@@ -15,6 +15,15 @@ import { Button } from '@/components/ui/button'
 import { getStateByKey, slugify } from '@/lib/utils'
 import { CATEGORIES_NAME } from '@/lib/categories'
 
+export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
+  return {
+    title: 'Explorar',
+    description: `Servicios de categoria: ${getCategoryNameFromSlug(
+      params.categorySlug,
+    )}`,
+  }
+}
+
 async function getCategoryItems(categorySlug: string) {
   const items = await db.item.findMany({
     where: {
