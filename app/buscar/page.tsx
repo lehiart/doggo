@@ -128,12 +128,19 @@ async function SearchPage({ searchParams }: SearchPageProps) {
                   <CardDescription>{item.description}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex flex-col items-start">
+                  {item.company.name && (
+                    <div className="text-sm">{item.company.name}</div>
+                  )}
+
+                  {/* TODO: ADD AVERAGE RATING FROM OPINIONS */}
+
                   {item.onlineBusiness && (
                     <div className="flex gap-2 text-sm items-center">
                       <WifiIcon className="h-4 w-4" />
                       Servicio disponible en línea
                     </div>
                   )}
+
                   {item.state && (
                     <div className="flex items-center gap-2 text-sm">
                       <MapPinIcon className="h-4 w-4" />

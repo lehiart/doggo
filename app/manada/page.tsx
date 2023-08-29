@@ -13,18 +13,17 @@ import {
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { DogIcon } from 'lucide-react'
-import { DeletePackMemberBtn } from '../../components/pack-form/delete-pack-member-btn'
+import { DeletePackMemberBtn } from '../../components/pack/pack-form/delete-pack-member-btn'
+import EmptyPack from '@/components/pack/empty-pack'
 
 async function MyPackPage() {
   const user = await getCurrentUser()
 
-  if (!user) {
-    return <div>Debes estar logueado</div>
-  }
+  if (!user) return
 
   const myPack = await db.pack.findUnique({
     where: {
-      userId: user.id,
+      userId: user?.id,
     },
     select: {
       id: true,
@@ -32,45 +31,18 @@ async function MyPackPage() {
     },
   })
 
-  const myRequests = await db.request.findMany({
-    where: {
-      userId: user.id,
-    },
-  })
-
-  const myFavorites = await db.favoriteItems.findUnique({
-    where: {
-      userId: user.id,
-    },
-    select: {
-      items: true,
-    },
-  })
-
-  const MyOpinions = await db.opinion.findMany({
-    where: {
-      userId: user.id,
-    },
-  })
-
   return (
-    <div>
-      <div className="my-4">
-        <Link href="manada/nuevo">
-          <Button>Agregar nuevo</Button>
-        </Link>
-      </div>
-
+    <main className="lg:border-l h-full w-full">
       {myPack?.members.length === 0 ? (
-        <div className="flex flex-col items-center justify-center">
-          <p className="mb-4">Aún no tienes miembros en tu manada</p>
-          <Link href="manada/nuevo">
-            <Button>Agregar nuevo</Button>
-          </Link>
-        </div>
+        <EmptyPack />
       ) : (
         <div>
           <p className="mb-4">Estos son los miembros de mi manada:</p>
+          <div className="my-4">
+            <Link href="manada/nuevo">
+              <Button>Agregar nuevo</Button>
+            </Link>
+          </div>
           <ul>
             {myPack?.members.map((member) => (
               <li key={member.id}>
@@ -107,16 +79,7 @@ async function MyPackPage() {
           </ul>
         </div>
       )}
-
-      <div className="my-4 text-2xl">Mis solicitudes</div>
-      <pre>{JSON.stringify(myRequests, null, 2)}</pre>
-
-      <div className="my-4 text-2xl">Mis items favoritos</div>
-      <pre>{JSON.stringify(myFavorites, null, 2)}</pre>
-
-      <div className="my-4 text-2xl">Mis opiniones</div>
-      <pre>{JSON.stringify(MyOpinions, null, 2)}</pre>
-    </div>
+    </main>
   )
 }
 

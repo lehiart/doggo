@@ -1,15 +1,14 @@
-import { Separator } from "@/components/ui/separator";
-import { AccountForm } from "./account-form";
-import { getCurrentUser } from "@/lib/session";
-import { CurrentUserSession } from "@/types/user";
-import { redirect } from "next/navigation";
-import { db } from "@/lib/prisma";
+import { AccountForm } from '@/components/profile/account-form'
+import { Separator } from '@/components/ui/separator'
+import { getCurrentUser } from '@/lib/session'
+import { CurrentUserSession } from '@/types/user'
+import { redirect } from 'next/navigation'
 
 export default async function SettingsAccountPage() {
-  const user: CurrentUserSession = await getCurrentUser();
+  const user: CurrentUserSession = await getCurrentUser()
 
   if (!user) {
-    redirect("/login");
+    redirect('/login')
   }
 
   return (
@@ -25,5 +24,5 @@ export default async function SettingsAccountPage() {
 
       <AccountForm id={user.id} email={user.email} role={user.role} />
     </div>
-  );
+  )
 }

@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -14,9 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { ROLE } from "@/lib/constants";
+} from '@/components/ui/dialog'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { ROLE } from '@/lib/constants'
 
 export function ChangeRoleCard({ role }: { role: string }) {
   return (
@@ -24,16 +24,16 @@ export function ChangeRoleCard({ role }: { role: string }) {
       <CardHeader className="space-y-1">
         <CardTitle>Cambiar tipo de cuenta</CardTitle>
         <CardDescription>
-          Actualmente tu cuenta es de tipo:{" "}
-          <b>{role === ROLE.COMPANY ? "NEGOCIO" : "USUARIO"}</b>
-        </CardDescription>{" "}
+          Actualmente tu cuenta es de tipo:{' '}
+          <b>{role === ROLE.COMPANY ? 'NEGOCIO' : 'USUARIO'}</b>
+        </CardDescription>{' '}
       </CardHeader>
       <CardContent className="w-50 grid gap-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button type="button" className="w-fit">
-              Cambiar a cuenta de{" "}
-              {role === ROLE.COMPANY ? "usuario" : "negocio"}
+              Cambiar a cuenta de{' '}
+              {role === ROLE.COMPANY ? 'usuario' : 'negocio'}
             </Button>
           </DialogTrigger>
 
@@ -46,8 +46,8 @@ export function ChangeRoleCard({ role }: { role: string }) {
                 </p>
 
                 <p className="mt-4">
-                  Te recomendamos crear una nueva cuenta de tipo{" "}
-                  {role === ROLE.COMPANY ? "usuario" : "negocio"}, para que
+                  Te recomendamos crear una nueva cuenta de tipo{' '}
+                  {role === ROLE.COMPANY ? 'usuario' : 'negocio'}, para que
                   conserves ambas cuentas. Ya que al hacer el cambio, tus datos
                   guardados se perderan. tambien algunas de tus opciones y
                   vistas del sitio cambiaran.
@@ -68,5 +68,5 @@ export function ChangeRoleCard({ role }: { role: string }) {
         </Dialog>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,11 +1,14 @@
-import { redirect } from "next/navigation";
-import { db } from "@/lib/prisma";
+import { redirect } from 'next/navigation'
+import { db } from '@/lib/prisma'
 
-import { Separator } from "@/components/ui/separator";
-import { ProfileForm, ProfileFormProps } from "./profile-form";
-import { getCurrentUser } from "@/lib/session";
-import { CurrentUserSession } from "@/types/user";
-import { Profile, User } from "@prisma/client";
+import { Separator } from '@/components/ui/separator'
+import {
+  ProfileForm,
+  ProfileFormProps,
+} from '../../../components/profile/profile-form'
+import { getCurrentUser } from '@/lib/session'
+import { CurrentUserSession } from '@/types/user'
+import { Profile, User } from '@prisma/client'
 
 const getEditableUserPofile = async (userId: string) => {
   const userProfile = await db.user.findUnique({
@@ -27,22 +30,22 @@ const getEditableUserPofile = async (userId: string) => {
         },
       },
     },
-  });
+  })
 
-  return userProfile;
-};
+  return userProfile
+}
 
 export default async function SettingsProfilePage() {
-  const user: CurrentUserSession = await getCurrentUser();
+  const user: CurrentUserSession = await getCurrentUser()
 
   if (!user) {
-    redirect("/login");
+    redirect('/login')
   }
 
-  const profile: any = await getEditableUserPofile(user.id);
+  const profile: any = await getEditableUserPofile(user.id)
 
   if (!profile) {
-    redirect("/login");
+    redirect('/login')
   }
 
   return (
@@ -56,5 +59,5 @@ export default async function SettingsProfilePage() {
       <Separator />
       <ProfileForm userProfile={profile} />
     </div>
-  );
+  )
 }

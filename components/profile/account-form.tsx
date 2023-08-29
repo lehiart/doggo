@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOffIcon, EyeIcon, Loader2Icon, Delete } from "lucide-react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { EyeOffIcon, EyeIcon, Loader2Icon, Delete } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { toast } from '@/components/ui/use-toast'
 import {
   Card,
   CardContent,
@@ -23,104 +23,104 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useState } from "react";
-import { AppearanceForm } from "./appereance-form";
-import { DeleteUserForm } from "./delete-user-form";
-import { ChangeRoleCard } from "./change-role-card";
+} from '@/components/ui/card'
+import { useState } from 'react'
+import { AppearanceForm } from './appereance-form'
+import { DeleteUserForm } from './delete-user-form'
+import { ChangeRoleCard } from './change-role-card'
 
 const accountFormSchema = z
   .object({
     currentPassword: z.string(),
     newPassword: z.string().min(1, {
-      message: "La contraseña debe tener al menos 8 caracteres.",
+      message: 'La contraseña debe tener al menos 8 caracteres.',
     }),
     confirmPassword: z.string().min(1, {
-      message: "La contraseña debe tener al menos 8 caracteres.",
+      message: 'La contraseña debe tener al menos 8 caracteres.',
     }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Los campos de contraseña nueva no coinciden.",
-    path: ["confirmPassword"],
-  });
+    message: 'Los campos de contraseña nueva no coinciden.',
+    path: ['confirmPassword'],
+  })
 
-type AccountFormValues = z.infer<typeof accountFormSchema>;
+type AccountFormValues = z.infer<typeof accountFormSchema>
 
 const defaultValues: Partial<AccountFormValues> = {
-  currentPassword: "",
-  newPassword: "",
-  confirmPassword: "",
-};
+  currentPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+}
 
 export function AccountForm({
   id,
   email,
   role,
 }: {
-  id: string;
-  email: string | null;
-  role: string;
+  id: string
+  email: string | null
+  role: string
 }) {
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({
     showCurrentPassword: false,
     showNewPassword: false,
     showConfirmPassword: false,
-  });
-  const [isSaving, setIsSaving] = useState<boolean>(false);
+  })
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   function handlePasswordIconClick(buttonName: string) {
     setShowPasswords((prevState) => ({
       ...prevState,
       [buttonName]: !prevState[buttonName],
-    }));
+    }))
   }
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
-  });
+  })
 
   async function onSubmit(data: AccountFormValues) {
-    setIsSaving(true);
+    setIsSaving(true)
 
     const payload = {
       password: data.currentPassword,
       newPassword: data.newPassword,
       id,
       email,
-    };
+    }
 
     try {
-      const result = await fetch("/api/profile/account", {
-        method: "PUT",
+      const result = await fetch('/api/profile/account', {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
-      });
+      })
 
       if (!result.ok) {
         toast({
-          title: "No se pudo actualizar la contraseña.",
+          title: 'No se pudo actualizar la contraseña.',
           description:
-            "Por favor, intenta de nuevo. Si el problema persiste, contacta a soporte.",
-          variant: "destructive",
-        });
+            'Por favor, intenta de nuevo. Si el problema persiste, contacta a soporte.',
+          variant: 'destructive',
+        })
       } else {
         toast({
-          title: "Contraseña actualizada.",
-          description: "Tu contraseña ha sido actualizada con éxito.",
-        });
+          title: 'Contraseña actualizada.',
+          description: 'Tu contraseña ha sido actualizada con éxito.',
+        })
       }
     } catch (error) {
       toast({
-        title: "No pudimos actualizar tu contraseña.",
+        title: 'No pudimos actualizar tu contraseña.',
         description:
-          "Por favor, intenta de nuevo. Si el problema persiste, contacta a soporte.",
-      });
+          'Por favor, intenta de nuevo. Si el problema persiste, contacta a soporte.',
+      })
     }
 
-    setIsSaving(false);
+    setIsSaving(false)
   }
 
   return (
@@ -152,8 +152,8 @@ export function AccountForm({
                           autoComplete="off"
                           type={
                             showPasswords.showCurrentPassword
-                              ? "text"
-                              : "password"
+                              ? 'text'
+                              : 'password'
                           }
                         />
                         <Button
@@ -161,7 +161,7 @@ export function AccountForm({
                           type="button"
                           size="icon"
                           onClick={() =>
-                            handlePasswordIconClick("showCurrentPassword")
+                            handlePasswordIconClick('showCurrentPassword')
                           }
                           tabIndex={-1}
                         >
@@ -192,7 +192,7 @@ export function AccountForm({
                           className="w-full lg:w-2/3"
                           autoComplete="off"
                           type={
-                            showPasswords.showNewPassword ? "text" : "password"
+                            showPasswords.showNewPassword ? 'text' : 'password'
                           }
                         />
                         <Button
@@ -200,7 +200,7 @@ export function AccountForm({
                           type="button"
                           size="icon"
                           onClick={(e) =>
-                            handlePasswordIconClick("showNewPassword")
+                            handlePasswordIconClick('showNewPassword')
                           }
                           tabIndex={-1}
                         >
@@ -232,8 +232,8 @@ export function AccountForm({
                           autoComplete="off"
                           type={
                             showPasswords.showConfirmPassword
-                              ? "text"
-                              : "password"
+                              ? 'text'
+                              : 'password'
                           }
                         />
                         <Button
@@ -241,7 +241,7 @@ export function AccountForm({
                           type="button"
                           size="icon"
                           onClick={() =>
-                            handlePasswordIconClick("showConfirmPassword")
+                            handlePasswordIconClick('showConfirmPassword')
                           }
                           tabIndex={-1}
                         >
@@ -265,7 +265,7 @@ export function AccountForm({
                 type="submit"
                 disabled={!form.formState.isDirty || isSaving}
               >
-                {isSaving ? <Loader2Icon /> : "Cambiar contraseña"}
+                {isSaving ? <Loader2Icon /> : 'Cambiar contraseña'}
               </Button>
             </CardFooter>
           </Card>
@@ -280,5 +280,5 @@ export function AccountForm({
 
       <DeleteUserForm />
     </div>
-  );
+  )
 }

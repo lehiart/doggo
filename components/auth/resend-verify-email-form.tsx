@@ -37,11 +37,8 @@ export default function ResendVerifyEmailForm() {
   return (
     <div className="w-full md:w-1/2 mx-auto">
       {isSaving ? (
-        <p className="text-center flex flex-col gap-4">
-          <CheckCircleIcon
-            color="green"
-            className="h-8 w-8 mt-4 mx-auto mb-4 animate-pulse"
-          />
+        <p className="text-center flex flex-col gap-4 space-y-4">
+          <CheckCircleIcon className="h-14 w-14 mt-4 mx-auto mb-4  text-primary" />
           Se ha enviado un correo a tu cuenta, por favor revisa tu bandeja de
           entrada. Si no encuentras el correo, revisa tu bandeja de spam.
           <Link href="/login">
@@ -61,6 +58,7 @@ export default function ResendVerifyEmailForm() {
                 name="email"
                 type="email"
                 autoComplete="off"
+                autoCapitalize="off"
                 placeholder="Tu correo con el que te registraste..."
                 required
               />

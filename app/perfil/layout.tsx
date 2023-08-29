@@ -1,32 +1,32 @@
-import { Metadata } from "next";
+import { Metadata } from 'next'
 
-import { Separator } from "@/components/ui/separator";
-import { SidebarNav } from "./(perfil)/sidebar-nav";
+import { Separator } from '@/components/ui/separator'
+import { SidebarNav } from '../../components/profile/sidebar-nav'
 
 export const metadata: Metadata = {
-  title: "Perfil",
+  title: 'Perfil',
   description:
-    "Administra la configuración de tu cuenta y establece las preferencias de correo electrónico.",
-};
+    'Administra la configuración de tu cuenta y establece las preferencias de correo electrónico.',
+}
 
 const sidebarNavItems = [
   {
-    title: "Perfil",
-    href: "/perfil",
+    title: 'Perfil',
+    href: '/perfil',
   },
   {
-    title: "Cuenta",
-    href: "/perfil/cuenta",
+    title: 'Cuenta',
+    href: '/perfil/cuenta',
   },
-];
+]
 
 interface SettingsLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
-    <div className="block min-h-screen space-y-6 p-10 pb-16">
+    <section className="block min-h-screen space-y-6 p-10 pb-16 container">
       <div className="space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Ajustes</h2>
         <p className="text-muted-foreground">
@@ -44,6 +44,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
 
         <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>
-    </div>
-  );
+    </section>
+  )
 }

@@ -11,14 +11,14 @@ function EmailNotVerifiedPage() {
           Tu cuenta no esta verificada
         </h2>
 
-        <MailIcon className="w-28 h-28 mx-auto " />
+        <MailIcon className="w-14 h-14 mx-auto text-primary" />
 
         <p className="text-md md:text-lg text-center w-full md:w-1/2 mx-auto mt-4">
           Por favor revisa tu correo, para poder iniciar sesion es necesario
           verificar tu cuenta desde el correo con el que te registraste.
         </p>
 
-        <Separator className="my-8 w-full md:w-1/2mx-auto" />
+        <Separator className="my-8 w-full md:w-1/2 mx-auto" />
 
         <ResendVerifyEmailForm />
       </div>

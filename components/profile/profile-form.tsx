@@ -22,7 +22,7 @@ import { toast } from '@/components/ui/use-toast'
 import SocialMediaURLSelect from '@/components/social-media-url-select'
 import { StatesSelector } from '@/components/states-selector'
 import { Loader2Icon, User2Icon } from 'lucide-react'
-import ImageUploadInput from '../../../components/image-upload-input'
+import ImageUploadInput from '../image-upload-input'
 
 const profileFormSchema = z.object({
   name: z

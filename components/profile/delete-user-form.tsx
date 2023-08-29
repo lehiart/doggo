@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/use-toast'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Loader2Icon, UserX2Icon } from "lucide-react";
+} from '@/components/ui/card'
+import { Loader2Icon, UserX2Icon } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -22,13 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { DialogClose } from '@radix-ui/react-dialog'
+import { Label } from '@/components/ui/label'
+import { useState } from 'react'
 
-const keyword: string = "Eliminar cuenta";
+const keyword: string = 'Eliminar cuenta'
 
 const accountDeleteFormSchema = z.object({
   confirmation: z.literal(keyword, {
@@ -37,19 +37,19 @@ const accountDeleteFormSchema = z.object({
     }),
   }),
   password: z.string().min(2, {
-    message: "Este campo es requerido.",
+    message: 'Este campo es requerido.',
   }),
-});
+})
 
-type AccountDeleteFormValues = z.infer<typeof accountDeleteFormSchema>;
+type AccountDeleteFormValues = z.infer<typeof accountDeleteFormSchema>
 
 const defaultValues: Partial<AccountDeleteFormValues> = {
-  confirmation: "",
-  password: "",
-};
+  confirmation: '',
+  password: '',
+}
 
 export function DeleteUserForm() {
-  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const {
     register,
@@ -58,19 +58,19 @@ export function DeleteUserForm() {
   } = useForm<AccountDeleteFormValues>({
     resolver: zodResolver(accountDeleteFormSchema),
     defaultValues,
-  });
+  })
 
   async function onSubmit(data: AccountDeleteFormValues) {
-    setIsSaving(true);
+    setIsSaving(true)
 
     //TODO: CREATE DELETE USER  ROUTE.TS
 
     toast({
-      title: "Cuenta eliminada",
-      description: "Tu cuenta ha sido eliminada.",
-    });
+      title: 'Cuenta eliminada',
+      description: 'Tu cuenta ha sido eliminada.',
+    })
 
-    setIsSaving(false);
+    setIsSaving(false)
   }
 
   return (
@@ -120,7 +120,7 @@ export function DeleteUserForm() {
                     focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
                     disabled:cursor-not-allowed disabled:opacity-50 lg:w-2/3"
                   autoComplete="off"
-                  {...register("password")}
+                  {...register('password')}
                 />
                 {errors.password && (
                   <p className="text-sm font-medium text-destructive">
@@ -143,7 +143,7 @@ export function DeleteUserForm() {
                     file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground 
                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 lg:w-2/3"
                   autoComplete="off"
-                  {...register("confirmation")}
+                  {...register('confirmation')}
                 />
                 {errors.confirmation && (
                   <p className="text-sm font-medium text-destructive">
@@ -162,7 +162,7 @@ export function DeleteUserForm() {
                   variant="destructive"
                   disabled={isSaving || !isValid}
                 >
-                  {isSaving ? <Loader2Icon /> : "Confirmar cancelacion"}
+                  {isSaving ? <Loader2Icon /> : 'Confirmar cancelacion'}
                 </Button>
               </DialogFooter>
             </form>
@@ -170,5 +170,5 @@ export function DeleteUserForm() {
         </Dialog>
       </CardContent>
     </Card>
-  );
+  )
 }

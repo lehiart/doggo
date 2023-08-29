@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -13,48 +13,48 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/components/ui/use-toast";
-import { useTheme } from "next-themes";
+} from '@/components/ui/form'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { toast } from '@/components/ui/use-toast'
+import { useTheme } from 'next-themes'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(["light", "dark"]),
-});
+  theme: z.enum(['light', 'dark']),
+})
 
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
+type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<AppearanceFormValues> = {
-  theme: "light",
-};
+  theme: 'light',
+}
 
 export function AppearanceForm() {
-  const { setTheme } = useTheme();
+  const { setTheme } = useTheme()
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
-  });
+  })
 
-  function handleOnChange(value: AppearanceFormValues["theme"]) {
-    form.setValue("theme", value);
+  function handleOnChange(value: AppearanceFormValues['theme']) {
+    form.setValue('theme', value)
   }
 
   function onSubmit(data: AppearanceFormValues) {
-    setTheme(data.theme);
+    setTheme(data.theme)
 
     toast({
-      title: "Actualizaste tu sitio a:",
+      title: 'Actualizaste tu sitio a:',
       description: data.theme.charAt(0).toUpperCase() + data.theme.slice(1),
-    });
+    })
   }
 
   return (
@@ -139,5 +139,5 @@ export function AppearanceForm() {
         </Form>
       </CardContent>
     </Card>
-  );
+  )
 }

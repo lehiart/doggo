@@ -14,8 +14,6 @@ export default async function AddNewCompanyPage() {
     redirect('/login')
   }
 
-  console.log(user, 'entro a nuevo page')
-
   return (
     <div className="block min-h-screen space-y-6 p-10 pb-16">
       <div className="space-y-0.5">

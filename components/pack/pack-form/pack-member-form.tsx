@@ -14,7 +14,7 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { BreedSelector } from './breed-selector-input'
-import ImageUploadInput from '../image-upload-input'
+import ImageUploadInput from '../../image-upload-input'
 import { toast } from '@/components/ui/use-toast'
 import {
   Select,
@@ -131,10 +131,10 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <ImageUploadInput form={form} Icon={DogIcon} />
 
-        <div className="grid grid-cols-2 items-end gap-4">
+        <div className="grid grid-cols-2 items-end gap-4 mb-8">
           <FormField
             control={form.control}
             name="name"
@@ -158,7 +158,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
           <BreedSelector form={form} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-8">
           <FormField
             control={form.control}
             name="age"
@@ -209,7 +209,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Elige una tamaño..." />
+                      <SelectValue placeholder="Elige un tamaño.." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -226,7 +226,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-8">
           <FormField
             control={form.control}
             name="gender"
@@ -289,7 +289,11 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
           />
         </div>
 
-        <Button type="submit" disabled={!form.formState.isValid || isSaving}>
+        <Button
+          type="submit"
+          disabled={!form.formState.isValid || isSaving}
+          className="w-full md:w-1/2 mt-12"
+        >
           {type === 'EDIT' ? 'Editar' : 'Agregar'}
         </Button>
       </form>
