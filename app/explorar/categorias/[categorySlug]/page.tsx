@@ -201,7 +201,7 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
                     {company.state && (
                       <div className="flex items-center gap-2 text-sm">
                         <MapPinIcon className="h-4 w-4" />
-                        {getStateByKey(company.state)?.label}
+                        {getStateFromKey(company.state)?.label}
                       </div>
                     )}
                   </CardFooter>
