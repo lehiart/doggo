@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
       params.categorySlug,
     )}`,
     openGraph: {
-      url: 'https://nextjs.org',
       siteName: 'Doghouse',
       images: [
         {
