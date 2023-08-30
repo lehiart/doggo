@@ -23,18 +23,18 @@ export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
     )}`,
     openGraph: {
       siteName: 'Doghouse',
-      images: [
-        {
-          url: '/images/seo/open-graph.jpg',
-          width: 800,
-          height: 600,
-        },
-        {
-          url: '/images/seo/og-category.jpg',
-          width: 1800,
-          height: 1600,
-        },
-      ],
+      // images: [
+      //   {
+      //     url: '/images/seo/open-graph.jpg',
+      //     width: 800,
+      //     height: 600,
+      //   },
+      //   {
+      //     url: '/images/seo/og-category.jpg',
+      //     width: 1800,
+      //     height: 1600,
+      //   },
+      // ],
       locale: 'es_MX',
       type: 'website',
     },
@@ -98,12 +98,12 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
   if (!categoryExist) {
     return (
       <section className="h-screen">
-        <div className="flex justify-center items-center h-full max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-          <div className=" max-w-lg text-center pb-16">
+        <div className="flex justify-center items-center h-full px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+          <div className="text-center pb-16">
             <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
               Categoria no encontrada
             </h2>
-            <p className="mb-8">
+            <p className="mb-8 text-xl">
               Por favor, intenta con otra categoria de la lista
             </p>
             <Link href="/explorar/categorias">
@@ -121,13 +121,23 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
   return (
     <section className="px-2">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-        <div className="mx-auto max-w-lg text-center">
-          <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down capitalize">
-            {getCategoryNameFromSlug(params.categorySlug)}
-          </h2>
-          <Link href="/explorar/categorias">
-            <Button>Ir a la lista de categorias</Button>
-          </Link>
+        <div className="relative w-full h-80 bg-slate-500 rounded-md ">
+          <Image
+            src={`https://www-doggo.s3.us-east-005.backblazeb2.com/categories/${params.categorySlug}.jpg`}
+            alt={`Imagen de la categoria ${params.categorySlug}`}
+            fill
+            objectFit="cover"
+            priority
+            className="brightness-75 dark:brightness-50 rounded-md"
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full p-4">
+            <h1 className=" text-primary-foreground text-4xl md:text-6xl font-bold  mb-12 animate-slide-down">
+              {getCategoryNameFromSlug(params.categorySlug)}
+            </h1>
+            <Link href="/explorar/categorias">
+              <Button variant="outline">Ir a la lista de categorias</Button>
+            </Link>
+          </div>
         </div>
 
         {/* ITEMS CARD GRID */}

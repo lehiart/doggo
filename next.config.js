@@ -8,6 +8,7 @@ const nextConfig = {
       'loremflickr.com',
       'unsplash.com',
       'source.unsplash.com',
+      'www-doggo.s3.us-east-005.backblazeb2.com',
     ],
   },
   experimental: {

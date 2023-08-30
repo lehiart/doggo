@@ -67,13 +67,13 @@ async function ExploreByStatePage({ params }: ExploreByStatePageProps) {
 
   if (!state) {
     return (
-      <section className="h-screen">
-        <div className="flex justify-center items-center h-full max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-          <div className=" max-w-lg text-center pb-16">
+      <section className="h-screen w-full">
+        <div className="flex justify-center items-center h-full px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+          <div className="text-center pb-16">
             <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
               Estado no encontrado
             </h2>
-            <p className="mb-8">Por favor, intenta con otro estado</p>
+            <p className="mb-8 text-xl">Por favor, intenta con otro estado</p>
             <Link href="/explorar/lugares">
               <Button>Ir a la lista de estados</Button>
             </Link>
@@ -89,13 +89,23 @@ async function ExploreByStatePage({ params }: ExploreByStatePageProps) {
   return (
     <section className="px-2">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-        <div className="mx-auto max-w-lg text-center">
-          <h2 className="lg:text-6xl font-bold text-4xl mb-12 animate-slide-down">
-            {state.label}
-          </h2>
-          <Link href="/explorar/lugares">
-            <Button>Ir a la lista de estados</Button>
-          </Link>
+        <div className="relative w-full h-80 bg-slate-500 rounded-md">
+          <Image
+            src={`https://www-doggo.s3.us-east-005.backblazeb2.com/states/${state.slug}.jpg`}
+            alt={`Imagen del estado de ${state.label}`}
+            fill
+            objectFit="cover"
+            priority
+            className="brightness-75 dark:brightness-50 rounded-md"
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full">
+            <h1 className=" text-primary-foreground text-4xl md:text-6xl font-bold  mb-12 animate-slide-down">
+              {state.label}
+            </h1>
+            <Link href="/explorar/lugares">
+              <Button variant="outline">Ir a la lista de estados</Button>
+            </Link>
+          </div>
         </div>
 
         {/* ITEMS CARD GRID */}
