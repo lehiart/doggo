@@ -12,7 +12,7 @@ import {
 import Image from 'next/image'
 import { MapPinIcon, WifiIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { getStateByKey, slugify } from '@/lib/utils'
+import { getStateFromKey, slugify } from '@/lib/utils'
 import { CATEGORIES_NAME } from '@/lib/categories'
 
 export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
@@ -156,7 +156,7 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
                     {item.state && (
                       <div className="flex items-center gap-2 text-sm">
                         <MapPinIcon className="h-4 w-4" />
-                        {getStateByKey(item.state)?.label}
+                        {getStateFromKey(item.state)?.label}
                       </div>
                     )}
                   </CardFooter>
