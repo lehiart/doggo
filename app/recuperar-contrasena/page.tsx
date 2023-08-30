@@ -1,16 +1,8 @@
-'use client'
-
 import React from 'react'
-import z from 'zod'
 
-import { Button } from '@/components/ui/button'
-
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { sendRecoveryEmail } from './actions'
-import { toast } from '@/components/ui/use-toast'
 import Image from 'next/image'
 import { Metadata } from 'next'
+import ForgotPasswordForm from '@/components/auth/forgot-password-form'
 
 export const metadata: Metadata = {
   title: 'Recuperar contraseña',
@@ -22,23 +14,7 @@ export const metadata: Metadata = {
   },
 }
 
-const formDataSchema = z.object({
-  email: z.string().email(),
-})
-
-type FormData = z.infer<typeof formDataSchema>
-
 export default function ForgotPasswordPage() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitting },
-  } = useForm<FormData>({
-    shouldUseNativeValidation: true,
-    resolver: zodResolver(formDataSchema),
-  })
-
   return (
     <section className="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -46,7 +22,7 @@ export default function ForgotPasswordPage() {
           <Image
             src="/images/forgot-password.jpg"
             fill
-            alt="aaaa"
+            alt="Un perro sentado frente a una computadora"
             objectFit="cover"
           />
         </div>
@@ -63,37 +39,7 @@ export default function ForgotPasswordPage() {
             </p>
           </div>
 
-          <form
-            onSubmit={handleSubmit(async (data) => {
-              await sendRecoveryEmail(data)
-              reset()
-              toast({
-                title:
-                  'Se ha enviado un correo con las instrucciones para recuperar tu contraseña.',
-                description: 'Revisa tu bandeja de entrada y de spam.',
-              })
-            })}
-          >
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-muted-foreground"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className="border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-primary focus:border-primary"
-                  {...register('email')}
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Enviando...' : 'Enviar'}
-              </Button>
-            </div>
-          </form>
+          <ForgotPasswordForm />
         </div>
       </div>
     </section>
