@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
           height: 600,
         },
         {
-          url: '/images/og.jpg',
+          url: '/images/og-category.jpg',
           width: 1800,
           height: 1600,
         },
