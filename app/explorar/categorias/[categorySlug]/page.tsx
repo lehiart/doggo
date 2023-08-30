@@ -21,6 +21,24 @@ export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
     description: `Servicios de categoria: ${getCategoryNameFromSlug(
       params.categorySlug,
     )}`,
+    openGraph: {
+      url: 'https://nextjs.org',
+      siteName: 'Doghouse',
+      images: [
+        {
+          url: '/images/open-graph.jpg',
+          width: 800,
+          height: 600,
+        },
+        {
+          url: '/images/og.jpg',
+          width: 1800,
+          height: 1600,
+        },
+      ],
+      locale: 'es_MX',
+      type: 'website',
+    },
   }
 }
 
