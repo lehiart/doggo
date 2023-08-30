@@ -25,12 +25,12 @@ export async function generateMetadata({ params }: ExploreByCategoryPageProps) {
       siteName: 'Doghouse',
       images: [
         {
-          url: '/images/open-graph.jpg',
+          url: '/images/seo/open-graph.jpg',
           width: 800,
           height: 600,
         },
         {
-          url: '/images/og-category.jpg',
+          url: '/images/seo/og-category.jpg',
           width: 1800,
           height: 1600,
         },

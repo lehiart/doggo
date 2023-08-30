@@ -10,6 +10,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { sendRecoveryEmail } from './actions'
 import { toast } from '@/components/ui/use-toast'
 import Image from 'next/image'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Recuperar contraseña',
+  description: 'Recupera tu contraseña',
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+  },
+}
 
 const formDataSchema = z.object({
   email: z.string().email(),

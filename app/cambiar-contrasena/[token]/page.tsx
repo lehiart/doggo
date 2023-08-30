@@ -1,54 +1,65 @@
-"use client";
+'use client'
 
-import React from "react";
-import z from "zod";
+import React from 'react'
+import z from 'zod'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { setNewPassword } from "./actions";
-import { toast } from "@/components/ui/use-toast";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { setNewPassword } from './actions'
+import { toast } from '@/components/ui/use-toast'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Cambiar contraseña',
+  description: 'Cambia tu contraseña',
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+  },
+}
 
 const formDataSchema = z
   .object({
     newPassword: z.string().min(1, {
-      message: "La contraseña debe tener al menos 8 caracteres.",
+      message: 'La contraseña debe tener al menos 8 caracteres.',
     }),
     confirmPassword: z.string().min(1, {
-      message: "La contraseña debe tener al menos 8 caracteres.",
+      message: 'La contraseña debe tener al menos 8 caracteres.',
     }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Los campos de contraseña nueva no coinciden.",
-    path: ["confirmPassword"],
-  });
+    message: 'Los campos de contraseña nueva no coinciden.',
+    path: ['confirmPassword'],
+  })
 
-type FormData = z.infer<typeof formDataSchema>;
+type FormData = z.infer<typeof formDataSchema>
 
 const showErrorToast = () => {
   toast({
     title:
-      "Hubo un error al actualizar la contraseña. Por favor intenta de nuevo.",
-    description: "Si el problema persiste, contacta a soporte.",
-    variant: "destructive",
-  });
-};
+      'Hubo un error al actualizar la contraseña. Por favor intenta de nuevo.',
+    description: 'Si el problema persiste, contacta a soporte.',
+    variant: 'destructive',
+  })
+}
 
 export default function ChangePasswordPage({
   params,
 }: {
-  params: { token: string };
+  params: { token: string }
 }) {
   const [showPasswords, setShowPasswords] = React.useState<
     Record<string, boolean>
   >({
     showNewPassword: false,
     showConfirmPassword: false,
-  });
+  })
 
   const {
     register,
@@ -58,30 +69,30 @@ export default function ChangePasswordPage({
   } = useForm<FormData>({
     shouldUseNativeValidation: true,
     resolver: zodResolver(formDataSchema),
-  });
+  })
 
   function handlePasswordIconClick(buttonName: string) {
     setShowPasswords((prevState) => ({
       ...prevState,
       [buttonName]: !prevState[buttonName],
-    }));
+    }))
   }
 
   async function onSubmit(data: FormData) {
     try {
-      const response = await setNewPassword(data, params.token);
-      reset();
+      const response = await setNewPassword(data, params.token)
+      reset()
 
       if (response?.status === 200) {
         toast({
           title:
-            "Se ha actualizado tu contraseña. Inicia sesión con tu nueva contraseña",
-        });
+            'Se ha actualizado tu contraseña. Inicia sesión con tu nueva contraseña',
+        })
       } else {
-        showErrorToast();
+        showErrorToast()
       }
     } catch (error) {
-      showErrorToast();
+      showErrorToast()
     }
   }
 
@@ -108,18 +119,18 @@ export default function ChangePasswordPage({
                 <Input
                   id="newPassword"
                   placeholder="Contraseña"
-                  type={showPasswords.showNewPassword ? "text" : "password"}
+                  type={showPasswords.showNewPassword ? 'text' : 'password'}
                   autoCapitalize="none"
                   autoComplete="password"
                   autoCorrect="off"
                   disabled={isSubmitting}
-                  {...register("newPassword")}
+                  {...register('newPassword')}
                 />
                 <Button
                   variant="outline"
                   type="button"
                   size="icon"
-                  onClick={() => handlePasswordIconClick("showNewPassword")}
+                  onClick={() => handlePasswordIconClick('showNewPassword')}
                   tabIndex={-1}
                   disabled={isSubmitting}
                 >
@@ -138,20 +149,20 @@ export default function ChangePasswordPage({
                     id="confirmPassword"
                     placeholder="Contraseña"
                     type={
-                      showPasswords.showConfirmPassword ? "text" : "password"
+                      showPasswords.showConfirmPassword ? 'text' : 'password'
                     }
                     autoCapitalize="none"
                     autoComplete="password"
                     autoCorrect="off"
                     disabled={isSubmitting}
-                    {...register("confirmPassword")}
+                    {...register('confirmPassword')}
                   />
                   <Button
                     variant="outline"
                     type="button"
                     size="icon"
                     onClick={() =>
-                      handlePasswordIconClick("showConfirmPassword")
+                      handlePasswordIconClick('showConfirmPassword')
                     }
                     tabIndex={-1}
                     disabled={isSubmitting}
@@ -172,11 +183,11 @@ export default function ChangePasswordPage({
               className="w-full mt-4"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Enviando..." : "Enviar"}
+              {isSubmitting ? 'Enviando...' : 'Enviar'}
             </Button>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }

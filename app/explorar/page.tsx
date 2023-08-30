@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   title: 'Explorar',
   description:
     'Explora todos los servicios para tu perro disponibles por categoria o en tu estado.',
+  openGraph: {
+    title: 'Explorar',
+    description:
+      'Explora todos los servicios para tu perro disponibles por categoria o en tu estado.',
+    url: 'https://www.doghouse.com/explorar',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.doghouse.com/images/seo/explorar.png',
+      },
+    ],
+  },
 }
 
 async function getCategoriesData() {

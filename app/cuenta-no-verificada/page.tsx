@@ -2,6 +2,17 @@ import React from 'react'
 import { MailIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import ResendVerifyEmailForm from '@/components/auth/resend-verify-email-form'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Cuenta no verificada',
+  description: 'Tu cuenta no esta verificada',
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+  },
+}
 
 function EmailNotVerifiedPage() {
   return (

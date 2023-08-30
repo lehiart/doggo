@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description:
     'Explora todos los servicios para tu perro disponibles por categoria.',
 }
+
 async function getCategoriesData() {
   const categoriesCount = await db.category.count()
 
