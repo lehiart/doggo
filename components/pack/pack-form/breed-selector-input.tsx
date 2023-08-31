@@ -34,10 +34,11 @@ export function BreedSelector({ form }: any) {
       control={form.control}
       name="breed"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>
+        <FormItem className="flex flex-col w-full">
+          <FormLabel className="mb-1">
             Raza <span className="text-red-500">*</span>
           </FormLabel>
+
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -45,7 +46,7 @@ export function BreedSelector({ form }: any) {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    'w-[200px] justify-between',
+                    'w-auto justify-between',
                     !field.value && 'text-muted-foreground',
                   )}
                 >
@@ -59,8 +60,8 @@ export function BreedSelector({ form }: any) {
               </FormControl>
             </PopoverTrigger>
 
-            <PopoverContent className="w-[200px] p-0">
-              <Command>
+            <PopoverContent className="p-0">
+              <Command className="w-full ">
                 <CommandInput placeholder="Buscar..." />
                 <CommandEmpty>No encontramos esa raza.</CommandEmpty>
                 <CommandGroup className="h-[200px] overflow-y-scroll">
@@ -88,9 +89,7 @@ export function BreedSelector({ form }: any) {
               </Command>
             </PopoverContent>
           </Popover>
-          {/* <FormDescription>
-            This is the breed that will be used in the dashboard.
-          </FormDescription> */}
+
           <FormMessage />
         </FormItem>
       )}

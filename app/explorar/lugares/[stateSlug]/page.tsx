@@ -75,7 +75,7 @@ async function ExploreByStatePage({ params }: ExploreByStatePageProps) {
             </h2>
             <p className="mb-8 text-xl">Por favor, intenta con otro estado</p>
             <Link href="/explorar/lugares">
-              <Button>Ir a la lista de estados</Button>
+              <Button variant="outline">Ir a la lista de estados</Button>
             </Link>
           </div>
         </div>

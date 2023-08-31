@@ -45,7 +45,7 @@ export default async function EditMemberPage({
 
       <h1>Editar miembro</h1>
 
-      <PackMemberForm id={user?.id} type="EDIT" member={member} />
+      <PackMemberForm userId={user.id} type="EDIT" member={member} />
     </div>
   )
 }

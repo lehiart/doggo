@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 import type { ChangeEvent } from 'react'
 import { toast } from '@/components/ui/use-toast'
@@ -22,9 +24,7 @@ export const ImageUploadInput = ({
 }) => {
   const profileInputFileRef = useRef<HTMLInputElement>(null)
 
-  const editImage = ({
-    target: { files },
-  }: ChangeEvent<HTMLInputElement>): void => {
+  const editImage = ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
     const imagesData = getImagesData(files)
 
     if (!imagesData) {
@@ -35,18 +35,19 @@ export const ImageUploadInput = ({
     const { imagesPreviewData, selectedImagesData } = imagesData
 
     const newImage = imagesPreviewData[0].src
-    //TODO: upload image to server with and save the url string to user profile
-    form.setValue('image', newImage)
+
+    form.setValue('imageURL', newImage)
+    form.setValue('imageData', selectedImagesData[0])
   }
 
   return (
     <div className="relative mx-auto my-16 flex w-32 justify-center md:w-[200px]">
       <FormField
         control={form.control}
-        name="image"
+        name="imageURL"
         render={({ field }) => {
           return (
-            <FormItem className="space-y-6">
+            <FormItem>
               <FormControl>
                 <>
                   <input
@@ -60,12 +61,12 @@ export const ImageUploadInput = ({
 
                   <div className="group aspect-square w-32 overflow-hidden rounded-full bg-muted sm:w-36 md:w-[200px]">
                     {field.value ? (
-                      <figure className="inner:!m-1 inner:rounded-full h-full w-full">
+                      <figure className="inner:!m-1 inner:rounded-full h-full w-full relative">
                         <Image
                           className="rounded-full object-cover transition "
                           src={field.value}
-                          alt="alt"
-                          layout="fill"
+                          alt="Imagen de perfil para tu mascota"
+                          fill
                         />
                       </figure>
                     ) : (
@@ -79,7 +80,7 @@ export const ImageUploadInput = ({
                             type="button"
                             className="group/inner absolute
                           left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                          rounded-full bg-black/25 p-4 text-white focus-visible:bg-black/50 group-hover:bg-black/50"
+                          rounded-full bg-black/25 p-4 text-white focus-visible:bg-black/20 group-hover:bg-black/50"
                             onClick={() => profileInputFileRef.current?.click()}
                           >
                             <CameraIcon className="hover-animation text-dark-primary h-6 w-6 " />

@@ -107,7 +107,7 @@ async function ExploreByCategoryPage({ params }: ExploreByCategoryPageProps) {
               Por favor, intenta con otra categoria de la lista
             </p>
             <Link href="/explorar/categorias">
-              <Button>Ir a la lista de categorias</Button>
+              <Button variant="outline">Ir a la lista de categorias</Button>
             </Link>
           </div>
         </div>

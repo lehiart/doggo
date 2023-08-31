@@ -27,54 +27,86 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PackMember } from '@prisma/client'
-import { DogIcon } from 'lucide-react'
+import { DogIcon, InfoIcon, Loader2Icon } from 'lucide-react'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card'
 
 const formSchema = z.object({
   name: z.string().min(1).max(25),
   breed: z.string(),
   age: z.string(),
   size: z.string(),
-  image: z.string().optional(),
+  imageURL: z.string().optional(),
+  imageData: z
+    .any()
+    .refine((value) => value instanceof File, {
+      message: 'Invalid file format.',
+    })
+    .optional(),
   gender: z.string(),
   weight: z.string().optional(),
 })
 
 interface MemberFormProps {
-  id: string | undefined
+  userId: string
   type: 'EDIT' | 'NEW'
   member?: PackMember | undefined
 }
 
-export default function PackMemberForm({ id, type, member }: MemberFormProps) {
+export default function PackMemberForm({
+  userId,
+  type,
+  member,
+}: MemberFormProps) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: member?.name,
+      name: member?.name || '',
       breed: member?.breed,
       age: member?.age,
       gender: member?.gender,
       size: member?.size,
       weight: member?.weight || undefined,
-      image: member?.imageURL || undefined,
+      imageURL: member?.imageURL || undefined,
     },
   })
 
   async function addNewMember(data: z.infer<typeof formSchema>) {
-    const payload = {
-      ...data,
-      id,
+    const formData = new FormData()
+    if (data.imageData) {
+      formData.append('imageData', data.imageData)
+      formData.append('imageName', data.imageData.name)
+    }
+
+    formData.append('userId', userId)
+    formData.append('name', data.name)
+    formData.append('breed', data.breed)
+    formData.append('age', data.age)
+    formData.append('gender', data.gender)
+    formData.append('size', data.size)
+
+    if (data.weight) {
+      formData.append('weight', data.weight)
     }
 
     try {
       const result = await fetch('/api/pack/member', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: formData,
       })
 
       if (result.ok) {
+        toast({
+          title: 'Miembro agregado',
+          description: 'Tu manada ha crecido!',
+        })
+
         router.refresh()
         router.push('/manada')
       }
@@ -91,7 +123,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
   const editMemberData = async (data: z.infer<typeof formSchema>) => {
     const payload = {
       ...data,
-      id,
+      userId,
       memberId: member?.id,
     }
 
@@ -134,7 +166,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ImageUploadInput form={form} Icon={DogIcon} />
 
-        <div className="grid grid-cols-2 items-end gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-end gap-4 mb-4 lg:mb-8">
           <FormField
             control={form.control}
             name="name"
@@ -158,7 +190,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
           <BreedSelector form={form} />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 lg:mb-8">
           <FormField
             control={form.control}
             name="age"
@@ -226,7 +258,7 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:mb-8">
           <FormField
             control={form.control}
             name="gender"
@@ -292,11 +324,22 @@ export default function PackMemberForm({ id, type, member }: MemberFormProps) {
         <Button
           type="submit"
           disabled={!form.formState.isValid || isSaving}
-          className="w-full md:w-1/2 mt-12"
+          className="w-full  lg:w-1/2 mt-8 lg:mt-14 flex justify-center mx-auto "
         >
+          {isSaving && <Loader2Icon className="h-5 w-5 animate-spin" />}
           {type === 'EDIT' ? 'Editar' : 'Agregar'}
         </Button>
       </form>
+      <HoverCard>
+        <HoverCardTrigger className="flex justify-center items-center mx-auto mt-6 gap-2 hover:underline">
+          <InfoIcon className="h-5 w-5" />
+          Por que pedimos esta información?
+        </HoverCardTrigger>
+        <HoverCardContent className="text-center text-sm">
+          Esta información nos ayuda a ofrecerte servicios mas personalizados
+          para tu mascota.
+        </HoverCardContent>
+      </HoverCard>
     </Form>
   )
 }

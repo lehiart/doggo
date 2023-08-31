@@ -9,6 +9,7 @@ const nextConfig = {
       'unsplash.com',
       'source.unsplash.com',
       'www-doggo.s3.us-east-005.backblazeb2.com',
+      'www-doggo-pack-pictures.s3.us-east-005.backblazeb2.com',
     ],
   },
   experimental: {
