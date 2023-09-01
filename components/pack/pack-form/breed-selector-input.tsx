@@ -1,7 +1,7 @@
 'use-client'
 
 import * as React from 'react'
-import { CheckIcon, ChevronsUpDown } from 'lucide-react'
+import { CheckIcon, ChevronsUpDown, InfoIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -25,6 +25,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { breeds } from '../../../lib/breeds'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card'
 
 export function BreedSelector({ form }: any) {
   const [open, setOpen] = React.useState(false)
@@ -35,8 +40,19 @@ export function BreedSelector({ form }: any) {
       name="breed"
       render={({ field }) => (
         <FormItem className="flex flex-col w-full">
-          <FormLabel className="mb-1">
-            Raza <span className="text-red-500">*</span>
+          <FormLabel className="mb-1 flex justify-between">
+            <p>
+              Raza <span className="text-red-500">*</span>
+            </p>
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <InfoIcon className="h-4 w-4" color="black" />
+              </HoverCardTrigger>
+              <HoverCardContent className="text-center">
+                Si tu perro es de raza unica, selecciona Mestizo o la raza que
+                más se le parezca.
+              </HoverCardContent>
+            </HoverCard>
           </FormLabel>
 
           <Popover open={open} onOpenChange={setOpen}>
@@ -70,7 +86,7 @@ export function BreedSelector({ form }: any) {
                       value={breed.value}
                       key={breed.value}
                       onSelect={(value) => {
-                        form.setValue('breed', value)
+                        form.setValue('breed', value, { shouldValidate: true })
                         setOpen(false)
                       }}
                     >

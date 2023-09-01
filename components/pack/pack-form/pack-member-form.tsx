@@ -35,10 +35,19 @@ import {
 } from '@/components/ui/hover-card'
 
 const formSchema = z.object({
-  name: z.string().min(1).max(25),
-  breed: z.string(),
-  age: z.string(),
-  size: z.string(),
+  name: z
+    .string()
+    .min(1, { message: 'El nombre no puede ir vacio' })
+    .max(25, { message: 'El nombre no puede ser mayor a 25 letras' }),
+  breed: z.string({
+    required_error: 'Debes seleccionar una raza',
+  }),
+  age: z.string({
+    required_error: 'Debes seleccionar una edad',
+  }),
+  size: z.string({
+    required_error: 'Debes seleccionar un tamaño',
+  }),
   imageURL: z.string().optional(),
   imageData: z
     .any()
@@ -46,7 +55,9 @@ const formSchema = z.object({
       message: 'Invalid file format.',
     })
     .optional(),
-  gender: z.string(),
+  gender: z.string({
+    required_error: 'Debes seleccionar un genero',
+  }),
   weight: z.string().optional(),
 })
 
@@ -166,7 +177,7 @@ export default function PackMemberForm({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ImageUploadInput form={form} Icon={DogIcon} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-end gap-4 mb-4 lg:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2  gap-4 mb-4 lg:mb-8 items-baseline">
           <FormField
             control={form.control}
             name="name"
@@ -323,7 +334,7 @@ export default function PackMemberForm({
 
         <Button
           type="submit"
-          disabled={!form.formState.isValid || isSaving}
+          disabled={isSaving}
           className="w-full  lg:w-1/2 mt-8 lg:mt-14 flex justify-center mx-auto "
         >
           {isSaving && <Loader2Icon className="h-5 w-5 animate-spin" />}
@@ -332,8 +343,8 @@ export default function PackMemberForm({
       </form>
       <HoverCard>
         <HoverCardTrigger className="flex justify-center items-center mx-auto mt-6 gap-2 hover:underline">
-          <InfoIcon className="h-5 w-5" />
-          Por que pedimos esta información?
+          <InfoIcon className="h-4 w-4" />
+          <span className="text-sm">Por que pedimos esta información?</span>
         </HoverCardTrigger>
         <HoverCardContent className="text-center text-sm">
           Esta información nos ayuda a ofrecerte servicios mas personalizados

@@ -149,9 +149,9 @@ export function UserRegisterForm() {
                 />
                 <Button
                   variant="outline"
+                  type="button"
                   size="icon"
                   onClick={(e) => handlePasswordIconClick(e)}
-                  tabIndex={-1}
                   disabled={isLoading || isSocialLoading}
                 >
                   <span className="sr-only">Ver contraseña</span>

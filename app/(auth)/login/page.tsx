@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import { UserAuthForm } from '@/components/auth/user-auth-form'
+import { UserLoginForm } from '@/components/auth/user-login-form'
 import { ChevronLeft, Dog } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <UserAuthForm />
+        <UserLoginForm />
 
         <p className="px-8 text-center text-sm text-muted-foreground">
           <Link

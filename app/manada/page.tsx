@@ -50,12 +50,12 @@ async function MyPackPage() {
 
           <Separator className="my-8 lg:hidden" />
 
-          <div id="pack-list" className="p-4 lg:mt-8">
+          <div id="pack-list" className="md:p-4 lg:mt-8">
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               {myPack?.members.map((member) => (
                 <li key={member.id}>
                   <Card className="mb-4">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-2">
+                    <CardHeader className="flex flex-col items-center justify-between space-y-2">
                       {member.imageURL && (
                         <Image
                           src={member.imageURL}

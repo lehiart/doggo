@@ -22,11 +22,11 @@ import {
 } from '@/lib/constants'
 import Link from 'next/link'
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userAuthSchema>
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   const {
     register,
     handleSubmit,
@@ -128,10 +128,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 {...register('password')}
               />
               <Button
+                type="button"
                 variant="outline"
                 size="icon"
                 onClick={(e) => handlePasswordIconClick(e)}
-                tabIndex={-1}
                 disabled={isLoading || isSocialLoading}
               >
                 <span className="sr-only">Ver contraseña</span>
