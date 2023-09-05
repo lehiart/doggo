@@ -46,7 +46,7 @@ export function BreedSelector({ form }: any) {
             </p>
             <HoverCard>
               <HoverCardTrigger asChild>
-                <InfoIcon className="h-4 w-4" color="black" />
+                <InfoIcon className="h-4 w-4 mr-1" />
               </HoverCardTrigger>
               <HoverCardContent className="text-center">
                 Si tu perro es de raza unica, selecciona Mestizo o la raza que
