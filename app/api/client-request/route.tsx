@@ -15,6 +15,22 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    ////////////////////////
+
+    // Create 100 items with variations
+    // const requestsToCreate = Array.from({ length: 100 }).map((_, index) => ({
+    //   message: `${message} - ${index + 1}`, // Add a unique identifier to each message
+    //   userId,
+    //   companyId,
+    //   selectedItems,
+    // }))
+
+    // await db.request.createMany({
+    //   data: requestsToCreate,
+    // })
+
+    ////////////////////
+
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error(error, 'CREATE_CLIENT_REQUEST_ERROR')

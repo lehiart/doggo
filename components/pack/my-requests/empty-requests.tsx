@@ -2,18 +2,19 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
-function EmptyPack() {
+export default function EmptyRequests() {
   return (
     <section className="flex flex-col items-center justify-center w-full h-full mt-28">
       <h2 className="lg:text-4xl font-bold text-2xl mb-12 animate-slide-down text-center">
-        Aún no tienes miembros en tu manada
+        Aún no tienes solicitudes
       </h2>
-
-      <Link href="manada/nuevo">
-        <Button>Agregar nuevo</Button>
+      <h3 className="text-center mb-12 text-xl w-[300px]">
+        Te invitamos a explorar todas nuestras emoresas y servicios ¡Hay mucho
+        por descubrir!
+      </h3>
+      <Link href="/explorar">
+        <Button>Ir a explorar</Button>
       </Link>
     </section>
   )
 }
-
-export default EmptyPack

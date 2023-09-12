@@ -24,7 +24,7 @@ export const columns: ColumnDef<Request>[] = [
 
       return (
         <div className="text-center font-medium">
-          {date.toLocaleDateString('es-ES', {
+          {date.toLocaleDateString('es-MX', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',

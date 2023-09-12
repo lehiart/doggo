@@ -6,12 +6,13 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table'
 
 import {
@@ -22,22 +23,29 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+
+import { DataTableToolbar } from './data-table-toolbar'
+import { DataTablePagination } from './data-table-pagination'
+import { cn } from '@/lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  className?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  className,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+
   const table = useReactTable({
     data,
     columns,
@@ -47,24 +55,18 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
   })
 
   return (
-    <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter message..."
-          value={(table.getColumn('message')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('message')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>
+    <div className={cn('w-full', className)}>
+      <DataTableToolbar table={table} />
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -85,14 +87,13 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  // className="cursor-pointer"
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  // onClick={() => console.log('row clicked', row.original.id)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -110,31 +111,15 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No se encontraron resultados.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
       </div>
+
+      <DataTablePagination table={table} />
     </div>
   )
 }
