@@ -137,8 +137,8 @@ model Company {
   pro  Boolean @default(false)
   slug String  @unique
 
+  name             String
   image            String?
-  name             String?
   description      String?
   streetAddress    String?
   streetNumber     String?

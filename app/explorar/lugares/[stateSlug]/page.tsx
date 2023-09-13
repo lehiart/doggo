@@ -138,8 +138,12 @@ async function ExploreByStatePage({ params }: ExploreByStatePageProps) {
                     />
                   </CardHeader>
                   <CardContent>
-                    <CardTitle className="mb-4">{item.title}</CardTitle>
-                    <CardDescription>{item.description}</CardDescription>
+                    <CardTitle className="mb-4 break-words">
+                      {item.title}
+                    </CardTitle>
+                    <CardDescription className="break-words">
+                      {item.description}
+                    </CardDescription>
                   </CardContent>
                   <CardFooter>
                     {item.onlineBusiness && (

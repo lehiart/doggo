@@ -11,14 +11,13 @@ export async function DELETE(
   const session = await getServerSession(authOptions)
 
   try {
-    await db.favoriteItems.update({
+    // remove item from favorites using the itemId and userId
+    await db.favoriteItems.deleteMany({
       where: {
-        userId: session?.user?.id,
-      },
-      data: {
-        items: {
-          disconnect: { id: itemId },
-        },
+        AND: [
+          { userId: session?.user?.id },
+          { items: { some: { id: itemId } } },
+        ],
       },
     })
 

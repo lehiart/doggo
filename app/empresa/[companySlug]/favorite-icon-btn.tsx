@@ -5,30 +5,35 @@ import { HeartIcon } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
 
-interface AddToFavoriteIconProps {
+interface FavoriteIconProps {
   itemId: string
   userId: string
-  filled: boolean
+  isFavorite: boolean
+  onToggle: (itemId: string) => void
 }
 
-export default function AddToFavoriteIcon({
+export default function FavoriteIcon({
   itemId,
   userId,
-  filled,
-}: AddToFavoriteIconProps) {
+  isFavorite,
+  onToggle,
+}: FavoriteIconProps) {
   const router = useRouter()
 
   async function handleIconClick(
     itemId: string,
     userId: string,
-    filled: boolean,
+    isFavorite: boolean,
   ) {
+    console.log(itemId, userId, isFavorite)
     if (!userId || !itemId) {
       return
     }
 
+    onToggle(itemId)
+
     try {
-      if (filled) {
+      if (isFavorite) {
         await fetch(`/api/favorites/items/${itemId}`, {
           method: 'DELETE',
         })
@@ -39,11 +44,11 @@ export default function AddToFavoriteIcon({
         })
       }
 
-      router.refresh()
+      // router.refresh()
 
       toast({
         title: 'Éxito',
-        description: `Se ${filled ? 'eliminó de' : 'agregó a'} favoritos`,
+        description: `Se ${isFavorite ? 'eliminó de' : 'agregó a'} favoritos`,
       })
     } catch (error) {
       toast({
@@ -56,10 +61,10 @@ export default function AddToFavoriteIcon({
 
   return (
     <HeartIcon
-      fill={filled ? 'red' : 'none'}
-      color={filled ? 'red' : 'white'}
-      className="h-4 w-4 cursor-pointer hover:opacity-50 transition-opacity dark:border-white"
-      onClick={() => handleIconClick(itemId, userId, filled)}
+      fill={isFavorite ? 'red' : 'none'}
+      color={isFavorite ? 'red' : 'currentColor'}
+      className="h-4 w-4 cursor-pointer hover:opacity-50 transition-opacity"
+      onClick={() => handleIconClick(itemId, userId, isFavorite)}
     />
   )
 }

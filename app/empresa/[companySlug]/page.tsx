@@ -1,14 +1,12 @@
-import { Company, FavoriteItems, Item } from '@prisma/client'
+import { Company } from '@prisma/client'
 import { db } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { TerminalIcon } from 'lucide-react'
-import AddOpinionDialog from '@/components/dashboard/opinions/add-opinion-dialog'
 import { getCurrentUser } from '@/lib/session'
 
 import ClientRequestForm from './client-request-form'
-import AddToFavoriteIcon from './add-to-favorite-icon'
-// import { ROLE } from '@/lib/constants'
+import ItemsSection from './items-section'
 
 async function getCompanyData(companySlug: Company['slug']) {
   return await db.company.findUnique({
@@ -94,39 +92,12 @@ export default async function CompanyPublicPage({
         )}
         <code className="max-w-2xl">{JSON.stringify(company, null, 2)}</code>
         Items:
-        {company.items.map((item: Item) => (
-          <div
-            key={item.id}
-            className="flex flex-col items-center space-y-4 border border-gray-200 p-4"
-          >
-            {/* user?.role === ROLE.USER */}
-
-            {user?.id && (
-              <AddToFavoriteIcon
-                itemId={item.id}
-                userId={user.id}
-                filled={
-                  favoritesList?.items.find(
-                    (fav: FavoriteItems) => fav.id === item.id,
-                  )?.id
-                }
-              />
-            )}
-
-            <span>{item.title}</span>
-
-            {/* user?.role === ROLE.USER */}
-
-            {user?.id && (
-              <AddOpinionDialog
-                itemId={item.id}
-                name={item.title}
-                companyId={item.companyId}
-                userId={user.id}
-              />
-            )}
-          </div>
-        ))}
+        <ItemsSection
+          items={company.items}
+          userId={user?.id}
+          role={user?.role}
+          favoritesList={favoritesList.items}
+        />
       </div>
     </div>
   )

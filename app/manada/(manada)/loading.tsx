@@ -19,10 +19,10 @@ export default function MyPackLoadingPage() {
 
             <CardHeader className="flex flex-col">
               <CardTitle>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardTitle>
               <CardDescription>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-2">
@@ -39,10 +39,10 @@ export default function MyPackLoadingPage() {
 
             <CardHeader className="flex flex-col">
               <CardTitle>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardTitle>
               <CardDescription>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-2">
@@ -59,10 +59,10 @@ export default function MyPackLoadingPage() {
 
             <CardHeader className="flex flex-col">
               <CardTitle>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardTitle>
               <CardDescription>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-2">
@@ -79,10 +79,10 @@ export default function MyPackLoadingPage() {
 
             <CardHeader className="flex flex-col">
               <CardTitle>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardTitle>
               <CardDescription>
-                <Skeleton className="w-[100] h-8" />
+                <Skeleton className="w-[100px] h-8" />
               </CardDescription>
             </CardHeader>
             <CardFooter className="gap-2">

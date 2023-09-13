@@ -3,7 +3,9 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { itemId, userId } = body
+  const { userId, itemId } = body
+
+  console.log(body, 'body')
 
   try {
     await db.favoriteItems.update({
@@ -12,11 +14,12 @@ export async function POST(request: NextRequest) {
       },
       data: {
         items: {
-          connect: { id: itemId },
+          connect: {
+            id: itemId,
+          },
         },
       },
     })
-
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error(error, 'ADD_TO_FAVORITES_ERROR')

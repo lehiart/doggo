@@ -61,7 +61,7 @@ function CompanyItemsPage() {
         {items.map((item: Item) => (
           <Card key={item.id}>
             <CardHeader>
-              <CardTitle>{item.title}</CardTitle>
+              <CardTitle className="break-words">{item.title}</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription>
