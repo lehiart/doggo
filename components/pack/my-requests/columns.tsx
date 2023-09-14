@@ -2,12 +2,12 @@
 
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Company, Item, Request } from '@prisma/client'
+import { Company, Item } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpRightIcon } from 'lucide-react'
 import Link from 'next/link'
-import { DataTableColumnHeader } from './data-table-column-header'
 import { UserRequestQuery } from '@/app/manada/solicitudes/page'
+import { DataTableColumnHeader } from '@/components/data-table-column-header'
 
 export const columns: ColumnDef<UserRequestQuery>[] = [
   {

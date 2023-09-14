@@ -15,18 +15,12 @@ import { Settings2Icon } from 'lucide-react'
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>
-}
-
-const columns_name_map: { [key: string]: string } = {
-  createdAt: 'Fecha',
-  status: 'Estatus',
-  message: 'Mensaje',
-  company: 'Empresa',
-  selectedItems: 'Items',
+  columnNames: Record<string, string>
 }
 
 export function DataTableViewOptions<TData>({
   table,
+  columnNames,
 }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
@@ -57,7 +51,7 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {columns_name_map[column.id] ?? column.id}
+                {columnNames[column.id] ?? column.id}
               </DropdownMenuCheckboxItem>
             )
           })}

@@ -52,3 +52,30 @@ export async function POST(request: NextRequest) {
     return new NextResponse('Something went wrong', { status: 500 })
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { opinionId, rating, comment } = body
+
+    if (!opinionId) {
+      return new Response(null, { status: 403 })
+    }
+
+    await db.opinion.update({
+      where: {
+        id: opinionId,
+      },
+      data: {
+        rating,
+        comment,
+        updatedAt: new Date(),
+      },
+    })
+
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error(error, 'UPDATE_ONE_OPINION_ERROR')
+    return new NextResponse('Something went wrong', { status: 500 })
+  }
+}

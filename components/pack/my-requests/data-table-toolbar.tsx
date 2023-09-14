@@ -6,9 +6,9 @@ import { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { DataTableFacetedFilter } from './data-table-faceted-filter'
-import { DataTableViewOptions } from './data-table-view-options'
 import { Status } from '@prisma/client'
+import { DataTableViewOptions } from '@/components/data-table-view-options'
+import { DataTableFacetedFilter } from '@/components/pack/my-requests/data-table-faceted-filter'
 
 export const statuses = [
   {
@@ -27,6 +27,14 @@ export const statuses = [
     icon: XCircleIcon,
   },
 ]
+
+const columns_name_map: { [key: string]: string } = {
+  createdAt: 'Fecha',
+  status: 'Estatus',
+  message: 'Mensaje',
+  company: 'Empresa',
+  selectedItems: 'Items',
+}
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -71,7 +79,7 @@ export function DataTableToolbar<TData>({
         )}
       </div>
 
-      <DataTableViewOptions table={table} />
+      <DataTableViewOptions table={table} columnNames={columns_name_map} />
     </div>
   )
 }
