@@ -136,6 +136,7 @@ export default function MyFavoritesList({ items }: MyFavoritesListProps) {
                   >
                     {selectedFilters.length}
                   </Badge>
+                  x
                 </>
               ) : null}
             </Button>
@@ -194,13 +195,14 @@ export default function MyFavoritesList({ items }: MyFavoritesListProps) {
         </Popover>
       </div>
 
-      <ul className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
         {currentItems.map((item) => (
           <Link
             key={item.id}
             href={`/empresa/${item.company.slug}/#${item.title}`}
+            className="mx-auto my-0"
           >
-            <Card className="hover:shadow-md h-full">
+            <Card className="hover:shadow-md h-full max-w-[500px] break-words break-all	">
               <CardHeader className="w-full p-0 relative">
                 <Image
                   src="https://source.unsplash.com/IPheOySCW7A"
@@ -211,7 +213,7 @@ export default function MyFavoritesList({ items }: MyFavoritesListProps) {
 
                 <HeartButton />
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="pt-6 relative">
                 <CardTitle className="mb-4 break-words">{item.title}</CardTitle>
                 <p className="break-words">Por: {item.company.name}</p>
                 <CardDescription className="break-words">

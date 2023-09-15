@@ -20,7 +20,7 @@ interface MyFavoritesData {
   items: MyFavoritesQuery[]
 }
 
-async function GetUserFavorites(): Promise<MyFavoritesData | null> {
+async function getUserFavorites(): Promise<MyFavoritesData | null> {
   const user = await getCurrentUser()
 
   if (!user) return null
@@ -52,7 +52,7 @@ async function GetUserFavorites(): Promise<MyFavoritesData | null> {
 }
 
 async function UserFavoritesPage() {
-  const myFavorites = await GetUserFavorites()
+  const myFavorites = await getUserFavorites()
 
   return (
     <main className="h-full w-full">

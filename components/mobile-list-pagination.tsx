@@ -12,7 +12,7 @@ import React from 'react'
 
 interface MobileListPaginationProps {
   itemsPerPage: number
-  totalPosts: number
+  totalItems: number
   paginate: (number: number) => void
   previousPage: () => void
   nextPage: () => void
@@ -21,7 +21,7 @@ interface MobileListPaginationProps {
 
 const MobileListPagination = ({
   itemsPerPage,
-  totalPosts,
+  totalItems,
   paginate,
   previousPage,
   nextPage,
@@ -29,7 +29,7 @@ const MobileListPagination = ({
 }: MobileListPaginationProps) => {
   const pageNumbers = []
 
-  for (let i = 1; i <= Math.ceil(totalPosts / itemsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
     pageNumbers.push(i)
   }
 
@@ -39,7 +39,7 @@ const MobileListPagination = ({
         variant="outline"
         className="h-8 w-8 p-0 flex"
         onClick={() => paginate(1)}
-        disabled={currentPage === 1 || totalPosts === 0}
+        disabled={currentPage === 1 || totalItems === 0}
       >
         <span className="sr-only">Ir a la primera página</span>
         <ChevronsLeftIcon className="h-4 w-4" />
@@ -48,7 +48,7 @@ const MobileListPagination = ({
         variant="outline"
         className="h-8 w-8 p-0"
         onClick={() => previousPage()}
-        disabled={currentPage === 1 || totalPosts === 0}
+        disabled={currentPage === 1 || totalItems === 0}
       >
         <span className="sr-only">Ir a la página anterior</span>
         <ChevronLeftIcon className="h-4 w-4" />
@@ -70,7 +70,7 @@ const MobileListPagination = ({
         variant="outline"
         className="h-8 w-8 p-0"
         onClick={() => nextPage()}
-        disabled={currentPage === pageNumbers.length || totalPosts === 0}
+        disabled={currentPage === pageNumbers.length || totalItems === 0}
       >
         <span className="sr-only">Ir a la página siguiente</span>
         <ChevronRightIcon className="h-4 w-4" />
@@ -80,7 +80,7 @@ const MobileListPagination = ({
         variant="outline"
         className="h-8 w-8 p-0 flex"
         onClick={() => paginate(pageNumbers.length)}
-        disabled={currentPage === pageNumbers.length || totalPosts === 0}
+        disabled={currentPage === pageNumbers.length || totalItems === 0}
       >
         <span className="sr-only">Ir a la ultima página</span>
         <ChevronsRightIcon className="h-4 w-4" />

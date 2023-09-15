@@ -63,7 +63,7 @@ export function PackMemberButtons({ memberId }: { memberId: string }) {
           Eliminando...
         </Button>
       ) : (
-        <Link href={`manada/editar/${memberId}`} className="w-full">
+        <Link href={`/manada/editar/${memberId}`} className="w-full">
           <Button variant="secondary" className="w-full" disabled={isDeleting}>
             Editar
           </Button>

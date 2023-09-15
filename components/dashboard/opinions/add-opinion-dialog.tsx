@@ -52,8 +52,6 @@ export default function AddOpinionDialog({
   const [open, setOpen] = useState(false)
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('submitted:', data)
-
     try {
       const response = await fetch('/api/opinions', {
         method: 'POST',

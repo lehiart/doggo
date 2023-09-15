@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import MobileListPagination from './mobile-list-pagination'
 import MobileListCard from './mobile-list-card'
 import { UserRequestQuery } from '@/app/manada/solicitudes/page'
 import { Button } from '@/components/ui/button'
@@ -23,6 +22,7 @@ import { CheckIcon, PlusCircleIcon, X } from 'lucide-react'
 import { statuses } from './data-table-toolbar'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
+import MobileListPagination from '@/components/mobile-list-pagination'
 
 interface MobileListProps {
   requests: UserRequestQuery[]
@@ -217,7 +217,7 @@ export default function MobileList({ requests }: MobileListProps) {
 
       <MobileListPagination
         itemsPerPage={itemsPerPage}
-        totalPosts={filteredRequests.length}
+        totalItems={filteredRequests.length}
         paginate={paginate}
         previousPage={previousPage}
         nextPage={nextPage}

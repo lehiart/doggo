@@ -15,7 +15,6 @@ interface SocialMediaLink {
 export default function CompanySettingsContainer({
   company,
 }: CompanySettingsContainerProps) {
-  console.log(company)
   return (
     <div>
       <div>NAME: {company.name}</div>

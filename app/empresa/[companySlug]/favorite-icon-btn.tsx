@@ -25,7 +25,6 @@ export default function FavoriteIcon({
     userId: string,
     isFavorite: boolean,
   ) {
-    console.log(itemId, userId, isFavorite)
     if (!userId || !itemId) {
       return
     }

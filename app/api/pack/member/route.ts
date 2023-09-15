@@ -61,8 +61,6 @@ export async function POST(request: NextRequest) {
       )
 
       url = `https://${process.env.B2_BUCKET_NAME}.${process.env.B2_BUCKET_URL}/${filename}`
-
-      console.log('Success!', 'File uploaded to S3', url)
     }
 
     await db.packMember.create({
@@ -88,7 +86,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id, memberId, ...data } = body
+    const { userId, memberId, ...data } = body
 
     if (!memberId) {
       return new Response(null, { status: 403 })
@@ -96,7 +94,7 @@ export async function PUT(request: NextRequest) {
 
     // Ensure user is authenticated and has access to this user.
     const session = await getServerSession(authOptions)
-    if (!session?.user || id !== session?.user.id) {
+    if (!session?.user || userId !== session?.user.id) {
       return new Response(null, { status: 403 })
     }
 

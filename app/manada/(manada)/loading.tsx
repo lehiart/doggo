@@ -21,9 +21,9 @@ export default function MyPackLoadingPage() {
               <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
               </CardTitle>
-              <CardDescription>
+              <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
-              </CardDescription>
+              </CardTitle>
             </CardHeader>
             <CardFooter className="gap-2">
               <Skeleton className="w-2/3 h-8" />
@@ -41,9 +41,9 @@ export default function MyPackLoadingPage() {
               <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
               </CardTitle>
-              <CardDescription>
+              <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
-              </CardDescription>
+              </CardTitle>
             </CardHeader>
             <CardFooter className="gap-2">
               <Skeleton className="w-2/3 h-8" />
@@ -61,9 +61,9 @@ export default function MyPackLoadingPage() {
               <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
               </CardTitle>
-              <CardDescription>
+              <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
-              </CardDescription>
+              </CardTitle>
             </CardHeader>
             <CardFooter className="gap-2">
               <Skeleton className="w-2/3 h-8" />
@@ -81,9 +81,9 @@ export default function MyPackLoadingPage() {
               <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
               </CardTitle>
-              <CardDescription>
+              <CardTitle>
                 <Skeleton className="w-[100px] h-8" />
-              </CardDescription>
+              </CardTitle>
             </CardHeader>
             <CardFooter className="gap-2">
               <Skeleton className="w-2/3 h-8" />

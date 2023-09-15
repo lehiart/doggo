@@ -27,7 +27,6 @@ const ListPagination = ({
   nextPage,
   currentPage,
 }: ListPaginationProps) => {
-  console.log(totalItems, itemsPerPage)
   const pageNumbers = []
 
   for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {

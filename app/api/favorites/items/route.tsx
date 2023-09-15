@@ -5,8 +5,6 @@ export async function POST(request: NextRequest) {
   const body = await request.json()
   const { userId, itemId } = body
 
-  console.log(body, 'body')
-
   try {
     await db.favoriteItems.update({
       where: {

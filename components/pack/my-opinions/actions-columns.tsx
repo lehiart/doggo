@@ -45,7 +45,7 @@ export default function ActionsColumn({ opinionItem }: ActionsColumnProps) {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+          <DropdownMenuLabel>Opciones</DropdownMenuLabel>
 
           <DialogTrigger asChild>
             <DropdownMenuItem onSelect={() => setDialogType(DialogType.EDIT)}>

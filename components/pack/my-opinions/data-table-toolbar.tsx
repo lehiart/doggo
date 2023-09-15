@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckIcon, PlusCircleIcon } from 'lucide-react'
+import { CheckIcon, PlusCircleIcon, X } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
@@ -37,6 +37,7 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const [selectedFilter, setSelectedFilter] = useState<string>('comment')
+  const isFiltered = table.getState().columnFilters.length > 0
 
   return (
     <div className="flex items-center justify-between py-4">
@@ -51,6 +52,17 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-1/3"
         />
+
+        {isFiltered && (
+          <Button
+            variant="outline"
+            onClick={() => table.resetColumnFilters()}
+            className="h-8 px-2 lg:px-3"
+          >
+            Borrar
+            <X className="ml-2 h-4 w-4" />
+          </Button>
+        )}
 
         <Popover>
           <PopoverTrigger asChild>

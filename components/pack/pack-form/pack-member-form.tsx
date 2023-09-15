@@ -337,7 +337,7 @@ export default function PackMemberForm({
           disabled={isSaving}
           className="w-full  lg:w-1/2 mt-8 lg:mt-14 flex justify-center mx-auto "
         >
-          {isSaving && <Loader2Icon className="h-5 w-5 animate-spin" />}
+          {isSaving && <Loader2Icon className="h-5 w-5 animate-spin mr-2" />}
           {type === 'EDIT' ? 'Editar' : 'Agregar'}
         </Button>
       </form>

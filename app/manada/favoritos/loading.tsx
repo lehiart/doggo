@@ -28,9 +28,9 @@ export default function MyFavoritesLoadingPage() {
             <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
             </CardTitle>
-            <CardDescription className="break-words">
+            <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
-            </CardDescription>
+            </CardTitle>
           </CardContent>
           <CardFooter className="flex flex-col items-start">
             <Skeleton className="w-1/2 h-8" />
@@ -46,9 +46,9 @@ export default function MyFavoritesLoadingPage() {
             <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
             </CardTitle>
-            <CardDescription className="break-words">
+            <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
-            </CardDescription>
+            </CardTitle>
           </CardContent>
           <CardFooter className="flex flex-col items-start">
             <Skeleton className="w-1/2 h-8" />
@@ -64,9 +64,9 @@ export default function MyFavoritesLoadingPage() {
             <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
             </CardTitle>
-            <CardDescription className="break-words">
+            <CardTitle className="mb-4 break-words">
               <Skeleton className="w-full h-8" />
-            </CardDescription>
+            </CardTitle>
           </CardContent>
           <CardFooter className="flex flex-col items-start">
             <Skeleton className="w-1/2 h-8" />

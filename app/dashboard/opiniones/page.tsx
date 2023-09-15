@@ -3,13 +3,7 @@ import React from 'react'
 
 import { useDashboardContext } from '@/components/dashboard/dashboard-context'
 import { useCompanyOpinions } from '@/lib/swr'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { Opinion } from '@prisma/client'
 export default function CompanyOpinionsPage() {
   const { selectedCompany } = useDashboardContext()
@@ -19,8 +13,6 @@ export default function CompanyOpinionsPage() {
 
   if (isLoading) return <div>Loading...</div>
   if (!selectedCompany || !opinions) return null
-
-  console.log(opinions)
 
   return (
     <div className="h-screen space-y-4">
