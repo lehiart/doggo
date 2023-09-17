@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { EyeIcon, EyeOffIcon, Loader2 } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, FacebookIcon, Loader2 } from 'lucide-react'
 import { GoogleIcon } from '../ui/google-icon'
 import {
   INVALID_CREDENTIALS_MSG,
@@ -36,7 +36,9 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   })
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isSocialLoading, setIsSocialLoading] = React.useState<boolean>(false)
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
+  const [isFacebookLoading, setIsFacebookLoading] =
+    React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -100,7 +102,7 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isSocialLoading}
+              disabled={isLoading || isGoogleLoading || isFacebookLoading}
               {...register('email')}
             />
 
@@ -124,7 +126,7 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
                 autoCapitalize="none"
                 autoComplete="password"
                 autoCorrect="off"
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
                 {...register('password')}
               />
               <Button
@@ -132,7 +134,7 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
                 variant="outline"
                 size="icon"
                 onClick={(e) => handlePasswordIconClick(e)}
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
               >
                 <span className="sr-only">Ver contraseña</span>
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
@@ -154,7 +156,10 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
             </p>
           </div>
 
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            type="submit"
+            disabled={isLoading || isGoogleLoading || isFacebookLoading}
+          >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Iniciar sesión
           </Button>
@@ -176,17 +181,34 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
         type="button"
         variant="outline"
         onClick={() => {
-          setIsSocialLoading(true)
+          setIsGoogleLoading(true)
           signIn('google')
         }}
-        disabled={isLoading || isSocialLoading}
+        disabled={isLoading || isGoogleLoading || isFacebookLoading}
       >
-        {isSocialLoading ? (
+        {isGoogleLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <GoogleIcon className="h-4 w-[24px]" />
         )}
         Google
+      </Button>
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => {
+          setIsFacebookLoading(true)
+          signIn('facebook')
+        }}
+        disabled={isLoading || isGoogleLoading || isFacebookLoading}
+      >
+        {isFacebookLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <FacebookIcon className="h-4 w-[24px]" />
+        )}
+        Facebook
       </Button>
     </div>
   )

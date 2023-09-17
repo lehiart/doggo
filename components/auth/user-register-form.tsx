@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { EyeIcon, EyeOffIcon, Loader2 } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, FacebookIcon, Loader2 } from 'lucide-react'
 import { GoogleIcon } from '@/components/ui/google-icon'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -28,7 +28,9 @@ export function UserRegisterForm() {
   })
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [isSocialLoading, setIsSocialLoading] = React.useState<boolean>(false)
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
+  const [isFacebookLoading, setIsFacebookLoading] =
+    React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [roleType, setRoleType] = React.useState<string>('USER')
 
@@ -97,7 +99,7 @@ export function UserRegisterForm() {
                 autoCapitalize="none"
                 autoComplete="username"
                 autoCorrect="off"
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
                 {...register('name')}
               />
 
@@ -120,7 +122,7 @@ export function UserRegisterForm() {
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
-                disabled={isLoading || isSocialLoading}
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
                 {...register('email')}
               />
 
@@ -144,7 +146,7 @@ export function UserRegisterForm() {
                   autoCapitalize="none"
                   autoComplete="password"
                   autoCorrect="off"
-                  disabled={isLoading || isSocialLoading}
+                  disabled={isLoading || isGoogleLoading || isFacebookLoading}
                   {...register('password')}
                 />
                 <Button
@@ -152,7 +154,7 @@ export function UserRegisterForm() {
                   type="button"
                   size="icon"
                   onClick={(e) => handlePasswordIconClick(e)}
-                  disabled={isLoading || isSocialLoading}
+                  disabled={isLoading || isGoogleLoading || isFacebookLoading}
                 >
                   <span className="sr-only">Ver contraseña</span>
                   {showPassword ? <EyeOffIcon /> : <EyeIcon />}
@@ -166,13 +168,19 @@ export function UserRegisterForm() {
               )}
             </div>
             <TabsContent value="user">
-              <Button disabled={isLoading} className="w-full">
+              <Button
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
+                className="w-full"
+              >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Registrarse
               </Button>
             </TabsContent>
             <TabsContent value="company">
-              <Button disabled={isLoading} className="w-full">
+              <Button
+                disabled={isLoading || isGoogleLoading || isFacebookLoading}
+                className="w-full"
+              >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Registrarse como negocio
               </Button>
@@ -196,17 +204,34 @@ export function UserRegisterForm() {
         type="button"
         variant="outline"
         onClick={() => {
-          setIsSocialLoading(true)
+          setIsGoogleLoading(true)
           signIn('google')
         }}
-        disabled={isLoading || isSocialLoading}
+        disabled={isLoading || isGoogleLoading || isFacebookLoading}
       >
-        {isSocialLoading ? (
+        {isGoogleLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <GoogleIcon className="h-4" />
         )}
         Google
+      </Button>
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => {
+          setIsFacebookLoading(true)
+          signIn('facebook')
+        }}
+        disabled={isLoading || isGoogleLoading || isFacebookLoading}
+      >
+        {isFacebookLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <FacebookIcon className="h-4" />
+        )}
+        Facebook
       </Button>
     </div>
   )
