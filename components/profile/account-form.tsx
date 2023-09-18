@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { EyeOffIcon, EyeIcon, Loader2Icon, Delete } from 'lucide-react'
+import { EyeOffIcon, EyeIcon, Loader2Icon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -31,12 +31,14 @@ import { ChangeRoleCard } from './change-role-card'
 
 const accountFormSchema = z
   .object({
-    currentPassword: z.string(),
-    newPassword: z.string().min(1, {
-      message: 'La contraseña debe tener al menos 8 caracteres.',
+    currentPassword: z.string().min(1, {
+      message: 'Este campo es requerido.',
     }),
-    confirmPassword: z.string().min(1, {
-      message: 'La contraseña debe tener al menos 8 caracteres.',
+    newPassword: z.string().min(5, {
+      message: 'La contraseña debe tener al menos 5 caracteres.',
+    }),
+    confirmPassword: z.string().min(5, {
+      message: 'La contraseña debe tener al menos 5 caracteres.',
     }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -52,15 +54,13 @@ const defaultValues: Partial<AccountFormValues> = {
   confirmPassword: '',
 }
 
-export function AccountForm({
-  id,
-  email,
-  role,
-}: {
+interface AccountFormProps {
   id: string
-  email: string | null
+  email: string
   role: string
-}) {
+}
+
+export function AccountForm({ id, email, role }: AccountFormProps) {
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({
     showCurrentPassword: false,
     showNewPassword: false,
@@ -121,6 +121,7 @@ export function AccountForm({
     }
 
     setIsSaving(false)
+    form.reset()
   }
 
   return (
@@ -265,7 +266,11 @@ export function AccountForm({
                 type="submit"
                 disabled={!form.formState.isDirty || isSaving}
               >
-                {isSaving ? <Loader2Icon /> : 'Cambiar contraseña'}
+                {isSaving ? (
+                  <Loader2Icon className="w-[100px]" />
+                ) : (
+                  'Cambiar contraseña'
+                )}
               </Button>
             </CardFooter>
           </Card>
@@ -278,7 +283,7 @@ export function AccountForm({
 
       {/* DELETE USER */}
 
-      <DeleteUserForm />
+      <DeleteUserForm id={id} email={email} />
     </div>
   )
 }

@@ -95,6 +95,7 @@ export default async function CompanyPublicPage({
         <ItemsSection
           items={company.items}
           userId={user?.id}
+          userName={user?.name}
           role={user?.role}
           favoritesList={favoritesList.items}
         />

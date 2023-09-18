@@ -9,6 +9,7 @@ import { ROLE } from '@/lib/constants'
 interface ItemsSectionProps {
   items: Item[]
   userId: string | null | undefined
+  userName: string | null | undefined
   role: string | null | undefined
   favoritesList: FavoriteItems[]
 }
@@ -28,8 +29,9 @@ const convertFavoritesListToObject = (favoritesList: FavoriteItems[]) => {
 export default function ItemsSection({
   items,
   userId,
+  userName,
   role,
-  favoritesList,
+  favoritesList = [],
 }: ItemsSectionProps) {
   // Use state to track the favorite status for each item
   const [itemFavorites, setItemFavorites] = useState<{
@@ -85,6 +87,7 @@ export default function ItemsSection({
               name={item.title}
               companyId={item.companyId}
               userId={userId}
+              author={userName || 'Anonimo'}
             />
           )}
         </div>

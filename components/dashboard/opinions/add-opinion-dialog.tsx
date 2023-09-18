@@ -31,6 +31,7 @@ interface AddOpinionDialogProps {
   name: string
   companyId: string
   userId: string
+  author: string
 }
 
 export default function AddOpinionDialog({
@@ -38,6 +39,7 @@ export default function AddOpinionDialog({
   name,
   companyId,
   userId,
+  author,
 }: AddOpinionDialogProps) {
   const {
     handleSubmit,
@@ -62,6 +64,7 @@ export default function AddOpinionDialog({
           itemId,
           companyId,
           userId,
+          author,
         }),
         headers: {
           'Content-Type': 'application/json',

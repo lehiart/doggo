@@ -88,7 +88,7 @@ model User {
   id             String   @id @default(uuid())
   name           String?
   hashedPassword String?
-  email          String?  @unique
+  email          String   @unique
   emailVerified  Boolean  @default(false)
   image          String?
   createdAt      DateTime @default(now()) @map(name: "created_at")
@@ -220,7 +220,7 @@ model Item {
 
   category      Category       @relation("ItemCategory", fields: [categoryId], references: [id])
   favoriteItems FavoriteItems? @relation(fields: [favoriteItemsId], references: [id])
-  company       Company        @relation("CompanyItems", fields: [companyId], references: [id])
+  company       Company        @relation("CompanyItems", fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([favoriteItemsId])
   @@index([categoryId])
@@ -259,15 +259,16 @@ model Opinion {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
-  userId    String
+  userId    String?
   itemId    String
   itemName  String
   companyId String
+  author    String
 
   rating  Int
   comment String
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull) // preserve opinion in case user is deleted
   company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([userId])

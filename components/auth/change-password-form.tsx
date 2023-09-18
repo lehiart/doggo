@@ -15,11 +15,11 @@ import { setNewPassword } from '@/app/cambiar-contrasena/[token]/actions'
 
 const formDataSchema = z
   .object({
-    newPassword: z.string().min(1, {
-      message: 'La contraseña debe tener al menos 8 caracteres.',
+    newPassword: z.string().min(5, {
+      message: 'La contraseña debe tener al menos 5 caracteres.',
     }),
-    confirmPassword: z.string().min(1, {
-      message: 'La contraseña debe tener al menos 8 caracteres.',
+    confirmPassword: z.string().min(5, {
+      message: 'La contraseña debe tener al menos 5 caracteres.',
     }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

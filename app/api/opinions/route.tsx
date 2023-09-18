@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { rating, comment, name, itemId, companyId, userId } = body
+    const { rating, comment, name, itemId, companyId, userId, author } = body
 
     if (!companyId || !itemId || !userId) {
       return new NextResponse('Not found', { status: 404 })
@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
           comment,
           itemName: name,
           itemId,
+          author,
           company: {
             connect: { id: companyId },
           },

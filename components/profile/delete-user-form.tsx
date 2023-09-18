@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { Label } from '@/components/ui/label'
 import { useState } from 'react'
+import { signOut } from 'next-auth/react'
 
 const keyword: string = 'Eliminar cuenta'
 
@@ -36,7 +37,8 @@ const accountDeleteFormSchema = z.object({
       message: `Debes escribir la palabra "${keyword}" de manera exacta.`,
     }),
   }),
-  password: z.string().min(2, {
+  // use length of 1 to avoid empty string
+  password: z.string().min(1, {
     message: 'Este campo es requerido.',
   }),
 })
@@ -48,12 +50,18 @@ const defaultValues: Partial<AccountDeleteFormValues> = {
   password: '',
 }
 
-export function DeleteUserForm() {
+interface DeleteUserFormProps {
+  id: string
+  email: string
+}
+
+export function DeleteUserForm({ id, email }: DeleteUserFormProps) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     handleSubmit,
   } = useForm<AccountDeleteFormValues>({
     resolver: zodResolver(accountDeleteFormSchema),
@@ -63,14 +71,42 @@ export function DeleteUserForm() {
   async function onSubmit(data: AccountDeleteFormValues) {
     setIsSaving(true)
 
-    //TODO: CREATE DELETE USER  ROUTE.TS
+    try {
+      const response = await fetch('/api/profile/account', {
+        method: 'POST', //post as delete
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: data.password, userId: id, email }),
+      })
 
-    toast({
-      title: 'Cuenta eliminada',
-      description: 'Tu cuenta ha sido eliminada.',
-    })
+      if (response.ok) {
+        toast({
+          title: 'Cuenta eliminada',
+          description: 'Tu cuenta ha sido eliminada.',
+        })
+
+        //logout user session
+        signOut({
+          callbackUrl: `${window.location.origin}/login`,
+        })
+      } else {
+        toast({
+          title: 'No se pudo eliminar la cuenta.',
+          description: 'La contraseña es incorrecta.',
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
+      toast({
+        title: 'No se pudo eliminar la cuenta.',
+        description: 'La contraseña es incorrecta.',
+        variant: 'destructive',
+      })
+    }
 
     setIsSaving(false)
+    setIsOpen(false)
   }
 
   return (
@@ -83,7 +119,7 @@ export function DeleteUserForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button variant="destructive" type="button">
               <UserX2Icon className="mr-2 h-4 w-4" />
@@ -114,14 +150,16 @@ export function DeleteUserForm() {
                 </Label>
                 <Input
                   id="password"
+                  type="password"
                   className="flex h-10 w-full rounded-md border border-input bg-background
                    px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent 
                    file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none
                     focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
-                    disabled:cursor-not-allowed disabled:opacity-50 lg:w-2/3"
+                    disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   {...register('password')}
                 />
+
                 {errors.password && (
                   <p className="text-sm font-medium text-destructive">
                     {errors.password.message}
@@ -138,13 +176,15 @@ export function DeleteUserForm() {
                 </Label>
                 <Input
                   id="confirmation"
+                  placeholder="Eliminar cuenta"
                   className="flex h-10 w-full rounded-md border
                    border-input bg-background px-3 py-2 text-sm ring-offset-background
                     file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground 
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 lg:w-2/3"
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   autoComplete="off"
                   {...register('confirmation')}
                 />
+
                 {errors.confirmation && (
                   <p className="text-sm font-medium text-destructive">
                     {errors.confirmation.message}
@@ -157,11 +197,7 @@ export function DeleteUserForm() {
                   <Button type="button">Cancelar</Button>
                 </DialogClose>
 
-                <Button
-                  type="submit"
-                  variant="destructive"
-                  disabled={isSaving || !isValid}
-                >
+                <Button type="submit" variant="destructive" disabled={isSaving}>
                   {isSaving ? <Loader2Icon /> : 'Confirmar cancelacion'}
                 </Button>
               </DialogFooter>
