@@ -38,7 +38,7 @@ export function SidebarNav() {
             buttonVariants({ variant: 'ghost' }),
             pathname === item.href ||
               (item.href === '/manada' && pathname.includes('nuevo')) ||
-              pathname.includes('editar')
+              (item.href === '/manada' && pathname.includes('editar'))
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline',
             'flex justify-start',

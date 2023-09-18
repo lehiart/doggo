@@ -36,7 +36,7 @@ export const ImageUploadInput = ({
 
     const newImage = imagesPreviewData[0].src
 
-    form.setValue('imageURL', newImage)
+    form.setValue('imageURL', newImage, { shouldDirty: true })
     form.setValue('imageData', selectedImagesData[0])
   }
 

@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import React from "react";
-import { useFieldArray } from "react-hook-form";
-import { v4 as uuid } from "uuid";
+import React from 'react'
+import { useFieldArray } from 'react-hook-form'
+import { v4 as uuid } from 'uuid'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -12,13 +12,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/popover'
+import { Input } from '@/components/ui/input'
 import {
   Trash2Icon,
   GlobeIcon,
@@ -29,28 +29,28 @@ import {
   FacebookIcon,
   LinkIcon,
   PlusIcon,
-} from "lucide-react";
+} from 'lucide-react'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
 
 type IconType =
-  | "website"
-  | "twitter"
-  | "github"
-  | "linkedin"
-  | "instagram"
-  | "facebook"
-  | "tiktok";
+  | 'website'
+  | 'twitter'
+  | 'github'
+  | 'linkedin'
+  | 'instagram'
+  | 'facebook'
+  | 'tiktok'
 
 interface Icons {
-  [key: string]: React.ComponentType<any>;
+  [key: string]: React.ComponentType<any>
 }
 
 const icons: Icons = {
@@ -61,39 +61,39 @@ const icons: Icons = {
   instagram: InstagramIcon,
   facebook: FacebookIcon,
   tiktok: LinkIcon,
-};
+}
 
 function SocialMediaIcon({ type }: { type: IconType | string }) {
-  const Icon = icons[type];
+  const Icon = icons[type]
 
-  return <Icon className="h-4 w-4" />;
+  return <Icon className="h-4 w-4" />
 }
 
 const socialMap = [
-  { value: "website", label: "Website" },
-  { value: "twitter", label: "Twitter" },
-  { value: "github", label: "GitHub" },
-  { value: "linkedin", label: "LinkedIn" },
-  { value: "instagram", label: "Instagram" },
-  { value: "facebook", label: "Facebook" },
-  { value: "tiktok", label: "TikTok" },
-];
+  { value: 'website', label: 'Website' },
+  { value: 'twitter', label: 'Twitter' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'linkedin', label: 'LinkedIn' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'facebook', label: 'Facebook' },
+  { value: 'tiktok', label: 'TikTok' },
+]
 
 function SocialMediaURLSelect({ form, inputName }: any) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
   const { fields, append, remove } = useFieldArray({
     name: inputName,
     control: form.control,
-  });
+  })
 
-  const watchURLinput = form.watch("url");
+  const watchURLinput = form.watch('url')
 
   function handleDeleteURL(
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) {
-    e.preventDefault();
-    remove(index);
+    e.preventDefault()
+    remove(index)
   }
 
   return (
@@ -129,7 +129,7 @@ function SocialMediaURLSelect({ form, inputName }: any) {
                 <Button
                   variant="secondary"
                   className="ml-0 mt-2 shrink-0 md:ml-2 md:mt-0"
-                  disabled={fields.length >= 8 || !watchURLinput}
+                  disabled={fields.length >= 5 || !watchURLinput}
                 >
                   <PlusIcon className="mr-2 h-4 w-4" />
                   Agregar Link
@@ -149,12 +149,12 @@ function SocialMediaURLSelect({ form, inputName }: any) {
                           onSelect={() => {
                             append({
                               value: element.value,
-                              url: form.getValues("url"),
+                              url: form.getValues('url'),
                               id: uuid(),
-                            });
+                            })
 
-                            setOpen(false);
-                            form.setValue("url", "");
+                            setOpen(false)
+                            form.setValue('url', '')
                           }}
                         >
                           <SocialMediaIcon type={element.value} />
@@ -202,15 +202,16 @@ function SocialMediaURLSelect({ form, inputName }: any) {
 
                       <Button
                         className="ml-4"
+                        variant="outline"
                         onClick={(e) => {
-                          handleDeleteURL(e, index);
+                          handleDeleteURL(e, index)
                         }}
                       >
                         <span className="sr-only">Borrar</span>
                         <Trash2Icon />
                       </Button>
                     </li>
-                  );
+                  )
                 })}
               </ul>
             </div>
@@ -218,7 +219,7 @@ function SocialMediaURLSelect({ form, inputName }: any) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
 
-export default SocialMediaURLSelect;
+export default SocialMediaURLSelect

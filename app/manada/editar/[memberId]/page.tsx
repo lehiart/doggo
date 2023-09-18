@@ -46,7 +46,7 @@ export default async function EditMemberPage({
         )}
       >
         <ChevronLeftIcon className="mr-2 h-4 w-4" />
-        Atras
+        Regresar
       </Link>
 
       <h2 className="font-bold text-2xl mb-12 animate-slide-down text-center mt-12">

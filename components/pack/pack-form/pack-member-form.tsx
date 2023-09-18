@@ -90,6 +90,7 @@ export default function PackMemberForm({
 
   async function addNewMember(data: z.infer<typeof formSchema>) {
     const formData = new FormData()
+
     if (data.imageData) {
       formData.append('imageData', data.imageData)
       formData.append('imageName', data.imageData.name)
@@ -132,19 +133,40 @@ export default function PackMemberForm({
   }
 
   const editMemberData = async (data: z.infer<typeof formSchema>) => {
-    const payload = {
-      ...data,
-      userId,
-      memberId: member?.id,
+    if (!member) return
+
+    const formData = new FormData()
+    if (data.imageData) {
+      formData.append('imageData', data.imageData)
+      formData.append('imageName', data.imageData.name)
+    }
+
+    formData.append('userId', userId)
+    formData.append('memberId', member.id)
+    formData.append('name', data.name)
+    formData.append('breed', data.breed)
+    formData.append('age', data.age)
+    formData.append('gender', data.gender)
+    formData.append('size', data.size)
+
+    if (data.weight) {
+      formData.append('weight', data.weight)
     }
 
     try {
       const result = await fetch('/api/pack/member', {
         method: 'PUT',
-        body: JSON.stringify(payload),
+        body: formData,
       })
 
       if (result.ok) {
+        toast({
+          title: 'Miembro actualizado',
+          description:
+            'Los datos del miembro se han actualizado correctamente.',
+          variant: 'success',
+        })
+
         router.refresh()
         router.push('/manada')
       }

@@ -116,7 +116,7 @@ model Profile {
   id       String  @id @default(uuid())
   userId   String  @unique //only one profile for one user
   bio      String?
-  links    String?
+  links    String? @db.Text
   location String?
   phone    String?
 

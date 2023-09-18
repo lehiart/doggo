@@ -46,9 +46,7 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
                 )}
               >
                 {value
-                  ? statesOfMexico.find(
-                      (state) => state.value === value.toUpperCase(),
-                    )?.label
+                  ? statesOfMexico.find((state) => state.value === value)?.label
                   : 'Selecciona el estado'}
                 <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
@@ -66,7 +64,7 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
                       value={state.value}
                       key={state.value}
                       onSelect={(value) => {
-                        onChange(value.toUpperCase())
+                        onChange(value)
                         setOpen(false)
                       }}
                     >

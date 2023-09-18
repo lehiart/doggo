@@ -56,7 +56,9 @@ export default async function SettingsProfilePage() {
           Así es como los demás te verán en el sitio.
         </p>
       </div>
+
       <Separator />
+
       <ProfileForm userProfile={profile} />
     </div>
   )

@@ -23,28 +23,63 @@ import SocialMediaURLSelect from '@/components/social-media-url-select'
 import { StatesSelector } from '@/components/states-selector'
 import { Loader2Icon, User2Icon } from 'lucide-react'
 import ImageUploadInput from '../image-upload-input'
+import { useRouter } from 'next/navigation'
+import MexFlagIcon from './mx-flag-icon'
 
 const profileFormSchema = z.object({
   name: z
-    .string()
+    .string({
+      required_error: 'El nombre es requerido.',
+    })
     .min(2, {
       message: 'El nombre debe ser por lo menos de dos caracteres.',
     })
-    .max(30, {
-      message: 'El nombre debe ser maximo de 30 caracteres.',
+    .max(40, {
+      message: 'El nombre debe ser maximo de 40 caracteres.',
     }),
   email: z.string().email(),
-  image: z.string().optional(),
-  bio: z.string().optional(),
+  imageURL: z.string().optional(),
+  imageData: z
+    .any()
+    .refine((value) => value instanceof File, {
+      message: 'Invalid file format.',
+    })
+    .optional(),
+  bio: z
+    .string()
+    .max(150, {
+      message: 'La biografía debe ser maximo de 120 caracteres.',
+    })
+    .optional(),
   url: z.string().optional(),
   links: z
     .array(z.object({ url: z.string(), value: z.string(), id: z.string() }))
     .optional(),
-  phone: z.string().optional(),
+  phone: z
+    .string()
+    .optional()
+    .refine(
+      (value) => {
+        const phone = removeMaskFromPhone(value)
+
+        return phone.length === 10
+      },
+      {
+        message: 'El telefono debe ser de 10 digitos.',
+      },
+    ),
   location: z.string().optional(),
 })
 
 type FormData = z.infer<typeof profileFormSchema>
+
+type DirtyField = {
+  [key: string]: boolean
+}
+
+type DirtyFields = {
+  dirtyFields: DirtyField
+}
 
 export interface ProfileFormProps
   extends React.HTMLAttributes<HTMLFormElement> {
@@ -90,15 +125,22 @@ const addMaskToPhone = (phone: string) => {
   return phoneMask
 }
 
+const removeMaskFromPhone = (phone: string | undefined) => {
+  if (!phone) return ''
+
+  return phone.replace(/\D/g, '')
+}
+
 export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
+  const router = useRouter()
 
   const form = useForm<FormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: userProfile?.name || '',
       email: userProfile?.email || '',
-      image: userProfile?.image || '',
+      imageURL: userProfile?.image || '',
       bio: userProfile?.profile?.bio || '',
       url: '',
       links:
@@ -106,55 +148,54 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           JSON.parse(userProfile.profile?.links)) ||
         '',
       phone:
-        (userProfile?.profile?.phone &&
-          addMaskToPhone(userProfile.profile?.phone)) ||
+        (userProfile.profile?.phone &&
+          addMaskToPhone(userProfile.profile.phone)) ||
         '',
       location: userProfile?.profile?.location || '',
     },
-    mode: 'onChange',
   })
 
   async function onSubmit(data: FormData) {
     setIsSaving(true)
+    const formData = new FormData()
 
-    type DirtyField = {
-      [key: string]: boolean
+    if (data.imageData) {
+      formData.append('imageData', data.imageData)
+      formData.append('imageName', data.imageData.name)
     }
 
-    type DirtyFields = {
-      dirtyFields: DirtyField
-    }
+    formData.append('userId', userProfile.id)
 
-    // Only add the dirty fields to the payload
+    // Only add the dirty fields to the formData
     const { dirtyFields }: any = form.formState // {password: true, email: true}
     const cleanedData = cleanData(data) // {password: "123", email: "email@example.com"}
 
-    const payload: { [key: string]: string | null } = Object.keys(
-      cleanedData,
-    ).reduce((acc: { [key: string]: string | null }, key: string) => {
+    Object.keys(cleanedData).forEach((key) => {
       if (dirtyFields[key as keyof DirtyFields]) {
-        acc[key] = cleanedData[key as keyof typeof cleanedData]
+        formData.append(key, cleanedData[key as keyof typeof cleanedData])
       }
-      return acc
-    }, {})
+    })
 
-    //is client so make it on the server route.ts
     try {
-      await fetch('/api/profile', {
+      const result = await fetch('/api/profile', {
         method: 'POST',
-        body: JSON.stringify({
-          ...payload,
-          userId: userProfile.id,
-          updatedAt: new Date(),
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: formData,
       })
 
-      toast({
-        title: 'Tu perfil se ha actualizado correctamente.',
-      })
+      if (result.ok) {
+        toast({
+          title: 'Tu perfil se ha actualizado correctamente.',
+        })
+
+        router.refresh()
+      } else {
+        toast({
+          title:
+            'Hubo un error al guardar los datos. Por favor intenta de nuevo.',
+          description: 'Si el problema persiste, contacta a soporte.',
+          variant: 'destructive',
+        })
+      }
     } catch (err) {
       toast({
         title:
@@ -183,10 +224,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
               <FormControl>
                 <Input placeholder="Nombre" {...field} />
               </FormControl>
-              <FormDescription>
-                Este es tu nombre público. Puede ser tu nombre real o un
-                seudónimo. Solo puedes cambiar esto una vez cada 30 días.
-              </FormDescription>
+              <FormDescription>Este es tu nombre público.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -234,24 +272,34 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Telefono (opcional)</FormLabel>
+              <FormLabel>Telefono</FormLabel>
               <FormControl>
-                <Input
-                  type="tel"
-                  placeholder="(00) 0000-0000"
-                  {...field}
-                  maxLength={10}
-                  onChange={(e) => {
-                    const value = e.target.value
-                    const formattedValue = addMaskToPhone(value)
+                <div className="flex gap-1">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    className="flex w-[100px] gap-2"
+                    tabIndex={-1}
+                  >
+                    <MexFlagIcon />
+                    <span>+52</span>
+                  </Button>
 
-                    field.onChange(formattedValue)
-                  }}
-                />
+                  <Input
+                    type="tel"
+                    placeholder="(00) 0000-0000"
+                    {...field}
+                    maxLength={10}
+                    onChange={(e) => {
+                      field.onChange(addMaskToPhone(e.target.value))
+                    }}
+                  />
+                </div>
               </FormControl>
+
               <FormDescription>
                 No se mostrará en tu perfil, solo es para que las empresas
-                puedan contactarte.
+                puedan contactarte en caso de que apliques a sus servicios.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -263,7 +311,7 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           name="location"
           render={() => (
             <FormItem>
-              <FormLabel>Estado de residencia (opcional)</FormLabel>
+              <FormLabel>Estado de residencia</FormLabel>
               <FormControl>
                 <StatesSelector control={form.control} inputName="location" />
               </FormControl>
@@ -274,8 +322,18 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           )}
         />
 
-        <Button type="submit" disabled={!form.formState.isDirty || isSaving}>
-          {isSaving ? <Loader2Icon /> : 'Actualizar perfil'}
+        <Button
+          type="submit"
+          className="w-full md:w-1/2 lg:w-1/3"
+          disabled={!form.formState.isDirty || isSaving}
+        >
+          {isSaving ? (
+            <>
+              <Loader2Icon className="mr-2" /> Actualizando...
+            </>
+          ) : (
+            'Actualizar perfil'
+          )}
         </Button>
       </form>
     </Form>
