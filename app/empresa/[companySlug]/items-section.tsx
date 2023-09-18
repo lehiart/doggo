@@ -31,7 +31,7 @@ export default function ItemsSection({
   userId,
   userName,
   role,
-  favoritesList = [],
+  favoritesList,
 }: ItemsSectionProps) {
   // Use state to track the favorite status for each item
   const [itemFavorites, setItemFavorites] = useState<{

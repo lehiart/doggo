@@ -97,7 +97,7 @@ export default async function CompanyPublicPage({
           userId={user?.id}
           userName={user?.name}
           role={user?.role}
-          favoritesList={favoritesList.items}
+          favoritesList={favoritesList?.items || []}
         />
       </div>
     </div>
