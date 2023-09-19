@@ -13,7 +13,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Dialog } from '@/components/ui/dialog'
 
 import {
   Popover,
@@ -51,73 +50,87 @@ export default function CompanySelectInput({
   }
 
   return (
-    <Dialog>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            disabled={
-              companies?.length === 0 ||
-              pathname === '/dashboard/items/nuevo' ||
-              pathname.startsWith('/dashboard/items/editar') ||
-              pathname.startsWith('/dashboard/clientes/')
-            }
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            aria-label="Elige un negocio"
-            className="min-w-[200px] justify-between"
-          >
-            <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-                src={`https://avatar.vercel.sh/${
-                  selectedCompany?.id || companies[0].id || 'default'
-                }.png`}
-                alt={selectedCompany?.name || companies[0].name || undefined}
-              />
-              <AvatarFallback>DH</AvatarFallback>
-            </Avatar>
-            {selectedCompany?.name || companies[0].name}
-            <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          disabled={
+            companies?.length === 0 ||
+            pathname === '/dashboard/items/nuevo' ||
+            pathname.startsWith('/dashboard/items/editar') ||
+            pathname.startsWith('/dashboard/clientes/')
+          }
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          aria-label="Elige un negocio"
+          className="w-1/2 md:w-1/4 justify-between"
+        >
+          <Avatar className="mr-2 h-5 w-5">
+            <AvatarImage
+              src={`https://avatar.vercel.sh/${
+                selectedCompany?.id || companies[0].id || 'default'
+              }.png`}
+              alt={selectedCompany?.name || companies[0].name || undefined}
+            />
+            <AvatarFallback>DH</AvatarFallback>
+          </Avatar>
+          {selectedCompany?.name || companies[0].name}
+          <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
 
-        <PopoverContent className="w-[200px] p-0">
-          <Command>
-            <CommandList>
-              <CommandInput placeholder="Buscar..." />
-              <CommandEmpty>No encontrado.</CommandEmpty>
-              <CommandGroup heading="Mis negocios">
-                {companies &&
-                  companies.length > 0 &&
-                  companies.map((company: BasicCompanyData) => (
-                    <CommandItem
-                      key={company.id}
-                      onSelect={() => handleSelectedCompanyChange(company)}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${company.id}.png`}
-                          alt={company.name || 'Negocio'}
-                        />
-                        <AvatarFallback>DH</AvatarFallback>
-                      </Avatar>
-                      {company.name}
-                      <CheckIcon
-                        className={cn(
-                          'ml-auto h-4 w-4',
-                          selectedCompany?.id === company.id
-                            ? 'opacity-100'
-                            : 'opacity-0',
-                        )}
+      <PopoverContent className="p-0 w-[--radix-popper-anchor-width]">
+        <Command>
+          <CommandList>
+            <CommandInput placeholder="Buscar..." />
+            <CommandEmpty>No encontrado.</CommandEmpty>
+            <CommandGroup heading="Mis negocios">
+              {companies &&
+                companies.length > 0 &&
+                companies.map((company: BasicCompanyData) => (
+                  <CommandItem
+                    key={company.id}
+                    onSelect={() => handleSelectedCompanyChange(company)}
+                    className="text-sm"
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage
+                        src={`https://avatar.vercel.sh/${company.id}.png`}
+                        alt={company.name || 'Negocio'}
                       />
-                    </CommandItem>
-                  ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </Dialog>
+                      <AvatarFallback>DH</AvatarFallback>
+                    </Avatar>
+                    {company.name}
+                    <CheckIcon
+                      className={cn(
+                        'ml-auto h-4 w-4',
+                        selectedCompany?.id === company.id
+                          ? 'opacity-100'
+                          : 'opacity-0',
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+            </CommandGroup>
+          </CommandList>
+
+          {/* CREATE NEW */}
+          {/* <CommandSeparator />
+          <CommandList>
+            <CommandGroup>
+              <CommandItem
+                disabled
+                onSelect={() => {
+                  setOpen(false)
+                }}
+              >
+                <PlusCircleIcon className="mr-2 h-5 w-5" />
+                Crear nuevo
+              </CommandItem>
+            </CommandGroup>
+          </CommandList> */}
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }

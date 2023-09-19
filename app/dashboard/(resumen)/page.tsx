@@ -27,7 +27,7 @@ export default function CompanySummaryPage() {
   const { selectedCompany } = useDashboardContext()
 
   return (
-    <div className="flex-1 space-y-4 p-8 pt-6 h-full">
+    <div className="flex-1 space-y-4 py-6 h-full">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
           {selectedCompany?.name}
@@ -95,11 +95,11 @@ export default function CompanySummaryPage() {
           <Tabs defaultValue="views" className="w-full">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Estadísticas</CardTitle>
-              <TabsList>
+              {/* <TabsList>
                 <TabsTrigger value="views">Visitas</TabsTrigger>
                 <TabsTrigger value="requests">Solicitudes</TabsTrigger>
                 <TabsTrigger value="contact">Contacto</TabsTrigger>
-              </TabsList>
+              </TabsList> */}
             </CardHeader>
             <CardContent className="pl-2">
               <TabsContent value="views">

@@ -3,18 +3,15 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { useDashboardContext } from './dashboard-context'
 
-export default function DashboardMainHeader() {
+export default function DesktopHeaderLinks() {
   const pathname = usePathname()
-  const { selectedCompany } = useDashboardContext()
 
   return (
-    <nav className="flex w-full items-center justify-between ml-6">
-      <div className="space-x-4">
+    <nav className="hidden xl:flex w-full items-center justify-end xl:justify-between ml-4">
+      <div className="space-x-4 ">
         <Link
           href="/dashboard"
           className={cn(
@@ -70,14 +67,6 @@ export default function DashboardMainHeader() {
           Ajustes
         </Link>
       </div>
-
-      <Link href={`/empresa/${selectedCompany?.slug}?preview=true`}>
-        <Button>Vista previa</Button>
-      </Link>
-
-      <Link href="/nuevo">
-        <Button>Agregar nuevo negocio</Button>
-      </Link>
     </nav>
   )
 }

@@ -8,7 +8,10 @@ import EmptyInitialScreen from '../../components/dashboard/empty-iinitial-screen
 
 import CompanySelectInput from '../../components/dashboard/company-select-input'
 import { DashboardContextProvider } from '../../components/dashboard/dashboard-context'
-import DashboardMainHeader from '@/components/dashboard/dashboard-main-header'
+import { Separator } from '@/components/ui/separator'
+import MobileHeaderLinks from '@/components/dashboard/mobile-header-links'
+import PreviewLinkButton from '@/components/dashboard/preview-link-btn'
+import DesktopHeaderLinks from '@/components/dashboard/desktop-header-links'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -53,7 +56,7 @@ export default async function DashboardLayout({
 
   if (!data?.companies || data?.companies.length === 0) {
     return (
-      <section className="h-screen">
+      <section className="h-screen container">
         <div className="flex flex-col h-screen">
           <EmptyInitialScreen />
         </div>
@@ -63,14 +66,17 @@ export default async function DashboardLayout({
 
   return (
     <DashboardContextProvider>
-      <section className="h-full">
+      <section className="min-h-screen container">
         <div className="flex flex-col h-full">
-          <div className="border-b px-8">
-            <div className="flex h-16 items-center">
-              <CompanySelectInput companies={data.companies} />
-              <DashboardMainHeader />
-            </div>
+          <div className="flex h-16 items-center w-full gap-1 justify-between">
+            <CompanySelectInput companies={data.companies} />
+            <DesktopHeaderLinks />
+            <PreviewLinkButton />
           </div>
+
+          <MobileHeaderLinks />
+
+          <Separator className="container my-4 xl:my-2" />
 
           {children}
         </div>
