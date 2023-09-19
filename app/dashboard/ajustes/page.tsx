@@ -4,7 +4,6 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
-import DeleteCard from '../../../components/dashboard/delete-card'
 import { ChevronLeftIcon } from 'lucide-react'
 
 import { useDashboardContext } from '../../../components/dashboard/dashboard-context'
@@ -20,26 +19,20 @@ export default function CompanySettingsPage() {
   if (!selectedCompany || !company) return null
 
   return (
-    <div className="block min-h-screen space-y-6 p-10 pb-16">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Ajustes</h2>
+    <div className="block min-h-screen space-y-6 pb-16 pt-4">
+      <Link href="/dashboard">
+        <Button variant="outline">
+          <ChevronLeftIcon className="mr-2 h-4 w-4" />
+          <span>Regresar</span>
+        </Button>
+      </Link>
+
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold text-left">Ajustes</h2>
+
         <p className="text-muted-foreground">
-          Administra la configuración de tu negocio {selectedCompany.name}
+          Administra los datos de tu negocio
         </p>
-        <Link href="/dashboard">
-          <Button>
-            <ChevronLeftIcon className="mr-2 h-4 w-4" />
-            <span>Atras</span>
-          </Button>
-        </Link>
-        <div className="flex gap-2 justify-end">
-          <Button>
-            <Link href={`/dashboard/ajustes/editar/${selectedCompany.id}`}>
-              Editar
-            </Link>
-          </Button>
-          <DeleteCard companyId={selectedCompany.id} />
-        </div>
       </div>
 
       <Separator className="my-6" />

@@ -36,6 +36,8 @@ export default async function EditCompanyPage({
     redirect('/login')
   }
 
+  console.log(params)
+
   const company: any = await getCompanyData(params.companyId)
 
   if (!company) {

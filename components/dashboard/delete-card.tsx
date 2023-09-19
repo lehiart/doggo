@@ -64,7 +64,10 @@ export default function DeleteCard({ companyId }: DeleteCardProps) {
   return (
     <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Eliminar</Button>
+        <Button variant="destructive" className="w-1/2 lg:w-1/4">
+          <Trash2Icon className="mr-2" />
+          Eliminar
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
