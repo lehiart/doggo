@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react'
-import { Category, Company } from '@prisma/client'
+import { Category } from '@prisma/client'
 
 import {
   Card,
@@ -10,19 +12,22 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Image from 'next/image'
-import { DogIcon, PencilIcon } from 'lucide-react'
+import {
+  DogIcon,
+  GlobeIcon,
+  HomeIcon,
+  PencilIcon,
+  PhoneIcon,
+} from 'lucide-react'
 import { Badge } from '../ui/badge'
 import { Label } from '../ui/label'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '../ui/button'
 import DeleteCard from '../dashboard/delete-card'
-
-interface CompanySettingsContainerProps {
-  company: Company & {
-    categories: Category[]
-  }
-}
+import { useDashboardContext } from '../dashboard/dashboard-context'
+import { useCompany } from '@/lib/swr'
+import DashboardSettingsLoadingPage from '@/app/dashboard/ajustes/loading'
 
 interface SocialMediaLink {
   name: string
@@ -56,12 +61,24 @@ const formatAddress = (
 const formatSocialMediaLinks = (socialMediaLinks: string | null) => {
   if (!socialMediaLinks) return null
 
-  return JSON.parse(socialMediaLinks).map((item: SocialMediaLink) => item.url)
+  return JSON.parse(socialMediaLinks).map((item: SocialMediaLink) => {
+    return (
+      <div className="flex items-center" key={item.id}>
+        <GlobeIcon className="mr-2 h-4 w-4" />
+        <span>{item.url}</span>
+      </div>
+    )
+  })
 }
 
-export default function CompanySettingsContainer({
-  company,
-}: CompanySettingsContainerProps) {
+export default function CompanySettingsContainer() {
+  const { selectedCompany } = useDashboardContext()
+  const { company, isLoading, isError } = useCompany(selectedCompany?.id)
+
+  if (isLoading) return <DashboardSettingsLoadingPage />
+
+  if (!company || isError) return null
+
   return (
     <Card>
       <CardHeader className="p-0 w-full relative h-64">
@@ -74,16 +91,16 @@ export default function CompanySettingsContainer({
             <Image
               className="object-cover object-top w-full"
               src="/images/dog-placeholder.jpg"
-              alt="Mountain"
+              alt="Imagen de fondo"
               fill
             />
           </div>
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
-            {company.image ? (
+            {company.imageURL ? (
               <Image
                 className="object-cover object-center h-32"
-                src={company.image}
-                alt="Woman looking front"
+                src={company.imageURL}
+                alt={`Imagen de la empresa ${company.name}`}
                 height={200}
                 width={200}
               />
@@ -129,7 +146,8 @@ export default function CompanySettingsContainer({
           <div className="flex items-center justify-between space-x-2">
             <Label htmlFor="necessary" className="flex flex-col space-y-1">
               <span>Telefono</span>
-              <span className="font-normal leading-snug text-muted-foreground">
+              <span className="font-normal leading-snug text-muted-foreground flex items-center">
+                <PhoneIcon className="mr-2 h-4 w-4" />
                 {company.phone}
               </span>
             </Label>
@@ -148,7 +166,7 @@ export default function CompanySettingsContainer({
             <Label htmlFor="necessary" className="flex flex-col space-y-1">
               <span>Sitio Web</span>
               <span className="font-normal leading-snug text-muted-foreground">
-                {company.website}
+                {company.website ? company.website : '-'}
               </span>
             </Label>
           </div>
@@ -156,7 +174,7 @@ export default function CompanySettingsContainer({
           <div className="flex items-center justify-between space-x-2">
             <Label htmlFor="necessary" className="flex flex-col space-y-1">
               <span>Direccion</span>
-              <span className="font-normal leading-snug text-muted-foreground">
+              <span className="font-normal leading-snug text-muted-foreground break-words">
                 {formatAddress(
                   company.streetAddress,
                   company.streetAddress2,

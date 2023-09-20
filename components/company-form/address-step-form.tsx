@@ -25,29 +25,64 @@ import { Button } from '../ui/button'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 const formSchema = z.object({
-  streetAddress: z.string(),
-  streetNumber: z.string().optional(),
+  streetAddress: z
+    .string()
+    .min(1, {
+      message: 'La calle es requerida',
+    })
+    .max(35, {
+      message: 'La calle debe ser maximo de 35 caracteres',
+    }),
+  streetNumber: z
+    .string()
+    .min(1, {
+      message: 'El numero exterior es requerido',
+    })
+    .max(10, {
+      message: 'El numero exterior debe ser maximo de 10 caracteres',
+    }),
   streetAddress2: z.string().optional(),
-  locality: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.string().length(5).regex(/^\d+$/),
+  locality: z
+    .string()
+    .min(1, {
+      message: 'La colonia es requerida',
+    })
+    .max(35, {
+      message: 'La colonia debe ser maximo de 35 caracteres',
+    }),
+  city: z
+    .string()
+    .min(1, {
+      message: 'La ciudad es requerida',
+    })
+    .max(35, {
+      message: 'La ciudad debe ser maximo de 35 caracteres',
+    }),
+  state: z.string({
+    required_error: 'El estado es requerido',
+  }),
+  zip: z
+    .string()
+    .length(5, {
+      message: 'El codigo postal debe ser de 5 caracteres',
+    })
+    .regex(/^\d+$/),
 })
 
 export default function AddressStepForm() {
-  const { onHandleNext, onHandleBack, setFormData, formData, company } =
+  const { onHandleNext, onHandleBack, setFormData, formData, company, type } =
     useFormState()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      streetAddress: company?.streetAddress || formData?.streetAddress || '',
-      streetNumber: company?.streetNumber || formData?.streetNumber || '',
-      streetAddress2: company?.streetAddress2 || formData?.streetAddress2 || '',
-      locality: company?.locality || formData?.locality,
-      city: company?.city || formData?.city,
-      state: company?.state || formData?.state,
-      zip: company?.zip || formData?.zip,
+      streetAddress: formData?.streetAddress || company?.streetAddress || '',
+      streetNumber: formData?.streetNumber || company?.streetNumber || '',
+      streetAddress2: formData?.streetAddress2 || company?.streetAddress2 || '',
+      locality: formData?.locality || company?.locality || '',
+      city: formData?.city || company?.city || '',
+      state: formData?.state || company?.state || '',
+      zip: formData?.zip || company?.zip || '',
     },
   })
 
@@ -57,114 +92,59 @@ export default function AddressStepForm() {
   }
 
   return (
-    <Card>
+    <Card className="mt-4">
       <CardHeader>
-        <CardTitle>Direccion</CardTitle>
-        <CardDescription>
-          What area are you having problems with?
+        <CardTitle>Dirección</CardTitle>
+        <CardDescription className="max-w-lg">
+          {type === 'EDIT' ? 'Actualiza' : 'Agrega'} la dirección de tu empresa.
+          Asegúrate de proporcionar una dirección precisa y completa para
+          garantizar que los clientes puedan ubicarte con facilidad
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="streetAddress"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Calle</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="streetNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Numero exterior</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="streetAddress2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Numero interior</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="locality"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Colonia</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Alcaldia/Municipio/Ciudad</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid gap-2 items-end w-full">
-                <StatesSelector
-                  control={form.control}
-                  inputName="state"
-                  className="w-full"
-                />
-              </div>
-            </div>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* STREET */}
 
-            <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="streetAddress"
+              render={({ field }) => (
+                <FormItem className="md:w-1/2">
+                  <FormLabel>Calle</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* STREET & EXT NUMBER */}
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 ">
               <FormField
                 control={form.control}
-                name="zip"
+                name="streetNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Codigo Postal</FormLabel>
+                    <FormLabel>Numero exterior</FormLabel>
                     <FormControl>
-                      <Input type="text" maxLength={5} {...field} />
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="streetAddress2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numero interior</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -172,14 +152,76 @@ export default function AddressStepForm() {
               />
             </div>
 
-            <div className="flex gap-2 w-full justify-between">
-              <Button type="button" onClick={onHandleBack}>
-                <ChevronLeftIcon />
-                atras
+            {/* LOCALITY */}
+
+            <FormField
+              control={form.control}
+              name="locality"
+              render={({ field }) => (
+                <FormItem className="md:w-1/2">
+                  <FormLabel>Colonia</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* CITY */}
+
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem className="md:w-1/2">
+                  <FormLabel>Alcaldia/Municipio/Ciudad</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* STATE */}
+
+            <StatesSelector
+              control={form.control}
+              inputName="state"
+              className="w-full"
+            />
+
+            {/* ZIP */}
+
+            <FormField
+              control={form.control}
+              name="zip"
+              render={({ field }) => (
+                <FormItem className="md:w-1/2">
+                  <FormLabel>Codigo Postal</FormLabel>
+                  <FormControl>
+                    <Input type="text" maxLength={5} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/*  NEXT &  PREV BUTTONS */}
+
+            <div className="flex gap-2 w-full justify-between items-center">
+              <Button
+                type="button"
+                onClick={onHandleBack}
+                className="w-[115px]"
+              >
+                <ChevronLeftIcon className="w-4 h-4 mr-1" />
+                Atras
               </Button>
-              <Button type="submit" disabled={!form.formState.isValid}>
-                siguiente
-                <ChevronRightIcon />
+              <Button type="submit">
+                Siguiente
+                <ChevronRightIcon className="w-4 h-4 ml-1" />
               </Button>
             </div>
           </form>

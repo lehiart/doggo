@@ -127,7 +127,7 @@ export default function MobileList({ requests }: MobileListProps) {
             </Button>
           </PopoverTrigger>
 
-          <PopoverContent className="w-[300px]">
+          <PopoverContent className="w-full">
             <Command>
               <CommandList>
                 <CommandGroup>

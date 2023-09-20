@@ -265,7 +265,11 @@ export const ProfileForm = ({ userProfile }: ProfileFormProps) => {
           )}
         />
 
-        <SocialMediaURLSelect form={form} inputName="links" />
+        <SocialMediaURLSelect
+          form={form}
+          inputName="links"
+          labelText="Mis Links"
+        />
 
         <FormField
           control={form.control}

@@ -79,7 +79,7 @@ const socialMap = [
   { value: 'tiktok', label: 'TikTok' },
 ]
 
-function SocialMediaURLSelect({ form, inputName }: any) {
+function SocialMediaURLSelect({ form, inputName, labelText }: any) {
   const [open, setOpen] = React.useState(false)
   const { fields, append, remove } = useFieldArray({
     name: inputName,
@@ -98,7 +98,7 @@ function SocialMediaURLSelect({ form, inputName }: any) {
 
   return (
     <div>
-      <Label htmlFor="url">Mis Links</Label>
+      <Label htmlFor="url">{labelText}</Label>
 
       <Card className="mt-2">
         <CardHeader>
@@ -136,9 +136,13 @@ function SocialMediaURLSelect({ form, inputName }: any) {
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="p-0" side="bottom" align="start">
+              <PopoverContent
+                className="p-0 w-[--radix-popper-anchor-width]"
+                side="bottom"
+                align="start"
+              >
                 <Command>
-                  <CommandInput placeholder="Buscar por nombre..." />
+                  <CommandInput placeholder="Buscar..." />
                   <CommandList>
                     <CommandEmpty>No se encontraron resultados.</CommandEmpty>
                     <CommandGroup>

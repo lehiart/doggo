@@ -36,8 +36,6 @@ export default async function EditCompanyPage({
     redirect('/login')
   }
 
-  console.log(params)
-
   const company: any = await getCompanyData(params.companyId)
 
   if (!company) {
@@ -45,28 +43,24 @@ export default async function EditCompanyPage({
   }
 
   return (
-    <div className="block min-h-screen space-y-6 p-10 pb-16">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Editar negocio</h2>
-        <p className="text-muted-foreground">Sobre mi negocio</p>
+    <div className="min-h-screen space-y-8 pb-16 mt-4 w-full">
+      <Link href="/dashboard/ajustes">
+        <Button variant="outline">
+          <ChevronLeftIcon className="mr-2 h-4 w-4" />
+          <span>Regresar</span>
+        </Button>
+      </Link>
 
-        <Link href={`/dashboard/ajustes`} className="mt-4">
-          <Button>
-            <ChevronLeftIcon className="mr-2 h-4 w-4" />
-            Atras
-          </Button>
-        </Link>
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold tracking-tight">Editar negocio</h2>
+        <p className="text-muted-foreground">
+          Actualizar detalles de la empresa, dirección y datos de contacto
+        </p>
       </div>
 
       <Separator className="my-6" />
 
-      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-        <div className="flex-1 lg:max-w-2xl">
-          <h1>Editar un negocio</h1>
-
-          <CompanyForm id={user?.id} type="EDIT" company={company} />
-        </div>
-      </div>
+      <CompanyForm id={user?.id} type="EDIT" company={company} />
     </div>
   )
 }

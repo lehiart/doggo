@@ -1,7 +1,7 @@
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import {
   S3Client,
   PutObjectCommand,
@@ -9,7 +9,7 @@ import {
 } from '@aws-sdk/client-s3'
 import { v4 as uuid } from 'uuid'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
 

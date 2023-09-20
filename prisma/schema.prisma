@@ -138,8 +138,8 @@ model Company {
   slug String  @unique
 
   name             String
-  image            String?
-  description      String?
+  imageURL         String?
+  description      String
   streetAddress    String?
   streetNumber     String?
   streetAddress2   String?
@@ -148,9 +148,9 @@ model Company {
   state            String?
   zip              String?
   phone            String?
-  email            String?
+  email            String
   website          String?
-  socialMediaLinks String?
+  socialMediaLinks String? @db.Text
 
   categories Category[] @relation("CompanyCategories")
   owner      User       @relation("UserCompanies", fields: [ownerId], references: [id], onDelete: Cascade) // company has only one owner

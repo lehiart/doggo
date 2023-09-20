@@ -16,14 +16,12 @@ interface MemberFormProps {
 
 export default function CompanyForm({ id, type, company }: MemberFormProps) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between">
       <FormProvider id={id} type={type} company={company}>
-        <div className="w-full rounded-xl border p-6">
+        <div className="w-full">
           <CompanyFormHeader />
 
-          <div className="space-y-6">
-            <ActiveStepFormComponent />
-          </div>
+          <ActiveStepFormComponent />
         </div>
       </FormProvider>
     </main>

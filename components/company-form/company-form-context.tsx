@@ -28,7 +28,7 @@ const FormContext = createContext<IFormContext>({
   setFormData: () => {},
   step: 0,
   type: 'NEW',
-  id: '',
+  id: '', //userId
   company: undefined,
 })
 

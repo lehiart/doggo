@@ -1,6 +1,6 @@
 'use client'
 
-import { ImageIcon, TerminalIcon } from 'lucide-react'
+import { ChevronRightIcon, ImageIcon } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import ImageUploadInput from '../image-upload-input'
 import {
@@ -24,27 +24,61 @@ import { CategoriesMultiSelect } from './categories-multi-select'
 import checkSlugIsUnique from '@/app/nuevo/actions'
 import { useEffect } from 'react'
 import { slugify } from '@/lib/utils'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card'
 
 const formSchema = z.object({
-  image: z.string().optional(),
-  name: z.string().min(1).max(25),
-  slug: z.string().min(1).max(35, {
-    message: 'El URL de tu negocio debe ser maximo de 35 caracteres',
+  imageURL: z.string().optional(),
+  imageData: z
+    .any()
+    .refine((value) => value instanceof File, {
+      message: 'Invalid file format.',
+    })
+    .optional(),
+  name: z
+    .string()
+    .min(1, {
+      message: 'El nombre de tu negocio es requerido',
+    })
+    .max(25, {
+      message: 'El nombre de tu negocio debe ser maximo de 25 caracteres',
+    }),
+  slug: z
+    .string()
+    .min(1, {
+      message: 'El URL de tu negocio es requerido',
+    })
+    .max(35, {
+      message: 'El URL de tu negocio debe ser maximo de 35 caracteres',
+    }),
+  description: z
+    .string()
+    .min(1, {
+      message: 'La descripcion de tu negocio es requerida',
+    })
+    .max(300, {
+      message: 'La descripcion de tu negocio debe ser maximo de 300 caracteres',
+    }),
+  categories: z.array(z.string()).min(1, {
+    message: 'Selecciona al menos una categoria',
   }),
-  description: z.string().min(1).max(300),
-  categories: z.array(z.string()).min(1),
 })
 
 export default function DetailsStepForm() {
-  const { onHandleNext, setFormData, formData, company } = useFormState()
+  const { onHandleNext, setFormData, formData, company, type } = useFormState()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image: company?.image || formData?.image,
-      name: company?.name || formData?.name || '',
-      slug: company?.slug || formData?.slug || '',
-      description: company?.description || formData?.description,
+      imageURL: formData?.imageURL || company?.imageURL || undefined,
+      name: formData?.name || company?.name || '',
+      slug: formData?.slug || company?.slug || '',
+      description: formData?.description || company?.description || '',
       categories:
         formData?.categories ||
         company?.categories.map((c: Category) => c.id) ||
@@ -76,78 +110,97 @@ export default function DetailsStepForm() {
   useEffect(() => {
     const slugValue = slugify(watchNameinput)
 
-    form.setValue('slug', slugValue)
+    form.setValue('slug', slugValue, {
+      shouldValidate: true,
+    })
   }, [watchNameinput, form])
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <ImageUploadInput form={form} Icon={ImageIcon} />
-        <FormDescription className="text-center max-w-sm my-0 mx-auto">
-          Esta imagen sera la que se mostrara en tu perfil publico. Puede ser un
-          logo o una foto de tu negocio.
-        </FormDescription>
+    <Card className="mt-4">
+      <CardHeader>
+        <CardTitle>Detalles</CardTitle>
+        <CardDescription className="max-w-lg">
+          {type === 'EDIT' ? 'Actualiza' : 'Agrega'} la información clave de tu
+          empresa, como la descripción, la categoria y otros detalles
+          importantes para mantener tu perfil actualizado y relevante para
+          clientes.
+        </CardDescription>
+      </CardHeader>
 
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Nombre <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="Nombre" autoComplete="off" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <CardContent className="grid gap-6 w-full">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <ImageUploadInput form={form} Icon={ImageIcon} />
+            <FormDescription className="text-center max-w-sm my-0 mx-auto">
+              Esta imagen será visible en tu perfil público. Puede ser un
+              logotipo o una fotografía de tu empresa.
+            </FormDescription>
 
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                URL <span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="URL" autoComplete="off" {...field} />
-              </FormControl>
-              <FormDescription>
-                Este sera tu URL de tu negocio publico, debe ser unico y solo
-                puede contener letras, numeros y guiones.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nombre" autoComplete="off" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Descripcion</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="mi-nuevo-negocio"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Esta será la URL de tu negocio en público, debe ser única y
+                    solo puede contener letras, números y guiones.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <CategoriesMultiSelect control={form.control} />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Escribe una breve descripción de tu negocio aquí..."
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <Button type="submit" disabled={!form.formState.isValid}>
-          siguiente
-        </Button>
-      </form>
-    </Form>
+            <CategoriesMultiSelect control={form.control} />
+
+            <div className="flex justify-end items-center">
+              <Button type="submit">
+                Siguiente
+                <ChevronRightIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }

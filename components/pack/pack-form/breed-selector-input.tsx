@@ -76,8 +76,8 @@ export function BreedSelector({ form }: any) {
               </FormControl>
             </PopoverTrigger>
 
-            <PopoverContent className="p-0">
-              <Command className="w-full ">
+            <PopoverContent className="p-0 w-[--radix-popper-anchor-width]">
+              <Command className="w-full">
                 <CommandInput placeholder="Buscar..." />
                 <CommandEmpty>No encontramos esa raza.</CommandEmpty>
                 <CommandGroup className="h-[200px] overflow-y-scroll">

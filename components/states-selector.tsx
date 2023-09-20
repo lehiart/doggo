@@ -41,7 +41,7 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
                 variant="outline"
                 role="combobox"
                 className={cn(
-                  'w-[200px] justify-between',
+                  'w-full justify-between',
                   !value && 'text-muted-foreground',
                 )}
               >
@@ -52,10 +52,10 @@ export function StatesSelector({ control, inputName }: StatesSelectorProps) {
               </Button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[--radix-popper-anchor-width] p-0">
               <Command>
                 <CommandInput placeholder="Buscar estado..." />
-                <CommandEmpty>
+                <CommandEmpty className="p-4">
                   No se encontro ningun estado con ese nombre.
                 </CommandEmpty>
                 <CommandGroup className="h-[200px] overflow-y-scroll">

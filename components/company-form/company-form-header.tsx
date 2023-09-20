@@ -1,3 +1,4 @@
+import { Card } from '../ui/card'
 import { useFormState } from './company-form-context'
 import { cn } from '@/lib/utils'
 
@@ -7,8 +8,7 @@ export default function CompanyFormHeader() {
   if (step > 3) return null
 
   return (
-    <div>
-      {/* {JSON.stringify(formData, null, 2)} */}
+    <Card className="p-4">
       <h2 className="sr-only">Steps</h2>
 
       <div className="relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-gray-100">
@@ -36,7 +36,7 @@ export default function CompanyFormHeader() {
               2
             </span>
 
-            <span className="hidden sm:block"> Direccion </span>
+            <span className="hidden sm:block"> Dirección </span>
           </li>
 
           <li className="flex items-center gap-2 bg-white dark:bg-black p-2">
@@ -53,6 +53,6 @@ export default function CompanyFormHeader() {
           </li>
         </ol>
       </div>
-    </div>
+    </Card>
   )
 }
