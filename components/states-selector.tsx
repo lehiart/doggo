@@ -26,11 +26,15 @@ interface StatesSelectorProps {
   className?: string
 }
 
-export function StatesSelector({ control, inputName }: StatesSelectorProps) {
+export function StatesSelector({
+  control,
+  inputName,
+  className,
+}: StatesSelectorProps) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div>
+    <div className={className}>
       <Controller
         control={control}
         name={inputName}

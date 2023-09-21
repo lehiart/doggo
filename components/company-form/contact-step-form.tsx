@@ -27,7 +27,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import MexFlagIcon from '../profile/mx-flag-icon'
-import { Category } from '@prisma/client'
 
 const formSchema = z.object({
   phone: z.string().length(10, {
@@ -135,7 +134,7 @@ export default function ContactStepForm() {
     const payload = {
       ...formData,
       ...data,
-      id,
+      userId: id,
     }
 
     // socialMediaLinks needs to be an string
@@ -143,15 +142,41 @@ export default function ContactStepForm() {
       payload.socialMediaLinks = JSON.stringify(payload.socialMediaLinks)
     }
 
+    // categories needs to be an array of ids
+    if (payload?.categories?.length > 0) {
+      payload.categories = JSON.stringify(payload.categories)
+    }
+
+    const payloadFormData = new FormData()
+
+    Object.keys(payload).forEach((key) => {
+      // remove undefined values
+      if (payload[key] === undefined) return
+
+      payloadFormData.append(key, payload[key])
+    })
+
+    if (payload.imageData) {
+      payloadFormData.append('imageData', payload.imageData)
+      payloadFormData.append('imageName', payload.imageData.name)
+    }
+
     try {
       const result = await fetch('/api/company', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: payloadFormData,
       })
 
       if (result.ok) {
         router.refresh()
         router.push('/dashboard')
+      } else {
+        toast({
+          title:
+            'Hubo un error al guardar los datos. Por favor intenta de nuevo.',
+          description: 'Si el problema persiste, contacta a soporte.',
+          variant: 'destructive',
+        })
       }
     } catch (error) {
       toast({

@@ -43,7 +43,7 @@ export default async function EditCompanyPage({
   }
 
   return (
-    <div className="min-h-screen space-y-8 pb-16 mt-4 w-full">
+    <section className="min-h-screen space-y-8 pb-16 mt-4 w-full">
       <Link href="/dashboard/ajustes">
         <Button variant="outline">
           <ChevronLeftIcon className="mr-2 h-4 w-4" />
@@ -61,6 +61,6 @@ export default async function EditCompanyPage({
       <Separator className="my-6" />
 
       <CompanyForm id={user?.id} type="EDIT" company={company} />
-    </div>
+    </section>
   )
 }

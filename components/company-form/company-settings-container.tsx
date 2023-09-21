@@ -82,14 +82,14 @@ export default function CompanySettingsContainer() {
   return (
     <Card>
       <CardHeader className="p-0 w-full relative h-64">
-        <div className="bg-white">
+        <div>
           <Badge className="absolute z-10 right-2 top-2" variant="secondary">
             {company.pro ? 'PLAN PRO' : 'PLAN GRATUITO'}
           </Badge>
 
           <div className="rounded-t-lg h-32 overflow-hidden relative">
             <Image
-              className="object-cover object-top w-full"
+              className="object-cover object-top w-full dark:brightness-75"
               src="/images/dog-placeholder.jpg"
               alt="Imagen de fondo"
               fill
@@ -98,7 +98,7 @@ export default function CompanySettingsContainer() {
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
             {company.imageURL ? (
               <Image
-                className="object-cover object-center h-32"
+                className="object-cover object-center h-32 dark:brightness-75"
                 src={company.imageURL}
                 alt={`Imagen de la empresa ${company.name}`}
                 height={200}
@@ -212,7 +212,7 @@ export default function CompanySettingsContainer() {
             Editar
           </Link>
 
-          <DeleteCard companyId={company.id} />
+          <DeleteCard companyId={company.id} companyName={company.name} />
         </div>
       </CardFooter>
     </Card>

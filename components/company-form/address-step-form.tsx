@@ -66,7 +66,9 @@ const formSchema = z.object({
     .length(5, {
       message: 'El codigo postal debe ser de 5 caracteres',
     })
-    .regex(/^\d+$/),
+    .regex(/^\d+$/, {
+      message: 'El codigo postal debe ser solo numeros',
+    }),
 })
 
 export default function AddressStepForm() {
@@ -189,7 +191,7 @@ export default function AddressStepForm() {
             <StatesSelector
               control={form.control}
               inputName="state"
-              className="w-full"
+              className="w-full md:w-1/2"
             />
 
             {/* ZIP */}

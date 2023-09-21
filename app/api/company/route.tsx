@@ -11,26 +11,50 @@ import { v4 as uuid } from 'uuid'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { id, categories, ...values } = body
+    const formData = await request.formData()
+
+    const { userId, imageData, imageName, ...data } = Object.fromEntries(
+      formData,
+    ) as any
 
     // Ensure user is authenticated and has access to this user.
     const session = await getServerSession(authOptions)
-    if (!session?.user || id !== session?.user.id) {
+    if (!session?.user || userId !== session?.user.id) {
       return new Response(null, { status: 403 })
+    }
+
+    if (JSON.parse(data.categories).length > 0) {
+      data.categories = {
+        connect: JSON.parse(data.categories).map((id: string) => ({ id })),
+      }
+    }
+
+    // If it has an image, upload it to B2
+    if (imageData) {
+      const s3 = new S3Client({
+        endpoint: 'https://' + process.env.B2_COMPANY_IMAGE_BUCKET_URL,
+        region: process.env.B2_COMPANY_IMAGE_BUCKET_REGION,
+      })
+
+      const arrayBuffer = await imageData.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+      const filename = `${uuid()}-${imageName}`
+
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.B2_COMPANY_IMAGE_BUCKET_NAME,
+          Key: filename,
+          Body: buffer,
+        }),
+      )
+
+      data.imageURL = `https://${process.env.B2_COMPANY_IMAGE_BUCKET_NAME}.${process.env.B2_COMPANY_IMAGE_BUCKET_URL}/${filename}`
     }
 
     await db.company.create({
       data: {
-        ...values,
-        owner: {
-          connect: {
-            id,
-          },
-        },
-        categories: {
-          connect: categories.map((id: string) => ({ id })),
-        },
+        ...data,
+        ownerId: userId,
       },
     })
 

@@ -11,21 +11,9 @@ import {
 export default function DashboardSettingsLoadingPage() {
   return (
     <div className="block min-h-screen space-y-6 pb-16 pt-4">
-      {/* <Skeleton className="w-1/2 h-8" />
-
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-left">Ajustes</h2>
-
-        <p className="text-muted-foreground">
-          Administra los datos de tu negocio
-        </p>
-      </div>
-
-      <Separator className="my-6" /> */}
-
       <Card>
         <CardHeader className="p-0 w-full relative h-64">
-          <div className="bg-white">
+          <div>
             <div className="rounded-t-lg h-32 overflow-hidden relative">
               <Skeleton className="w-full h-full" />
             </div>
@@ -39,9 +27,9 @@ export default function DashboardSettingsLoadingPage() {
           <CardTitle>
             <Skeleton className="w-1/2 h-8" />
           </CardTitle>
-          <CardDescription>
+          <div>
             <Skeleton className="w-1/2 h-8" />
-          </CardDescription>
+          </div>
         </CardHeader>
 
         <CardContent>

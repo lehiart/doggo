@@ -40,7 +40,7 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { companyId: string } },
 ) {
   try {

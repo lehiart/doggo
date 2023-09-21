@@ -104,28 +104,28 @@ export default function CompanySummaryPage() {
             <CardContent className="pl-2">
               <TabsContent value="views">
                 <div className="px-4 mb-4">
-                  <p>Visitas de mis servicios y productos </p>
-                  <p>
+                  <div>Visitas de mis servicios y productos </div>
+                  <div>
                     Esta gráfica te permite ver el número de impresiones de tu
                     escaparate por usuarios interesados en tus servicios
-                  </p>
+                  </div>
                 </div>
                 {/* <Overview /> */}
               </TabsContent>
               <TabsContent value="requests">
                 Solicitudes
-                <p>
+                <div>
                   Esta gráfica muestra el número de solicitudes realizadas por
                   usuarios interesados en tus servicios.
-                </p>
+                </div>
                 {/* <Overview /> */}
               </TabsContent>
               <TabsContent value="contact">
                 Clicks en ver Contacto
-                <p>
+                <div>
                   Esta gráfica muestra el número de veces que los usuarios
                   interesados en tus servicios vieron tu número de teléfono.
-                </p>
+                </div>
                 {/* <Overview /> */}
               </TabsContent>
             </CardContent>
@@ -134,7 +134,7 @@ export default function CompanySummaryPage() {
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Completa tu anuncio</CardTitle>
-            <CardDescription>
+            <div>
               Solo faltan 5 pasos para completar tu escaparate.
               <div className="flex gap-4 items-center my-4">
                 <Progress value={33} /> <span>33%</span>
@@ -142,7 +142,7 @@ export default function CompanySummaryPage() {
               {/* 1 - datos de detalles 2 - datos de direccion 3 - datos de contacto ( podria ser solo uno sobre completar datos de contacto) */}
               {/* 4 - agregar 1 servicio */}
               {/* 5 - agregar datos completos de 1 servicio */}
-            </CardDescription>
+            </div>
           </CardHeader>
           {/* <CardContent>
             <RecentSales />

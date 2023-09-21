@@ -4,7 +4,6 @@ import React from 'react'
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -20,9 +19,13 @@ import { useRouter } from 'next/navigation'
 
 interface DeleteCardProps {
   companyId: string
+  companyName: string
 }
 
-export default function DeleteCard({ companyId }: DeleteCardProps) {
+export default function DeleteCard({
+  companyId,
+  companyName,
+}: DeleteCardProps) {
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
   const router = useRouter()
@@ -58,7 +61,6 @@ export default function DeleteCard({ companyId }: DeleteCardProps) {
       })
     }
     setShowDeleteAlert(false)
-    setIsDeleteLoading(false)
   }
 
   return (
@@ -71,22 +73,30 @@ export default function DeleteCard({ companyId }: DeleteCardProps) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Estas seguro?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Estas seguro de eliminar {companyName}?
+          </AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer. Esto eliminará permanentemente tu
             negocio y removerá sus datos de nuestros servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={(e) => handleDeleteConfirmClick(e)}>
+        <AlertDialogFooter className="mt-4">
+          <AlertDialogCancel disabled={isDeleteLoading}>
+            Cancelar
+          </AlertDialogCancel>
+          <Button
+            variant="destructive"
+            onClick={(e) => handleDeleteConfirmClick(e)}
+            disabled={isDeleteLoading}
+          >
             {isDeleteLoading ? (
               <Loader2Icon className="mr-2 animate-spin" />
             ) : (
               <Trash2Icon className="mr-2" />
             )}
-            <span>Continue</span>
-          </AlertDialogAction>
+            <span>Eliminar</span>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -55,13 +55,7 @@ export default async function DashboardLayout({
   const data = await getDashboardData()
 
   if (!data?.companies || data?.companies.length === 0) {
-    return (
-      <section className="h-screen container">
-        <div className="flex flex-col h-screen">
-          <EmptyInitialScreen />
-        </div>
-      </section>
-    )
+    return <EmptyInitialScreen />
   }
 
   return (
