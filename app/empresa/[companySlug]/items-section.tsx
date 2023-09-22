@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { FavoriteItems, Item } from '@prisma/client'
 import FavoriteIcon from './favorite-icon-btn'
-import AddOpinionDialog from '@/components/dashboard/opinions/add-opinion-dialog'
+import AddOpinionDialog from '@/components/add-opinion-dialog'
 import { ROLE } from '@/lib/constants'
 
 interface ItemsSectionProps {

@@ -23,9 +23,9 @@ export default async function AddNewCompanyPage() {
   })
 
   // for now user can ony have one company
-  // if (count >= 1) {
-  //   redirect('/dashboard')
-  // }
+  if (count >= 1) {
+    redirect('/dashboard')
+  }
 
   return (
     <section className="min-h-screen space-y-8 pb-16 mt-4 w-full">

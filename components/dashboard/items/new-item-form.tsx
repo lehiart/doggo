@@ -25,8 +25,8 @@ import { Switch } from '@/components/ui/switch'
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   description: z.string().min(2).max(50),
-  category: z.array(z.string()).min(1).max(1),
-  state: z.string().length(3),
+  category: z.array(z.string()).min(1),
+  state: z.string(),
   onlineBusiness: z.boolean(),
 })
 
@@ -51,6 +51,8 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log('values', values)
+
     setIsLoading(true)
     if (!selectedCompany) return
 
@@ -149,9 +151,7 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
         <StatesSelector control={form.control} inputName="state" />
         {/* TODO: add message that is required */}
 
-        <Button type="submit" disabled={isLoading}>
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   )
