@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react'
 import { useDashboardContext } from './dashboard-context'
 import { usePathname } from 'next/navigation'
 
-type BasicCompanyData = Pick<Company, 'id' | 'pro' | 'name'>
+type BasicCompanyData = Pick<Company, 'id' | 'pro' | 'name' | 'slug'>
 
 interface CompanySelectInputProps {
   companies: BasicCompanyData[]
@@ -67,10 +67,8 @@ export default function CompanySelectInput({
         >
           <Avatar className="mr-2 h-5 w-5">
             <AvatarImage
-              src={`https://avatar.vercel.sh/${
-                selectedCompany?.id || companies[0].id || 'default'
-              }.png`}
-              alt={selectedCompany?.name || companies[0].name || undefined}
+              src={`https://avatar.vercel.sh/${selectedCompany?.id}.svg`}
+              alt={selectedCompany?.name || companies[0].name || 'Avatar'}
             />
             <AvatarFallback>DH</AvatarFallback>
           </Avatar>
@@ -85,13 +83,13 @@ export default function CompanySelectInput({
             <CommandInput placeholder="Buscar..." />
             <CommandEmpty>No encontrado.</CommandEmpty>
             <CommandGroup heading="Mis negocios">
-              {companies &&
-                companies.length > 0 &&
+              {companies?.length > 0 &&
                 companies.map((company: BasicCompanyData) => (
                   <CommandItem
                     key={company.id}
                     onSelect={() => handleSelectedCompanyChange(company)}
                     className="text-sm"
+                    value={company.slug}
                   >
                     <Avatar className="mr-2 h-5 w-5">
                       <AvatarImage
@@ -100,7 +98,9 @@ export default function CompanySelectInput({
                       />
                       <AvatarFallback>DH</AvatarFallback>
                     </Avatar>
+
                     {company.name}
+
                     <CheckIcon
                       className={cn(
                         'ml-auto h-4 w-4',
@@ -113,22 +113,6 @@ export default function CompanySelectInput({
                 ))}
             </CommandGroup>
           </CommandList>
-
-          {/* CREATE NEW */}
-          {/* <CommandSeparator />
-          <CommandList>
-            <CommandGroup>
-              <CommandItem
-                disabled
-                onSelect={() => {
-                  setOpen(false)
-                }}
-              >
-                <PlusCircleIcon className="mr-2 h-5 w-5" />
-                Crear nuevo
-              </CommandItem>
-            </CommandGroup>
-          </CommandList> */}
         </Command>
       </PopoverContent>
     </Popover>

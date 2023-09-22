@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { use } from 'react'
 
 import {
   AlertDialog,
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2Icon, Trash2Icon } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
+import { useDashboardContext } from './dashboard-context'
 
 interface DeleteCardProps {
   companyId: string
@@ -29,6 +30,7 @@ export default function DeleteCard({
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
   const router = useRouter()
+  const { setSelectedCompany } = useDashboardContext()
 
   const handleDeleteConfirmClick = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -42,8 +44,14 @@ export default function DeleteCard({
       })
 
       if (response.ok) {
+        setSelectedCompany(null)
         router.refresh()
         router.push('/dashboard')
+
+        toast({
+          title: 'Tu negocio ha sido eliminado',
+          description: `Tu negocio ${companyName} ha sido eliminado.`,
+        })
       } else {
         toast({
           title: 'Hubo un error al eliminar tu negocio',

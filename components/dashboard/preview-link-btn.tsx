@@ -12,6 +12,7 @@ export default function PreviewLinkButton() {
 
   return (
     <Link
+      target="_blank"
       className={cn(
         buttonVariants({
           variant: 'outline',
