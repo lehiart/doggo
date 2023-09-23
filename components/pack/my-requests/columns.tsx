@@ -29,9 +29,9 @@ export const columns: ColumnDef<UserRequestQuery>[] = [
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Estatus" />
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Estatus" />
+    ),
     cell: ({ row }) => {
       const status = row.getValue('status')
 

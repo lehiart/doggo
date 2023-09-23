@@ -11,6 +11,7 @@ import { columns } from '@/components/dashboard/opinions/columns'
 import { Separator } from '@/components/ui/separator'
 import CopyToClipboardInput from '@/components/dashboard/opinions/copy-to-clipboard-input'
 import DashboardOpinionsMobileList from '@/components/dashboard/opinions/dashboard-opinions-mobile-list'
+import DashboardOpinionsLoadingPage from './loading'
 
 const COMPANY_BASE_URL = 'https://doghouse.mx/empresa/'
 
@@ -20,7 +21,8 @@ export default function CompanyOpinionsPage() {
     selectedCompany?.id,
   )
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <DashboardOpinionsLoadingPage />
+
   if (!selectedCompany || !opinions) return null
 
   return (

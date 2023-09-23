@@ -1,12 +1,14 @@
 'use client'
+
 import React from 'react'
 
 import { useDashboardContext } from '@/components/dashboard/dashboard-context'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { useCompanyClientRequests } from '@/lib/swr'
-import { DataTable } from '../../../components/dashboard/clients/data-table'
 import { columns } from '../../../components/dashboard/clients/columns'
-import { Request } from '@prisma/client'
+import ClientsEmptyScreens from '@/components/dashboard/clients/clients-empty-screen'
+import SummaryCards from '@/components/dashboard/clients/summary-cards'
+import DashboardClientsMobileList from '@/components/dashboard/clients/dashboard-clients-mobile-list'
+import { DashboardClientsDataTable } from '@/components/dashboard/clients/dashboard-clients-data-table'
 
 export default function CompanyClientRequestsPage() {
   const { selectedCompany } = useDashboardContext()
@@ -15,37 +17,33 @@ export default function CompanyClientRequestsPage() {
     selectedCompany?.id,
   )
 
-  if (isLoading) return <div>Loading...</div>
   if (!selectedCompany || !clientRequests) return null
 
   return (
-    <div className="h-screen space-y-4">
-      <h1>clientes</h1>
-      <div>Esta es la página de solciitudes de la empresa:</div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              tienes {clientRequests.length} solicitudes en total
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              tienes{' '}
-              {
-                clientRequests.filter(
-                  (item: Request) => item.status === 'PENDING',
-                ).length
-              }{' '}
-              solicitudes pendientes
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
+    <main className="h-full w-full">
+      {!clientRequests || clientRequests?.length === 0 ? (
+        <ClientsEmptyScreens url={selectedCompany.slug} />
+      ) : (
+        <section className="flex flex-col justify-between w-full items-center space-y-8 mb-4 mt-2">
+          <h2 className="text-2xl font-bold text-center md:text-left my-4">
+            Estas son las solicitudes que has recibido
+          </h2>
 
-      <DataTable columns={columns} data={clientRequests} />
-    </div>
+          <SummaryCards requests={clientRequests} />
+
+          {/* MOBILE LIST */}
+
+          <DashboardClientsMobileList requests={clientRequests} />
+
+          {/* DESKTOP TABLE */}
+
+          <DashboardClientsDataTable
+            columns={columns}
+            data={clientRequests}
+            className="hidden md:block"
+          />
+        </section>
+      )}
+    </main>
   )
 }

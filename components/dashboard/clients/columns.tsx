@@ -1,56 +1,36 @@
-import { Button } from '@/components/ui/button'
+import { DataTableColumnHeader } from '@/components/data-table-column-header'
 import { Item, Request } from '@prisma/client'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronRightCircleIcon } from 'lucide-react'
-
-import Link from 'next/link'
+import ActionsColumn from './action-column'
 
 export const columns: ColumnDef<Request>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Fecha
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
+      return <DataTableColumnHeader column={column} title="Fecha" />
     },
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'))
 
-      return (
-        <div className="text-center font-medium">
-          {date.toLocaleDateString('es-MX', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </div>
-      )
+      const formatted = date.toLocaleDateString('es-MX', {
+        year: '2-digit',
+        month: '2-digit',
+        day: 'numeric',
+      })
+
+      return <div>{formatted}</div>
     },
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Estatus
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Estatus" />
+    ),
     cell: ({ row }) => {
       const status = row.getValue('status')
 
       return (
-        <div className="text-center font-medium">
+        <div>
           {status === 'PENDING' && 'Pendiente'}
           {status === 'ACCEPTED' && 'Aceptado'}
           {status === 'REJECTED' && 'Rechazado'}
@@ -60,11 +40,13 @@ export const columns: ColumnDef<Request>[] = [
   },
   {
     accessorKey: 'message',
-    header: () => <div className="text-center">Mensaje</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Mensaje" />
+    ),
   },
   {
     accessorKey: 'selectedItems',
-    header: () => <div className="text-center">Items</div>,
+    header: () => <div>Items</div>,
     cell: ({ row }) => {
       const amount = JSON.parse(row.getValue('selectedItems'))
       let formatted = 'sin items'
@@ -73,22 +55,11 @@ export const columns: ColumnDef<Request>[] = [
         formatted = amount.map((item: Item) => item.title).join(', ')
       }
 
-      return <div className="text-right font-medium">{formatted}</div>
+      return <div>{formatted}</div>
     },
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
-      const clientRequest = row.original
-
-      return (
-        <Link href={`/dashboard/clientes/${clientRequest.id}`}>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <ChevronRightCircleIcon className="h-4 w-4 mr-2" />
-          </Button>
-        </Link>
-      )
-    },
+    cell: ({ row }) => <ActionsColumn requestItemID={row.original.id} />,
   },
 ]
