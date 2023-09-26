@@ -84,18 +84,22 @@ export default function DashboardOpinionsMobileList({
     <div className="w-full block md:hidden">
       {/* FILTERS */}
 
-      <div className="flex items-center justify-between py-4">
-        <div className="flex flex-1 items-center space-x-2">
+      <div className="flex items-center justify-between py-4 w-full">
+        <div className="grid grid-cols-1 space-y-2 w-full">
           <Input
             placeholder={`Filtrar por ${columns_name_map[selectedFilter]}...`}
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            className="h-8 w-1/3"
+            className="h-8 w-full"
           />
 
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 border-dashed">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 border-dashed justify-start"
+              >
                 <PlusCircleIcon className="mr-2 h-4 w-4" />
                 Filtrar por
                 <div className="space-x-1 flex ml-2">
@@ -109,7 +113,7 @@ export default function DashboardOpinionsMobileList({
               </Button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-[200px] p-0" align="start">
+            <PopoverContent className="w-[--radix-popper-anchor-width] p-0">
               <Command>
                 <CommandList>
                   <CommandGroup>
@@ -139,10 +143,7 @@ export default function DashboardOpinionsMobileList({
           {selectedFilter && searchQuery && (
             <Button
               variant="outline"
-              onClick={() => {
-                setSelectedFilter('')
-                setSearchQuery('')
-              }}
+              onClick={() => setSearchQuery('')}
               className="h-8 px-2 lg:px-3"
             >
               Borrar
@@ -164,6 +165,14 @@ export default function DashboardOpinionsMobileList({
             />
           )
         })}
+
+        {currentItems.length === 0 && (
+          <div className="flex flex-col items-center justify-center w-full h-full mt-20">
+            <h2 className="lg:text-4xl font-bold text-2xl mb-12 text-center">
+              No se encontraron resultados
+            </h2>
+          </div>
+        )}
       </div>
 
       <MobileListPagination

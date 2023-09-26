@@ -32,6 +32,15 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>
 }
 
+const selectFilterOption = (table: Table<any>, filter: string) => {
+  table.setColumnFilters([
+    {
+      id: filter,
+      value: table.getState().columnFilters[0]?.value,
+    },
+  ])
+}
+
 export function DashboardOpinionsDataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
@@ -43,12 +52,9 @@ export function DashboardOpinionsDataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder={`Filtrar por ${columns_name_map[selectedFilter]}...`}
-          value={
-            (table.getColumn(selectedFilter)?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn(selectedFilter)?.setFilterValue(event.target.value)
-          }
+          onChange={(e) => {
+            table.getColumn(selectedFilter)?.setFilterValue(e.target.value)
+          }}
           className="h-8 w-1/3"
         />
 
@@ -83,7 +89,12 @@ export function DashboardOpinionsDataTableToolbar<TData>({
             <Command>
               <CommandList>
                 <CommandGroup>
-                  <CommandItem onSelect={() => setSelectedFilter('comment')}>
+                  <CommandItem
+                    onSelect={() => {
+                      setSelectedFilter('comment')
+                      selectFilterOption(table, 'comment')
+                    }}
+                  >
                     {selectedFilter === 'comment' ? (
                       <CheckIcon className="h-4 w-4 mr-2" />
                     ) : (
@@ -92,7 +103,12 @@ export function DashboardOpinionsDataTableToolbar<TData>({
                     <span className="p-1">Comentario</span>
                   </CommandItem>
 
-                  <CommandItem onSelect={() => setSelectedFilter('itemName')}>
+                  <CommandItem
+                    onSelect={() => {
+                      setSelectedFilter('itemName')
+                      selectFilterOption(table, 'itemName')
+                    }}
+                  >
                     {selectedFilter === 'itemName' ? (
                       <CheckIcon className="h-4 w-4 mr-2" />
                     ) : (

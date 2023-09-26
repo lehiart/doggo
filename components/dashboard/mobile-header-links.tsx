@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const pageLinks = [
   { href: '/dashboard', label: 'Resumen' },
@@ -25,6 +26,9 @@ const pageLinks = [
 
 export default function MobileHeaderLinks() {
   const [currentPage, setCurrentPage] = React.useState('Resumen')
+  const pathname = usePathname()
+
+  console.log(pathname)
 
   return (
     <div className="flex space-x-4 xl:hidden">
@@ -32,7 +36,8 @@ export default function MobileHeaderLinks() {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="w-full">
             <MenuIcon className="h-4 w-4 text-muted-foreground mr-2" />
-            Secciones / {currentPage}
+            Secciones /{' '}
+            {pageLinks.find((link) => link.href === pathname)?.label}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[--radix-popper-anchor-width] py-2">

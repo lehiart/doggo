@@ -136,7 +136,6 @@ export default function MyFavoritesList({ items }: MyFavoritesListProps) {
                   >
                     {selectedFilters.length}
                   </Badge>
-                  x
                 </>
               ) : null}
             </Button>
@@ -239,6 +238,14 @@ export default function MyFavoritesList({ items }: MyFavoritesListProps) {
           </Link>
         ))}
       </ul>
+
+      {currentItems.length === 0 && (
+        <div className="flex flex-col items-center justify-center w-full h-full mt-20">
+          <h2 className="lg:text-4xl font-bold text-2xl mb-12 text-center">
+            No se encontraron resultados
+          </h2>
+        </div>
+      )}
 
       <ListPagination
         itemsPerPage={itemsPerPage}

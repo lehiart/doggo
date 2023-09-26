@@ -63,7 +63,7 @@ export default function CompanySelectInput({
           role="combobox"
           aria-expanded={open}
           aria-label="Elige un negocio"
-          className="w-1/2 md:w-1/4 justify-between"
+          className="w-1/2 md:w-1/4 justify-between "
         >
           <Avatar className="mr-2 h-5 w-5">
             <AvatarImage
@@ -72,7 +72,9 @@ export default function CompanySelectInput({
             />
             <AvatarFallback>DH</AvatarFallback>
           </Avatar>
-          {selectedCompany?.name || companies[0].name}
+          <span className="line-clamp-1">
+            {selectedCompany?.name || companies[0].name}
+          </span>
           <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

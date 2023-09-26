@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     ////////////////////////
 
-    // Create 100 items with variations
+    // // Create 100 items with variations
     // const requestsToCreate = Array.from({ length: 100 }).map((_, index) => ({
     //   message: `${message} - ${index + 1}`, // Add a unique identifier to each message
     //   userId,

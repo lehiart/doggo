@@ -43,6 +43,9 @@ export const columns: ColumnDef<UserRequestQuery>[] = [
         </div>
       )
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
   },
   {
     accessorKey: 'message',

@@ -64,7 +64,7 @@ export function DashboardOpinionsDataTable<TData, TValue>({
   })
 
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn('w-full hidden md:block', className)}>
       <DashboardOpinionsDataTableToolbar table={table} />
 
       <div className="rounded-md border">

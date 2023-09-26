@@ -54,7 +54,7 @@ export function DataTableToolbar<TData>({
           onChange={(event) =>
             table.getColumn('message')?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-full md:w-1/2 lg:w-1/4"
         />
 
         <div className="hidden md:block">

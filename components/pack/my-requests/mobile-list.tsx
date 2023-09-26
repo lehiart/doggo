@@ -213,6 +213,25 @@ export default function MobileList({ requests }: MobileListProps) {
             position={indexOfLastPost + index - itemsPerPage}
           />
         ))}
+
+        {currentItems.length === 0 && (
+          <div className="flex flex-col items-center justify-center w-full h-full mt-14">
+            <h2 className="lg:text-4xl font-bold text-2xl mb-12 text-center">
+              No se encontraron resultados
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setSelectedValues(new Set())
+                  setSearchQuery('')
+                }}
+                className="h-8 px-2 lg:px-3"
+              >
+                Limpiar filtros
+                <X className="ml-2 h-4 w-4" />
+              </Button>
+            </h2>
+          </div>
+        )}
       </div>
 
       <MobileListPagination

@@ -33,6 +33,15 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>
 }
 
+const selectFilterOption = (table: Table<any>, filter: string) => {
+  table.setColumnFilters([
+    {
+      id: filter,
+      value: table.getState().columnFilters[0]?.value,
+    },
+  ])
+}
+
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
@@ -84,7 +93,12 @@ export function DataTableToolbar<TData>({
             <Command>
               <CommandList>
                 <CommandGroup>
-                  <CommandItem onSelect={() => setSelectedFilter('comment')}>
+                  <CommandItem
+                    onSelect={() => {
+                      setSelectedFilter('comment')
+                      selectFilterOption(table, 'comment')
+                    }}
+                  >
                     {selectedFilter === 'comment' ? (
                       <CheckIcon className="h-4 w-4 mr-2" />
                     ) : (
@@ -93,7 +107,12 @@ export function DataTableToolbar<TData>({
                     <span className="p-1">Comentario</span>
                   </CommandItem>
 
-                  <CommandItem onSelect={() => setSelectedFilter('itemName')}>
+                  <CommandItem
+                    onSelect={() => {
+                      setSelectedFilter('itemName')
+                      selectFilterOption(table, 'itemName')
+                    }}
+                  >
                     {selectedFilter === 'itemName' ? (
                       <CheckIcon className="h-4 w-4 mr-2" />
                     ) : (
@@ -103,7 +122,10 @@ export function DataTableToolbar<TData>({
                   </CommandItem>
 
                   <CommandItem
-                    onSelect={() => setSelectedFilter('company_name')}
+                    onSelect={() => {
+                      setSelectedFilter('company_name')
+                      selectFilterOption(table, 'company_name')
+                    }}
                   >
                     {selectedFilter === 'company_name' ? (
                       <CheckIcon className="h-4 w-4 mr-2" />
