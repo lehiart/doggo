@@ -216,7 +216,7 @@ export default function MobileList({ requests }: MobileListProps) {
 
         {currentItems.length === 0 && (
           <div className="flex flex-col items-center justify-center w-full h-full mt-14">
-            <h2 className="lg:text-4xl font-bold text-2xl mb-12 text-center">
+            <h2 className="lg:text-4xl font-bold text-2xl mb-12 text-center flex flex-col">
               No se encontraron resultados
               <Button
                 variant="ghost"

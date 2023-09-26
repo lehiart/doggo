@@ -51,8 +51,6 @@ export default function NewItemForm({ userId }: NewItemFormProps) {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values)
-
     setIsLoading(true)
     if (!selectedCompany) return
 

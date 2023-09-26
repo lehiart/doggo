@@ -25,10 +25,7 @@ const pageLinks = [
 ]
 
 export default function MobileHeaderLinks() {
-  const [currentPage, setCurrentPage] = React.useState('Resumen')
   const pathname = usePathname()
-
-  console.log(pathname)
 
   return (
     <div className="flex space-x-4 xl:hidden">
@@ -44,10 +41,7 @@ export default function MobileHeaderLinks() {
           <nav>
             {pageLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <DropdownMenuCheckboxItem
-                  onSelect={() => setCurrentPage(link.label)}
-                  checked={currentPage === link.label}
-                >
+                <DropdownMenuCheckboxItem checked={pathname === link.href}>
                   {link.label}
                 </DropdownMenuCheckboxItem>
               </Link>

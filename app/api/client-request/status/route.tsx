@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { requestId, status } = body
+  const { requestId, status, message } = body
 
   try {
     await db.request.update({
@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
       },
       data: {
         status,
+        reasonToReject: message,
       },
     })
 
